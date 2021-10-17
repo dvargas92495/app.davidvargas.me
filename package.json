@@ -10,7 +10,7 @@
     "api": "fuego api",
     "build": "fuego build",
     "compile": "fuego compile",
-    "deploy": "fuego deploy",
+    "deploy": "fuego deploy --domain app.davidvargas.me",
     "fe": "fuego fe",
     "migrate": "npm run typeorm migration:run",
     "publish": "fuego publish",
