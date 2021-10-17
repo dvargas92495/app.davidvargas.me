@@ -1,8 +1,8 @@
 import React from "react";
-import Layout, {LayoutHead} from "@dvargas92495/ui/dist/components/Layout";
+import Layout, { LayoutHead } from "./_common/Layout";
 
-const Home: React.FunctionComponent = () => <Layout homeIcon={"DV"}>Welcome!</Layout>;
+const Home: React.FC = () => <Layout>Welcome!</Layout>;
 
-export const Head = () => <LayoutHead title={'Vargas Arts App'}/>
+export const Head = () => <LayoutHead title={"Home"} />;
 
 export default Home;
