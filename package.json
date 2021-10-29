@@ -24,7 +24,7 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
-    "fuegojs": "^0.7.8",
+    "fuegojs": "^0.14.3",
     "prettier": "^2.4.1",
     "ts-node": "^10.3.0",
     "tslint-config-prettier": "^1.18.0",
@@ -34,7 +34,8 @@
   "dependencies": {
     "@dvargas92495/api": "^0.2.0",
     "@dvargas92495/ui": "^0.35.4",
-    "aws-sdk-plus": "^0.2.1",
-    "axios": "^0.23.0"
+    "aws-sdk-plus": "^0.4.0",
+    "axios": "^0.23.0",
+    "web3": "^1.6.0"
   }
 }
