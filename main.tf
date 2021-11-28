@@ -11,6 +11,10 @@ terraform {
       source = "integrations/github"
       version = "4.2.0"
     }
+    aws = {
+      source = "hashicorp/aws"
+      version = "3.74.2"
+    }
   }
 }
 
@@ -35,6 +39,10 @@ variable "clerk_api_key" {
 }
 
 variable "mysql_password" {
+  type = string
+}
+
+variable "notion_api_key" {
   type = string
 }
 
@@ -115,4 +123,10 @@ resource "github_actions_secret" "clerk_api_key" {
   repository       = "app"
   secret_name      = "CLERK_API_KEY"
   plaintext_value  = var.clerk_api_key
+}
+
+resource "github_actions_secret" "notion_api_key" {
+  repository       = "app"
+  secret_name      = "NOTION_API_KEY"
+  plaintext_value  = var.notion_api_key
 }
