@@ -3,11 +3,7 @@
     "jsx": "react",
     "target": "es2015",
     "allowJs": false,
-    "lib": [
-      "es2019",
-      "dom",
-      "dom.iterable"
-    ],
+    "lib": ["es2019", "dom", "dom.iterable"],
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
@@ -21,16 +17,13 @@
     "noImplicitAny": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "~/*": ["./app/*"],
+      "db/*": ["./db/*"],
+      "functions/*": ["./functions/*"]
+    }
   },
-  "include": [
-    "src",
-    "pages",
-    "functions",
-    "db"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/__tests__/*"
-  ]
+  "include": ["app", "functions", "db"],
+  "exclude": ["node_modules", "**/__tests__/*"]
 }

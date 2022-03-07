@@ -7,17 +7,7 @@ on:
       - ".github/workflows/db.yaml"
 
 env:
-  TYPEORM_CONNECTION: mysql
-  TYPEORM_HOST: vargas-arts.c2sjnb5f4d57.us-east-1.rds.amazonaws.com
-  TYPEORM_USERNAME: app
-  TYPEORM_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-  TYPEORM_DATABASE: app
-  TYPEORM_PORT: 5432
-  TYPEORM_SYNCHRONIZE: false
-  TYPEORM_LOGGING: false
-  TYPEORM_ENTITIES: db/*.ts
-  TYPEORM_MIGRATIONS: db/migrations/*.ts
-  TYPEORM_MIGRATIONS_DIR: db/migrations
+  DATABASE_URL: mysql://app:${{ secrets.MYSQL_PASSWORD }}@vargas-arts.c2sjnb5f4d57.us-east-1.rds.amazonaws.com:5432/app
 
 jobs:
   deploy:

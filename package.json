@@ -8,14 +8,14 @@
     "format": "prettier --write \"**/*.tsx\"",
     "lint": "eslint . --ext .ts,.tsx",
     "api": "fuego api",
-    "build": "fuego build",
+    "build": "fuego build --remix",
     "compile": "fuego compile",
     "deploy": "fuego deploy --domain app.davidvargas.me",
-    "fe": "fuego fe",
-    "migrate": "npm run typeorm migration:run",
+    "dev": "fuego dev --remix",
+    "migrate": "echo \"TODO: implement migration\"",
     "publish": "fuego publish",
-    "typeorm": "ts-node --transpile-only ./node_modules/typeorm/cli.js",
-    "start": "concurrently \"npm:api\" \"npm:fe\""
+    "start": "concurrently \"npm:api\" \"npm:dev\"",
+    "postinstall": "fuego postinstall \"@mui/material\" \"@babel\""
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.84",
@@ -26,7 +26,7 @@
     "@typescript-eslint/parser": "^5.0.0",
     "concurrently": "^6.4.0",
     "eslint": "^8.0.1",
-    "fuegojs": "^0.16.4",
+    "fuegojs": "^0.22.12",
     "prettier": "^2.4.1",
     "ts-node": "^10.3.0",
     "tslint-config-prettier": "^1.18.0",
@@ -34,8 +34,8 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
-    "@dvargas92495/api": "^0.3.1",
-    "@dvargas92495/ui": "^0.44.7",
+    "@dvargas92495/api": "^0.6.0",
+    "@dvargas92495/ui": "^0.50.4",
     "web3": "^1.6.0"
   }
 }

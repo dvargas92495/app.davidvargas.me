@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo, useState } from "react";
-import Layout, { LayoutHead } from "./_common/Layout";
-import RedirectToLogin from "@dvargas92495/ui/dist/components/RedirectToLogin";
-import clerkUserProfileCss from "@dvargas92495/ui/dist/clerkUserProfileCss";
-import useAuthenticatedHandler from "@dvargas92495/ui/dist/useAuthenticatedHandler";
-import { SignedIn, UserProfile } from "@clerk/clerk-react";
-import type { Handler as TerraformHandler } from "../functions/terraform/post";
+import clerkUserProfileCss from "@dvargas92495/ui/utils/clerkUserProfileCss";
+import useAuthenticatedHandler from "@dvargas92495/ui/utils/useAuthenticatedHandler";
+import { UserProfile } from "@clerk/remix";
+import type { Handler as TerraformHandler } from "../../../functions/terraform/post";
+import getMeta from "@dvargas92495/ui/utils/getMeta";
 
 const HackyDashboard = () => {
   const postTerraform = useAuthenticatedHandler<TerraformHandler>({
@@ -109,18 +108,15 @@ const HackyDashboard = () => {
 };
 
 const UserPage: React.FunctionComponent = () => (
-  <Layout>
-    <SignedIn>
-      <div>
-        <HackyDashboard />
-        <UserProfile />
-      </div>
-    </SignedIn>
-    <RedirectToLogin />
-  </Layout>
+  <div>
+    <HackyDashboard />
+    <style>{clerkUserProfileCss}</style>
+    <UserProfile />
+  </div>
 );
 
-export const Head = (): React.ReactElement => (
-  <LayoutHead title={"User"} styles={clerkUserProfileCss} />
-);
+export const meta = getMeta({
+  title: "user",
+});
+
 export default UserPage;
