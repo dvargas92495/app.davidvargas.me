@@ -1,7 +1,7 @@
 import createAPIGatewayProxyHandler from "aws-sdk-plus/dist/createAPIGatewayProxyHandler";
 import axios from "axios";
 import { BadRequestError } from "aws-sdk-plus/dist/errors";
-import clerkAuthenticateLambda from "@dvargas92495/api/dist/clerkAuthenticateLambda";
+import clerkAuthenticateLambda from "@dvargas92495/api/clerkAuthenticateLambda";
 
 type Workspaces = { data: { id: string; attributes: { name: string } }[] };
 type Vars = { data: { id: string; attributes: { key: string } }[] };
