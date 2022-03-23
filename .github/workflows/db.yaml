@@ -3,7 +3,7 @@ on:
   push:
     branches: main
     paths:
-      - "db/**"
+      - "app/migrations/**"
       - ".github/workflows/db.yaml"
 
 env:
