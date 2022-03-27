@@ -21,10 +21,5 @@ export const migrate = ({
     )`,
       resolve
     )
-  ).then(
-    () =>
-      new Promise((resolve) =>
-        connection.execute(`SELECT * FROM _migrations`, resolve)
-      )
   );
 };
