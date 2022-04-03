@@ -1,7 +1,7 @@
 import getMeta from "@dvargas92495/ui/utils/getMeta";
 import { SignUp } from "@clerk/remix";
-import getRootAuthedLoader from "@dvargas92495/ui/utils/getRootAuthedLoader";
+import remixAuthedLoader from "@dvargas92495/ui/utils/remixAuthedLoader.server";
 
-export const loader = getRootAuthedLoader();
+export const loader = remixAuthedLoader;
 export const meta = getMeta({ title: "Sign up" });
 export default SignUp;

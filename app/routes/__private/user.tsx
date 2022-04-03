@@ -4,6 +4,7 @@ import useAuthenticatedHandler from "@dvargas92495/ui/utils/useAuthenticatedHand
 import { UserProfile } from "@clerk/remix";
 import type { Handler as TerraformHandler } from "../../../functions/terraform/post";
 import getMeta from "@dvargas92495/ui/utils/getMeta";
+import UserProfileTab from "@dvargas92495/ui/components/UserProfileTab";
 
 const HackyDashboard = () => {
   const postTerraform = useAuthenticatedHandler<TerraformHandler>({
@@ -107,11 +108,43 @@ const HackyDashboard = () => {
   );
 };
 
+const RoamJSDigest = () => {
+  return (
+    <UserProfileTab
+      id={"Digest"}
+      icon={
+        <svg
+          width="1.25em"
+          height="1.25em"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          fill="none"
+          className="cl-icon"
+        >
+          <path
+            d="M19 5h-2V3c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v2H9V3c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v2H1c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V6c0-.55-.45-1-1-1zM8.71 15.29a1.003 1.003 0 01-1.42 1.42l-4-4C3.11 12.53 3 12.28 3 12s.11-.53.29-.71l4-4a1.003 1.003 0 011.42 1.42L5.41 12l3.3 3.29zm8-2.58l-4 4a1.003 1.003 0 01-1.42-1.42l3.3-3.29-3.29-3.29A.965.965 0 0111 8a1.003 1.003 0 011.71-.71l4 4c.18.18.29.43.29.71s-.11.53-.29.71z"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></path>
+        </svg>
+      }
+      cards={[
+        {
+          title: "Broadcast",
+          description: "Send it.",
+        },
+      ]}
+    />
+  );
+};
+
 const UserPage: React.FunctionComponent = () => (
   <div>
-    <HackyDashboard />
     <style>{clerkUserProfileCss}</style>
     <UserProfile />
+    <HackyDashboard />
+    <RoamJSDigest />
   </div>
 );
 

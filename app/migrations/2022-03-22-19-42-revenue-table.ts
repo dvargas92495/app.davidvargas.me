@@ -5,7 +5,7 @@ export const migrate = ({
 }: {
   connection: mysql.Connection;
 }): Promise<void> => {
-  return new Promise((resolve) =>
+  return new Promise<unknown>((resolve, reject) =>
     connection.execute(
       `CREATE TABLE IF NOT EXISTS revenue (
         uuid      VARCHAR(36)  NOT NULL,
@@ -19,7 +19,7 @@ export const migrate = ({
         PRIMARY KEY (uuid),
         CONSTRAINT UC_source UNIQUE (source,source_id)
     )`,
-      resolve
+      (err, res) => (err ? reject(err) : resolve(res))
     )
-  );
+  ).then(() => Promise.resolve());
 };
