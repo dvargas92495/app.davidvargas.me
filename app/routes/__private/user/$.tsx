@@ -4,11 +4,14 @@ import { UserProfile } from "@clerk/remix";
 import getMeta from "@dvargas92495/ui/utils/getMeta";
 import UserProfileTab from "@dvargas92495/ui/components/UserProfileTab";
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction";
-import { ActionFunction, useFetcher } from "remix";
+import { ActionFunction, Form, useFetcher } from "remix";
 import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
 import editTerraformVariable from "~/data/editTerraformVariable.server";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
-const Terraform = () => {
+const TerraformComponent = () => {
   const fetcher =
     useFetcher<Awaited<ReturnType<typeof editTerraformVariable>>>();
   const [name, setName] = useState("");
@@ -19,9 +22,11 @@ const Terraform = () => {
   const listVariables = useCallback(() => {
     if (fetcher.data) {
       const formData = new FormData();
-      fetcher.data.workspaces.forEach((w) => formData.append('workspaceIds', w.id))
-      formData.append('token', token);
-      formData.append('operation', 'terraform');
+      fetcher.data.workspaces.forEach((w) =>
+        formData.append("workspaceIds", w.id)
+      );
+      formData.append("token", token);
+      formData.append("operation", "terraform");
       fetcher.submit(formData);
     }
   }, [token, fetcher]);
@@ -29,22 +34,26 @@ const Terraform = () => {
   const [value, setValue] = useState("");
   const filteredWorkspaces = useMemo(
     () =>
-    fetcher.data ? fetcher.data.workspaces.filter((w) => !key || w.vars.map((v) => v.name).includes(key)) : [],
+      fetcher.data
+        ? fetcher.data.workspaces.filter(
+            (w) => !key || w.vars.map((v) => v.name).includes(key)
+          )
+        : [],
     [key, fetcher]
   );
   const fixVariables = useCallback(() => {
     const formData = new FormData();
-    filteredWorkspaces.forEach((w) => formData.append('variables', `${w.id}::${w.vars.find((v) => v.name === key)?.id || key}`))
-    formData.append('token', token);
-    formData.append('value', value);
-    formData.append('operation', 'terraform');
+    filteredWorkspaces.forEach((w) =>
+      formData.append(
+        "variables",
+        `${w.id}::${w.vars.find((v) => v.name === key)?.id || key}`
+      )
+    );
+    formData.append("token", token);
+    formData.append("value", value);
+    formData.append("operation", "terraform");
     fetcher.submit(formData);
-  }, [
-    value,
-    filteredWorkspaces,
-    token,
-    key,
-  ]);
+  }, [value, filteredWorkspaces, token, key]);
   const [action, setAction] = useState(0);
   const actions = [refresh, listVariables, fixVariables];
   return (
@@ -94,6 +103,23 @@ const Terraform = () => {
   );
 };
 
+const InsertStripeId = () => {
+  return (
+    <Form method="post" action={"?operation=stripe"}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <TextField name={"id"} />
+        <Button type="submit">Insert</Button>
+      </Box>
+    </Form>
+  );
+};
+
 const Stripe = () => {
   return (
     <UserProfileTab
@@ -117,8 +143,9 @@ const Stripe = () => {
       }
       cards={[
         {
-          title: "Broadcast",
-          description: "Send it.",
+          title: "Revenue",
+          description: "Add a stripe id to your revenue table.",
+          Component: InsertStripeId,
         },
       ]}
     />
@@ -156,10 +183,42 @@ const ConvertKit = () => {
   );
 };
 
+const Terraform = () => {
+  return (
+    <UserProfileTab
+      id={"Terraform"}
+      icon={
+        <svg
+          width="1.25em"
+          height="1.25em"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          fill="none"
+          className="cl-icon"
+        >
+          <path
+            d="M19 5h-2V3c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v2H9V3c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v2H1c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V6c0-.55-.45-1-1-1zM8.71 15.29a1.003 1.003 0 01-1.42 1.42l-4-4C3.11 12.53 3 12.28 3 12s.11-.53.29-.71l4-4a1.003 1.003 0 011.42 1.42L5.41 12l3.3 3.29zm8-2.58l-4 4a1.003 1.003 0 01-1.42-1.42l3.3-3.29-3.29-3.29A.965.965 0 0111 8a1.003 1.003 0 011.71-.71l4 4c.18.18.29.43.29.71s-.11.53-.29.71z"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></path>
+        </svg>
+      }
+      cards={[
+        {
+          title: "Variables",
+          description: "Update All Variables",
+          Component: TerraformComponent,
+        },
+      ]}
+    />
+  );
+};
+
 const UserPage: React.FunctionComponent = () => (
   <div>
     <style>{clerkUserProfileCss}</style>
-    <UserProfile />
+    <UserProfile routing="path" path="/user" />
     <Stripe />
     <Terraform />
     <ConvertKit />
@@ -171,8 +230,8 @@ export const meta = getMeta({
 });
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ data }) => {
-    const operation = data.operation?.[0];
+  return remixAppAction(args, ({ data, params }) => {
+    const operation = params.operation;
     if (operation === "stripe") {
       return insertRevenueFromStripe({ id: data.id?.[0] });
     } else if (operation === "terraform") {
@@ -185,6 +244,8 @@ export const action: ActionFunction = (args) => {
           .map((v) => v.split("::"))
           .map(([workspaceId, variableId]) => ({ workspaceId, variableId })),
       });
+    } else if (operation === "convertkit") {
+      return {};
     } else {
       throw new Error(`Unsupported operation ${operation}`);
     }

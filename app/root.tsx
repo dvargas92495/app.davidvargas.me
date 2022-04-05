@@ -6,7 +6,7 @@ import RemixRoot, {
 import remixRootLoader from "@dvargas92495/ui/utils/remixRootLoader.server";
 
 export const loader = remixRootLoader;
-export const meta = getRootMeta();
+export const meta = getRootMeta({ title: "App" });
 export const links = getRootLinks();
 export const CatchBoundary = RootCatchBoundary;
 export default RemixRoot;
