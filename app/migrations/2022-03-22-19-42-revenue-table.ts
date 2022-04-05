@@ -1,25 +1,23 @@
-import type mysql from "mysql2";
+import getMysqlConnection from "@dvargas92495/api/mysql";
+import type { MigrationProps } from "fuegojs/dist/migrate";
 
-export const migrate = ({
-  connection,
-}: {
-  connection: mysql.Connection;
-}): Promise<void> => {
-  return new Promise<unknown>((resolve, reject) =>
-    connection.execute(
-      `CREATE TABLE IF NOT EXISTS revenue (
+export const migrate = ({ connection }: MigrationProps): Promise<void> => {
+  return getMysqlConnection(connection)
+    .then((connection) =>
+      connection.execute(
+        `CREATE TABLE IF NOT EXISTS revenue (
         uuid      VARCHAR(36)  NOT NULL,
         source    VARCHAR(191) NOT NULL,
         source_id VARCHAR(191) NOT NULL,
         date      DATETIME(3)  NOT NULL,
         amount    INT          NOT NULL,
         product   VARCHAR(64)  NOT NULL,
-        connect   INT          NOT NULL
+        connect   INT          NOT NULL,
 
         PRIMARY KEY (uuid),
         CONSTRAINT UC_source UNIQUE (source,source_id)
-    )`,
-      (err, res) => (err ? reject(err) : resolve(res))
+    )`
+      )
     )
-  ).then(() => Promise.resolve());
+    .then(() => Promise.resolve());
 };

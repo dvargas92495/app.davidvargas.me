@@ -59,8 +59,10 @@ provider "github" {
 
 module "aws_static_site" {
   source  = "dvargas92495/static-site/aws"
-  version = "3.4.0"
+  version = "3.5.2"
 
+  origin_memory_size = 5120
+  origin_timeout = 20
   domain = "app.davidvargas.me"
   secret = var.secret
   tags = {
@@ -74,10 +76,11 @@ module "aws_static_site" {
 
 module "aws-serverless-backend" {
     source  = "dvargas92495/serverless-backend/aws"
-    version = "2.4.1"
+    version = "2.5.0"
 
-    api_name = "app"
-    domain  = "app.davidvargas.me"
+    api_name  = "app"
+    domain    = "app.davidvargas.me"
+    directory = "api"
 }
 
 module "aws_clerk" {

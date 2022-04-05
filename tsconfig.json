@@ -20,10 +20,9 @@
     "skipLibCheck": true,
     "paths": {
       "~/*": ["./app/*"],
-      "db/*": ["./db/*"],
-      "functions/*": ["./functions/*"]
+      "api/*": ["./api/*"]
     }
   },
-  "include": ["app", "functions", "db"],
+  "include": ["app", "api", "db"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }

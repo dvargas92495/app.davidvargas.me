@@ -1,4 +1,4 @@
-import type mysql from "mysql2";
+import getMysqlConnection from "@dvargas92495/api/mysql";
 import Stripe from "stripe";
 import { v4 } from "uuid";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
@@ -6,13 +6,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2020-08-27",
 });
 
-const insertRevenueFromStripe = ({
+const insertRevenueFromStripe = async ({
   id,
   connection,
 }: {
   id: string;
-  connection: mysql.Connection;
+  connection?: Awaited<ReturnType<typeof getMysqlConnection>>;
 }) => {
+  const execute = connection
+    ? connection.execute
+    : await getMysqlConnection().then((m) => m.execute);
   return stripe.paymentIntents
     .retrieve(id, { expand: ["data.invoice"] })
     .then(async (p) => ({
@@ -29,7 +32,7 @@ const insertRevenueFromStripe = ({
       date: p.date,
       lines: p.invoice
         ? (p.invoice as Stripe.Invoice).lines.data.map((l) => ({
-            product: l.price?.product,
+            product: l.price?.product as string,
             amount: l.amount - (p.fee * l.amount) / p.amount,
             connect: 0,
             id: l.id,
@@ -47,22 +50,19 @@ const insertRevenueFromStripe = ({
     }))
     .then((p) => {
       // write to mysql
-      return new Promise((resolve) =>
-        connection.execute(
-          `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) VALUES ${p.lines
-            .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
-            .join(",")}`,
-          p.lines.flatMap((line) => [
-            v4(),
-            "stripe",
-            line.id,
-            new Date(p.date).toJSON(),
-            line.amount,
-            line.product,
-            line.connect,
-          ]),
-          resolve
-        )
+      return execute(
+        `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) VALUES ${p.lines
+          .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
+          .join(",")}`,
+        p.lines.flatMap((line) => [
+          v4(),
+          "stripe",
+          line.id,
+          new Date(p.date).toJSON(),
+          line.amount,
+          line.product,
+          line.connect,
+        ])
       );
     })
     .then(() => ({ success: true }));

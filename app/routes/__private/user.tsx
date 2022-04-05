@@ -1,63 +1,49 @@
 import React, { useCallback, useMemo, useState } from "react";
 import clerkUserProfileCss from "@dvargas92495/ui/utils/clerkUserProfileCss";
-import useAuthenticatedHandler from "@dvargas92495/ui/utils/useAuthenticatedHandler";
 import { UserProfile } from "@clerk/remix";
-import type { Handler as TerraformHandler } from "../../../functions/terraform/post";
 import getMeta from "@dvargas92495/ui/utils/getMeta";
 import UserProfileTab from "@dvargas92495/ui/components/UserProfileTab";
+import remixAppAction from "@dvargas92495/ui/utils/remixAppAction";
+import { ActionFunction, useFetcher } from "remix";
+import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
+import editTerraformVariable from "~/data/editTerraformVariable.server";
 
-const HackyDashboard = () => {
-  const postTerraform = useAuthenticatedHandler<TerraformHandler>({
-    method: "POST",
-    path: "terraform",
-  });
+const Terraform = () => {
+  const fetcher =
+    useFetcher<Awaited<ReturnType<typeof editTerraformVariable>>>();
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
-  const [workspaces, setWorkspaces] = useState<
-    Awaited<ReturnType<TerraformHandler>>["workspaces"]
-  >([]);
   const refresh = useCallback(() => {
-    postTerraform({ name, token }).then((ws) => setWorkspaces(ws.workspaces));
-  }, [postTerraform, setWorkspaces, name, token]);
+    fetcher.submit({ name, token, operation: "terraform" });
+  }, [name, token]);
   const listVariables = useCallback(() => {
-    postTerraform({
-      workspaceIds: workspaces.map((w) => w.id),
-      token,
-    }).then((ws) => {
-      const varsById = Object.fromEntries(
-        ws.workspaces.map((w) => [w.id, w.vars])
-      );
-      setWorkspaces(workspaces.map((w) => ({ ...w, vars: varsById[w.id] })));
-    });
-  }, [postTerraform, setWorkspaces, workspaces, token]);
+    if (fetcher.data) {
+      const formData = new FormData();
+      fetcher.data.workspaces.forEach((w) => formData.append('workspaceIds', w.id))
+      formData.append('token', token);
+      formData.append('operation', 'terraform');
+      fetcher.submit(formData);
+    }
+  }, [token, fetcher]);
   const [key, setKey] = useState("");
   const [value, setValue] = useState("");
   const filteredWorkspaces = useMemo(
     () =>
-      workspaces.filter((w) => !key || w.vars.map((v) => v.name).includes(key)),
-    [key, workspaces]
+    fetcher.data ? fetcher.data.workspaces.filter((w) => !key || w.vars.map((v) => v.name).includes(key)) : [],
+    [key, fetcher]
   );
   const fixVariables = useCallback(() => {
-    postTerraform({
-      value,
-      variables: filteredWorkspaces.map((w) => ({
-        workspaceId: w.id,
-        variableId: w.vars.find((v) => v.name === key)?.id || key,
-      })),
-      token,
-    }).then(() => {
-      setKey("");
-      setValue("");
-    });
+    const formData = new FormData();
+    filteredWorkspaces.forEach((w) => formData.append('variables', `${w.id}::${w.vars.find((v) => v.name === key)?.id || key}`))
+    formData.append('token', token);
+    formData.append('value', value);
+    formData.append('operation', 'terraform');
+    fetcher.submit(formData);
   }, [
-    postTerraform,
-    setWorkspaces,
     value,
     filteredWorkspaces,
     token,
     key,
-    setKey,
-    setValue,
   ]);
   const [action, setAction] = useState(0);
   const actions = [refresh, listVariables, fixVariables];
@@ -108,10 +94,41 @@ const HackyDashboard = () => {
   );
 };
 
-const RoamJSDigest = () => {
+const Stripe = () => {
   return (
     <UserProfileTab
-      id={"Digest"}
+      id={"Stripe"}
+      icon={
+        <svg
+          width="1.25em"
+          height="1.25em"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          fill="none"
+          className="cl-icon"
+        >
+          <path
+            d="M19 5h-2V3c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v2H9V3c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v2H1c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V6c0-.55-.45-1-1-1zM8.71 15.29a1.003 1.003 0 01-1.42 1.42l-4-4C3.11 12.53 3 12.28 3 12s.11-.53.29-.71l4-4a1.003 1.003 0 011.42 1.42L5.41 12l3.3 3.29zm8-2.58l-4 4a1.003 1.003 0 01-1.42-1.42l3.3-3.29-3.29-3.29A.965.965 0 0111 8a1.003 1.003 0 011.71-.71l4 4c.18.18.29.43.29.71s-.11.53-.29.71z"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></path>
+        </svg>
+      }
+      cards={[
+        {
+          title: "Broadcast",
+          description: "Send it.",
+        },
+      ]}
+    />
+  );
+};
+
+const ConvertKit = () => {
+  return (
+    <UserProfileTab
+      id={"ConvertKit"}
       icon={
         <svg
           width="1.25em"
@@ -143,13 +160,35 @@ const UserPage: React.FunctionComponent = () => (
   <div>
     <style>{clerkUserProfileCss}</style>
     <UserProfile />
-    <HackyDashboard />
-    <RoamJSDigest />
+    <Stripe />
+    <Terraform />
+    <ConvertKit />
   </div>
 );
 
 export const meta = getMeta({
   title: "user",
 });
+
+export const action: ActionFunction = (args) => {
+  return remixAppAction(args, ({ data }) => {
+    const operation = data.operation?.[0];
+    if (operation === "stripe") {
+      return insertRevenueFromStripe({ id: data.id?.[0] });
+    } else if (operation === "terraform") {
+      return editTerraformVariable({
+        name: data.name?.[0],
+        token: data.token?.[0],
+        workspaceIds: data.workspaceIds,
+        value: data.value?.[0],
+        variables: data.variables
+          .map((v) => v.split("::"))
+          .map(([workspaceId, variableId]) => ({ workspaceId, variableId })),
+      });
+    } else {
+      throw new Error(`Unsupported operation ${operation}`);
+    }
+  });
+};
 
 export default UserPage;

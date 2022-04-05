@@ -1,6 +1,7 @@
 import insertRevenueFromStripe from "../data/insertRevenueFromStripe.server";
 import Stripe from "stripe";
-import type mysql from "mysql2";
+import type { MigrationProps } from "fuegojs/dist/migrate";
+import getMysqlConnection from "@dvargas92495/api/mysql";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   maxNetworkRetries: 3,
@@ -8,19 +9,27 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 });
 
 const paymentIntents: string[] = [];
-const collect = (starting_after?: string): Promise<number> =>
-  stripe.paymentIntents.list({ limit: 100, starting_after }).then((r) => {
-    paymentIntents.push(
-      ...r.data.filter(({ status }) => status === "succeeded").map((p) => p.id)
-    );
-    if (r.has_more) return collect(r.data.slice(-1)[0].id);
-    else return paymentIntents.length;
-  });
+const collect = (starting_after?: string): Promise<number> => {
+  console.log("querying after", starting_after);
+  return stripe.paymentIntents
+    .list({ limit: 100, starting_after })
+    .then((r) => {
+      paymentIntents.push(
+        ...r.data
+          .filter(({ status }) => status === "succeeded")
+          .map((p) => p.id)
+      );
+      console.log("we now have", paymentIntents.length, "payments");
+      if (r.has_more) return collect(r.data.slice(-1)[0].id);
+      else return paymentIntents.length;
+    });
+};
 
-export const migrate = ({ connection }: { connection: mysql.Connection }) =>
+export const migrate = ({ connection }: MigrationProps) =>
   collect()
     .then((d) => console.log("there are", d, "ids to migrate"))
-    .then(() =>
+    .then(() => getMysqlConnection(connection))
+    .then((connection) =>
       Promise.all(
         paymentIntents.map((id) => insertRevenueFromStripe({ id, connection }))
       )
