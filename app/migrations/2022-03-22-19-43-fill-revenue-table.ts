@@ -30,8 +30,13 @@ export const migrate = ({ connection }: MigrationProps) =>
     .then((d) => console.log("there are", d, "ids to migrate"))
     .then(() => getMysqlConnection(connection))
     .then((connection) =>
-      Promise.all(
-        paymentIntents.map((id) => insertRevenueFromStripe({ id, connection }))
-      )
+      paymentIntents
+        .map(
+          (id) => () =>
+            insertRevenueFromStripe({ id, connection }).then(() =>
+              console.log("Recorded stripe id", id)
+            )
+        )
+        .reduce((p, c) => p.then(c), Promise.resolve())
     )
     .then(() => console.log("done"));
