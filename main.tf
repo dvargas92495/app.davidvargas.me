@@ -46,6 +46,14 @@ variable "notion_api_key" {
   type = string
 }
 
+variable "stripe_public" {
+  type = string
+}
+
+variable "stripe_secret" {
+  type = string
+}
+
 provider "aws" {
   region = "us-east-1"
   access_key = var.aws_access_token
@@ -132,4 +140,22 @@ resource "github_actions_secret" "notion_api_key" {
   repository       = "app"
   secret_name      = "NOTION_API_KEY"
   plaintext_value  = var.notion_api_key
+}
+
+resource "github_actions_secret" "cloudfront_distribution_id" {
+  repository       = "app"
+  secret_name      = "CLOUDFRONT_DISTRIBUTION_ID"
+  plaintext_value  = module.aws_static_site.cloudfront_distribution_id
+}
+
+resource "github_actions_secret" "stripe_public" {
+  repository       = "app"
+  secret_name      = "STRIPE_PUBLIC_KEY"
+  plaintext_value  = var.stripe_public
+}
+
+resource "github_actions_secret" "stripe_secret" {
+  repository       = "app"
+  secret_name      = "STRIPE_SECRET_KEY"
+  plaintext_value  = var.stripe_secret
 }
