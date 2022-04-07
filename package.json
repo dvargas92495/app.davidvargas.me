@@ -18,7 +18,7 @@
     "migrate": "fuego migrate",
     "publish": "fuego publish",
     "start": "concurrently \"npm:api\" \"npm:dev\" \"npm:tailwind\"",
-    "postinstall": "fuego postinstall \"@mui/material\" \"@babel\""
+    "postinstall": "fuego postinstall"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.0",
