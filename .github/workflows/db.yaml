@@ -7,7 +7,9 @@ on:
       - ".github/workflows/db.yaml"
 
 env:
+  CLERK_API_KEY: ${{ secrets.CLERK_API_KEY }}
   DATABASE_URL: mysql://app:${{ secrets.MYSQL_PASSWORD }}@vargas-arts.c2sjnb5f4d57.us-east-1.rds.amazonaws.com:5432/app
+  STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
 
 jobs:
   deploy:
