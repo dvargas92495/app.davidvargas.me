@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 14.17.6
       - name: Use NPM 8
-        runs: npm install -g npm@latest
+        run: npm install -g npm@latest
       - name: install
         run: npm install
       - name: migrate
