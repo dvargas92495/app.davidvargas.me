@@ -38,7 +38,7 @@ const UserMysql = () => {
               >
                 <td>{v.name}</td>
                 <td>{new Date(v.start).toLocaleString()}</td>
-                <td>{new Date(v.end).toLocaleString()}</td>
+                <td>{v.end ? new Date(v.end).toLocaleString() : "None"}</td>
                 <td>{v.checksum}</td>
               </tr>
             ))}

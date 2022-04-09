@@ -45,6 +45,10 @@ const insertRevenueFromStripe = async ({
           console.log(`Not Recording test transaction`, id);
           return { values: [] };
         }
+        if (!p.charges.data.length) {
+          console.log(`Not Recording chargeless transaction`, id);
+          return { values: [] };
+        }
         if (p.charges.data[0].refunded) {
           console.log(`Not Recording refunded transaction`, id);
           return { values: [] };
