@@ -8,65 +8,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2020-08-27",
 });
 
-// const checkouts: { id: string; payment: string }[] = [];
-// const checkoutCache: Record<string, string> = {};
-// const collect = (starting_after?: string): Promise<number> => {
-//   console.log("querying after", starting_after);
-//   return stripe.checkout.sessions
-//     .list({ limit: 100, starting_after })
-//     .then((r) => {
-//       checkouts.push(
-//         ...r.data.map((p) => ({
-//           id: p.id,
-//           payment: p.payment_intent as string,
-//         }))
-//       );
-//       console.log("we now have", checkouts.length, "checkouts");
-//       if (r.has_more) return collect(r.data.slice(-1)[0].id);
-//       else return checkouts.length;
-//     });
-// };
-
-// const getSourceInfo = (s: string) => {
-//   if (s.startsWith("li_")) {
-//     const payment = checkoutCache[s];
-//     return stripe.checkout.sessions
-//       .list({ payment_intent: payment })
-//       .then((c) => stripe.checkout.sessions.listLineItems(c.data[0].id))
-//       .then((items) => ({ payment, sources: items.data.map((i) => i.id) }));
-//   } else if (s.startsWith("pi_")) {
-//     return Promise.resolve({ payment: s, sources: [s] });
-//   } else if (s.startsWith("ii_")) {
-//     return stripe.invoiceItems
-//       .retrieve(s)
-//       .then((inv) => stripe.invoices.retrieve(inv.invoice as string))
-//       .then((inv) => ({
-//         payment: inv.payment_intent as string,
-//         sources: inv.lines.data.map((d) => d.id),
-//       }));
-//   } else {
-//     return Promise.reject(`Unknown source: ${s}`);
-//   }
-// };
-
 export const migrate = ({ connection }: MigrationProps) => {
-  // return collect()
-  //   .then(() =>
-  //     checkouts
-  //       .map(
-  //         (c) => () =>
-  //           stripe.checkout.sessions
-  //             .listLineItems(c.id)
-  //             .then((items) =>
-  //               items.data.forEach((l) => (checkoutCache[l.id] = c.payment))
-  //             )
-  //       )
-  //       .reduce((p, c) => p.then(c), Promise.resolve())
-  //   )
-  //   .then(() =>
   return (
     getMysqlConnection(connection)
-      //)
       .then((connection) =>
         Promise.all([
           connection.execute(
@@ -122,8 +66,6 @@ export const migrate = ({ connection }: MigrationProps) => {
                 .filter((r) => r.source_id.startsWith("pi_"))
                 .map(
                   (r) => () =>
-                    // getSourceInfo(r.source_id)
-                    //   .then(({ payment, sources }) =>
                     connection
                       .execute(
                         `DELETE FROM revenue WHERE source = "Stripe" AND source_id = ?`,
