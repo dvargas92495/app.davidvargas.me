@@ -16,7 +16,7 @@ const listRevenue = () =>
         amount: number;
         product: string;
       }[];
-      return { values };
+      return { values: values.map((v) => ({ ...v, date: v.date.valueOf() })) };
     });
 
 export default listRevenue;

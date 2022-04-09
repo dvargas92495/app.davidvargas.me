@@ -7,6 +7,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2020-08-27",
 });
 
+const mappedProducts: Record<string, string> = {
+  "RoamJS Site": "RoamJS Static Site",
+  "SmartBlocks V2!": "RoamJS Smartblocks",
+};
+
 const insertRevenueFromStripe = async ({
   id,
   connection,
@@ -35,67 +40,131 @@ const insertRevenueFromStripe = async ({
     }
     return stripe.paymentIntents
       .retrieve(id, { expand: ["invoice"] })
-      .then(async (p) => ({
-        id: p.id,
-        amount: p.amount,
-        charges: p.charges,
-        date: new Date(p.created * 1000),
-        fee: await stripe.balanceTransactions
-          .retrieve(p.charges.data[0].balance_transaction as string)
-          .then((t) => t.fee),
-        invoice: p.invoice as Stripe.Invoice,
-      }))
-      .then(async (p) => ({
-        date: p.date,
-        lines: p.invoice
-          ? await Promise.all(
-              (p.invoice as Stripe.Invoice).lines.data.map((l) =>
-                stripe.products
-                  .retrieve(l.price?.product as string)
-                  .then((product) => ({
-                    product: product.name,
-                    amount: l.amount - (p.fee * l.amount) / p.amount,
-                    connect: 0,
-                    id: l.id,
-                  }))
-              )
-            )
-          : [
-              {
-                product: "RoamJS Smartblocks",
-                amount: (p.charges.data[0].application_fee_amount || 0) - p.fee,
-                connect:
-                  p.charges.data[0].amount -
-                  (p.charges.data[0].application_fee_amount || 0),
-                id: p.id,
-              },
-            ],
-      }))
       .then((p) => {
-        // write to mysql
-        const values = p.lines.map((line) => ({
-          uuid: v4(),
-          source: "stripe",
-          source_id: line.id,
-          date: new Date(p.date),
-          amount: line.amount,
-          product: line.product,
-          connect: line.connect,
-        }));
-        return execute(
-          `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) VALUES ${values
-            .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
-            .join(",")}`,
-          values.flatMap((v) => [
-            v.uuid,
-            v.source,
-            v.source_id,
-            v.date,
-            v.amount,
-            v.product,
-            v.connect,
-          ])
-        ).then(() => ({ values }));
+        if (p.metadata.Test === "true") {
+          console.log(`Not Recording test transaction`, id);
+          return { values: [] };
+        }
+        if (p.charges.data[0].refunded) {
+          console.log(`Not Recording refunded transaction`, id);
+          return { values: [] };
+        }
+        return Promise.all([
+          stripe.balanceTransactions
+            .retrieve(p.charges.data[0].balance_transaction as string)
+            .then((t) => t.fee),
+          stripe.checkout.sessions
+            .list({ payment_intent: p.id })
+            .then((r) => r.data?.[0]),
+        ])
+          .then(([fee, checkout]) => ({
+            id: p.id,
+            amount: p.amount,
+            charges: p.charges,
+            date: new Date(p.created * 1000),
+            fee,
+            invoice: p.invoice as Stripe.Invoice,
+            checkout,
+            metadata: p.metadata,
+          }))
+          .then(async (p) => ({
+            date: p.date,
+            lines: p.invoice
+              ? await Promise.all(
+                  (p.invoice as Stripe.Invoice).lines.data.map((l) =>
+                    stripe.products
+                      .retrieve(l.price?.product as string)
+                      .then((product) => ({
+                        product: product.name,
+                        amount: l.amount - (p.fee * l.amount) / p.amount,
+                        connect: 0,
+                        id: l.id,
+                      }))
+                  )
+                )
+              : p.checkout
+              ? await stripe.checkout.sessions
+                  .listLineItems(p.checkout.id)
+                  .then((c) =>
+                    Promise.all(
+                      c.data.map((l) =>
+                        stripe.products
+                          .retrieve(l.price?.product as string)
+                          .then((product) => ({
+                            product: product.name,
+                            amount:
+                              l.amount_subtotal -
+                              (p.fee * l.amount_subtotal) / p.amount,
+                            connect: 0,
+                            id: l.id,
+                          }))
+                      )
+                    )
+                  )
+              : (p.charges.data[0].application_fee_amount || 0) > 0
+              ? [
+                  {
+                    product: "RoamJS Smartblocks",
+                    amount:
+                      (p.charges.data[0].application_fee_amount || 0) - p.fee,
+                    connect:
+                      p.charges.data[0].amount -
+                      (p.charges.data[0].application_fee_amount || 0),
+                    id: p.id,
+                  },
+                ]
+              : p.metadata.source
+              ? [
+                  {
+                    product: p.metadata.source,
+                    amount: p.charges.data[0].amount,
+                    connect: 0,
+                    id: p.id,
+                  },
+                ]
+              : [
+                  {
+                    product: "Unknown",
+                    amount: p.charges.data[0].amount,
+                    connect: 0,
+                    id: p.id,
+                  },
+                ],
+          }))
+          .then((r) => {
+            // write to mysql
+            const values = r.lines.map((line) => ({
+              uuid: v4(),
+              source: "stripe",
+              source_id: line.id,
+              date: new Date(r.date),
+              amount: line.amount,
+              product: mappedProducts[line.product] || line.product,
+              connect: line.connect,
+            }));
+            return execute(
+              `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) VALUES ${values
+                .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
+                .join(",")}`,
+              values.flatMap((v) => [
+                v.uuid,
+                v.source,
+                v.source_id,
+                v.date,
+                v.amount,
+                v.product,
+                v.connect,
+              ])
+            )
+              .then(() => ({
+                values,
+              }))
+              .catch((e) => {
+                console.error("Failed to insert revenue records for id:", id);
+                console.error(JSON.stringify(values, null, 4));
+                return Promise.reject(e);
+              });
+          });
       });
   });
 };

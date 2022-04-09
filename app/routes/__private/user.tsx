@@ -3,7 +3,12 @@ import { UserButton, useUser } from "@clerk/remix";
 import getMeta from "@dvargas92495/ui/utils/getMeta";
 import { Link, Outlet, useMatches } from "remix";
 
-const TABS = [{ id: "stripe" }, { id: "terraform" }, { id: "convertkit" }];
+const TABS = [
+  { id: "convertkit" },
+  { id: "mysql" },
+  { id: "stripe" },
+  { id: "terraform" },
+];
 
 const UserPage: React.FunctionComponent = () => {
   const user = useUser();
@@ -43,7 +48,7 @@ const UserPage: React.FunctionComponent = () => {
                       strokeLinejoin="round"
                     ></path>
                   </svg>
-                  <span className={'ml-2'}>{tab.id}</span>
+                  <span className={"ml-2"}>{tab.id}</span>
                 </div>
               </Link>
             </div>

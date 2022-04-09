@@ -6,33 +6,23 @@ import {
   Form,
   LoaderFunction,
   redirect,
-  useLoaderData,
 } from "remix";
-import deleteRevenueRecord from "~/data/deleteRevenueRecord.server";
-import getRevenue from "~/data/getRevenue.server";
+import deleteMigrationRecord from "~/data/deleteMigrationRecord.server";
 
-const UserStripeUuid = () => {
-  const data = useLoaderData<Awaited<ReturnType<typeof getRevenue>>>();
+const UserMysqlUuid = () => {
   return (
     <>
       <Form method={"delete"}>
         <button type="submit">DELETE</button>
       </Form>
-      <a
-        href={`https://dashboard.stripe.com/payments/${data.source_id}`}
-        rel="noopener"
-        target={"_blank"}
-      >
-        LINK
-      </a>
     </>
   );
 };
 
 export const loader: LoaderFunction = (args) => {
   return remixAppLoader(args, ({ params }) => {
-    // fetch source Id
-    return getRevenue(params.uuid || "");
+      // fetch source Id
+    return params;
   });
 };
 
@@ -45,11 +35,11 @@ export const action: ActionFunction = (args) => {
     if (!params.uuid)
       throw new Response(`Missing Record uuid`, { status: 400 });
     if (method === "DELETE") {
-      return deleteRevenueRecord(params.uuid).then(() =>
-        redirect("/user/stripe")
+      return deleteMigrationRecord(params.uuid).then(() =>
+        redirect("/user/mysql")
       );
     } else throw new Response(`Unsupported method: ${method}`, { status: 404 });
   });
 };
 
-export default UserStripeUuid;
+export default UserMysqlUuid;

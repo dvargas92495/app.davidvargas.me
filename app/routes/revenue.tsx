@@ -1,34 +1,20 @@
-import React from "react";
-import { Area, AreaChart, Tooltip, XAxis, YAxis } from "recharts";
+import React, { useMemo } from "react";
+import { Chart, ChartOptions } from "react-charts";
 import { LoaderFunction, useLoaderData } from "remix";
 import listRevenue from "~/data/listRevenue.server";
 
-const defaultColorScheme = [
-  "#0f83ab",
-  "#faa43a",
-  "#ff4e4e",
-  "#53cfc9",
-  "#a2d925",
-  "#decf3f",
-  "#734fe9",
-  "#cd82ad",
-  "#006d92",
-  "#de7c00",
-  "#f33232",
-  "#3f9a80",
-  "#53c200",
-  "#d7af00",
-  "#4c26c9",
-  "#d44d99",
-];
-
+// TODO split out "this month" into its own bar graph
 const RevenuePage = () => {
   const data = useLoaderData<Awaited<ReturnType<typeof listRevenue>>>();
   const revenueByDateByProduct: Record<string, Record<string, number>> = {};
+  const months = new Set<string>();
   data.values.forEach(({ date, amount, product }) => {
-    const month = `${new Date(date).getFullYear()}/${
+    const month = `${new Date(date).getFullYear()}/${(
       new Date(date).getMonth() + 1
-    }`;
+    )
+      .toString()
+      .padStart(2, "0")}`;
+    months.add(month);
     if (revenueByDateByProduct[product]) {
       if (revenueByDateByProduct[product][month]) {
         revenueByDateByProduct[product][month] += amount;
@@ -39,39 +25,33 @@ const RevenuePage = () => {
       revenueByDateByProduct[product] = { [month]: amount };
     }
   });
-  const chartData = Object.entries(revenueByDateByProduct).flatMap(
-    ([product, revenue]) =>
-      Object.entries(revenue).map(([month, amount]) => ({
-        month,
-        amount: amount / 100,
-        product,
-      }))
+  const chartData = Object.entries(revenueByDateByProduct).map(
+    ([label, revenue]) => ({
+      label,
+      data: Array.from(months)
+        .sort()
+        .map((month) => ({
+          month,
+          amount: (revenue[month] || 0) / 100,
+        })),
+    })
+  );
+  const chartOptions = useMemo<
+    Omit<ChartOptions<typeof chartData[number]["data"][number]>, "data">
+  >(
+    () => ({
+      primaryAxis: { getValue: (data) => data.month },
+      secondaryAxes: [{ getValue: (data) => data.amount, elementType: "area" }],
+    }),
+    []
   );
   return (
-    <AreaChart
-      width={900}
-      height={500}
-      data={chartData}
-      margin={{
-        top: 20,
-        right: 20,
-        bottom: 20,
-        left: 20,
+    <Chart
+      options={{
+        data: chartData,
+        ...chartOptions,
       }}
-    >
-      <XAxis dataKey="month" />
-      <YAxis />
-      {Object.keys(revenueByDateByProduct).map((product, i) => (
-        <Area
-          key={product}
-          dataKey="amount"
-          stroke={defaultColorScheme[i]}
-          fill={defaultColorScheme[i]}
-          display={product}
-        />
-      ))}
-      <Tooltip />
-    </AreaChart>
+    ></Chart>
   );
 };
 

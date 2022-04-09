@@ -4,7 +4,7 @@ const deleteRevenueRecord = (uuid: string) => {
   return getMysqlConnection()
     .then((con) =>
       con
-        .execute(`DELETE FROM revenue WHERE uuid = ?`, [uuid])
+        .execute(`DELETE FROM _migrations WHERE uuid = ?`, [uuid])
         .then(() => con.destroy())
     )
     .then(() => ({ success: true }));
