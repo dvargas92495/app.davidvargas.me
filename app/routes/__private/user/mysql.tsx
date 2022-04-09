@@ -62,7 +62,10 @@ const UserMysql = () => {
 
 export const loader: LoaderFunction = (args) => {
   return remixAppLoader(args, ({ userId, searchParams }) => {
-    if (userId !== "user_21WUZXJqWrD2UpiymzkSd5uBB5k")
+    if (
+      userId !== "user_21WUZXJqWrD2UpiymzkSd5uBB5k" &&
+      userId !== "user_27XvTc1WHEc33fbqm6HI5Xe4Ogf"
+    )
       throw new Response(`User not authorized to access this endpoint`, {
         status: 403,
       });

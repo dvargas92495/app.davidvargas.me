@@ -1,12 +1,7 @@
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
 import React from "react";
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  redirect,
-} from "remix";
+import { ActionFunction, Form, LoaderFunction, redirect } from "remix";
 import deleteMigrationRecord from "~/data/deleteMigrationRecord.server";
 
 const UserMysqlUuid = () => {
@@ -21,14 +16,17 @@ const UserMysqlUuid = () => {
 
 export const loader: LoaderFunction = (args) => {
   return remixAppLoader(args, ({ params }) => {
-      // fetch source Id
+    // fetch source Id
     return params;
   });
 };
 
 export const action: ActionFunction = (args) => {
   return remixAppAction(args, ({ userId, method, params }) => {
-    if (userId !== "user_21WUZXJqWrD2UpiymzkSd5uBB5k")
+    if (
+      userId !== "user_21WUZXJqWrD2UpiymzkSd5uBB5k" &&
+      userId !== "user_27XvTc1WHEc33fbqm6HI5Xe4Ogf"
+    )
       throw new Response(`User not authorized to access this endpoint`, {
         status: 403,
       });

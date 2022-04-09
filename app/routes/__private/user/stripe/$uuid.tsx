@@ -38,7 +38,10 @@ export const loader: LoaderFunction = (args) => {
 
 export const action: ActionFunction = (args) => {
   return remixAppAction(args, ({ userId, method, params }) => {
-    if (userId !== "user_21WUZXJqWrD2UpiymzkSd5uBB5k")
+    if (
+      userId !== "user_21WUZXJqWrD2UpiymzkSd5uBB5k" &&
+      userId !== "user_27XvTc1WHEc33fbqm6HI5Xe4Ogf"
+    )
       throw new Response(`User not authorized to access this endpoint`, {
         status: 403,
       });
