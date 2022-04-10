@@ -1,6 +1,6 @@
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
-import React, { useMemo } from "react";
+import React from "react";
 import {
   ActionFunction,
   Form,
@@ -9,91 +9,15 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
-  useTransition,
   useSearchParams,
 } from "remix";
+import Button from "~/components/Button";
+import NumberInput from "~/components/NumberInput";
+import TextInput from "~/components/TextInput";
 import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
 import listRevenueFromStripe from "~/data/listRevenueFromStripe.server";
 
 const PAGE_SIZE = 20;
-
-type InputProps = {
-  label?: React.ReactNode;
-} & Omit<
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >,
-  "type" | "required"
->;
-
-const TextInput = ({ label, name, disabled, ...inputProps }: InputProps) => {
-  const transition = useTransition();
-  const loading = useMemo(
-    () => transition.state === "submitting",
-    [transition]
-  );
-  return (
-    <div className="mb-6">
-      <label
-        htmlFor={name}
-        className="block mb-2 text-sm font-medium text-gray-900"
-      >
-        {label}
-      </label>
-      <input
-        name={name}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 disabled:opacity-25"
-        required
-        disabled={typeof disabled === "undefined" ? loading : disabled}
-        {...inputProps}
-      />
-    </div>
-  );
-};
-
-const NumberInput = ({ label, name, disabled, ...inputProps }: InputProps) => {
-  const transition = useTransition();
-  const loading = useMemo(
-    () => transition.state === "submitting",
-    [transition]
-  );
-  return (
-    <div className="mb-6">
-      <label
-        htmlFor={name}
-        className="block mb-2 text-sm font-medium text-gray-900"
-      >
-        {label}
-      </label>
-      <input
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 disabled:opacity-25"
-        type={"number"}
-        name={name}
-        disabled={typeof disabled === "undefined" ? loading : disabled}
-        required
-        {...inputProps}
-      />
-    </div>
-  );
-};
-
-const Button: React.FC<{ disabled?: boolean }> = ({ children, disabled }) => {
-  const transition = useTransition();
-  const loading = useMemo(
-    () => transition.state === "submitting",
-    [transition]
-  );
-  return (
-    <button
-      type="submit"
-      className="px-8 py-3 font-semibold rounded-full bg-sky-500"
-      disabled={typeof disabled === "undefined" ? loading : disabled}
-    >
-      {children}
-    </button>
-  );
-};
 
 const UserStripe = () => {
   const data = useLoaderData<

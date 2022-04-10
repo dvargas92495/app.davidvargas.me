@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@dvargas92495/api": "^0.7.9",
-    "@dvargas92495/ui": "^0.52.5",
+    "@dvargas92495/ui": "^0.52.6",
     "@headlessui/react": "^1.5.0",
     "react-charts": "^3.0.0-beta.36",
     "remix": "1.3.3",
