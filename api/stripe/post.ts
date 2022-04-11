@@ -31,6 +31,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   const {
     type,
     data: { object },
+    id,
   } = stripeEvent;
   return (
     type === "payment_intent.succeeded"
@@ -40,7 +41,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             connection,
           }).then(() => connection.destroy())
         )
-      : type === ""
+      : type === "payment_method.attached"
       ? stripe.customers
           .retrieve((object as Stripe.PaymentMethod).customer as string)
           .then((c) => c as Stripe.Customer)
@@ -57,6 +58,96 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                   })
                   .then(() => Promise.resolve())
           )
+      : type === "invoice.payment_failed"
+      ? sendEmail({
+          to: "dvargas92495@gmail.com",
+          subject: "Invoice Failed",
+          body: React.createElement(
+            "div",
+            {
+              style: {
+                margin: "0 auto",
+                maxWidth: 600,
+                fontFamily: `"Proxima Nova","proxima-nova",Helvetica,Arial sans-serif`,
+                padding: `20px 0`,
+              },
+            },
+            React.createElement(
+              "div",
+              {
+                style: {
+                  width: "80%",
+                  margin: "0 auto",
+                  paddingBottom: 20,
+                  borderBottom: "1px dashed #dadada",
+                  textAlign: "center",
+                },
+              },
+              React.createElement("img", {
+                src: "https://davidvargas.me/favicon.ico",
+                width: 128,
+              })
+            ),
+            React.createElement(
+              "div",
+              {
+                style: {
+                  width: "80%",
+                  margin: "30px auto",
+                  fontSize: 16,
+                },
+              },
+              React.createElement(
+                "p",
+                {},
+                `A user failed to pay their latest invoice.`
+              ),
+              React.createElement(
+                "a",
+                { href: `https://dashboard.stripe.com/events/${id}` },
+                `Click here for more info.`
+              )
+            ),
+            React.createElement(
+              "div",
+              {
+                style: {
+                  width: "80%",
+                  margin: "30px auto",
+                  borderTop: "1px dashed #dadada",
+                  display: "flex",
+                  color: "#a8a8a8",
+                  paddingTop: 15,
+                },
+              },
+              React.createElement(
+                "div",
+                { style: { width: "50%" } },
+                "Sent From ",
+                React.createElement(
+                  "a",
+                  {
+                    href: "https://davidvargas.me",
+                    style: { color: "#3ba4dc", textDecoration: "none" },
+                  },
+                  "Vargas Arts"
+                )
+              ),
+              React.createElement(
+                "div",
+                { style: { width: "50%", textAlign: "right" } },
+                React.createElement(
+                  "a",
+                  {
+                    href: "mailto:hello@davidvargas.me",
+                    style: { color: "#3ba4dc", textDecoration: "none" },
+                  },
+                  "Contact Support"
+                )
+              )
+            )
+          ),
+        })
       : Promise.resolve()
   )
     .then(() => {
@@ -141,7 +232,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             React.createElement(
               "h3",
               {},
-              `An error was thrown in a RoamJS Lambda`
+              `An error was thrown in the Stripe Global Webhook`
             ),
             React.createElement(
               "p",
