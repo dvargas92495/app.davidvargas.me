@@ -40,6 +40,23 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             connection,
           }).then(() => connection.destroy())
         )
+      : type === ""
+      ? stripe.customers
+          .retrieve((object as Stripe.PaymentMethod).customer as string)
+          .then((c) => c as Stripe.Customer)
+          .then((c) => c.invoice_settings.default_payment_method as string)
+          .then((dpm) =>
+            dpm
+              ? Promise.resolve()
+              : stripe.customers
+                  .update((object as Stripe.PaymentMethod).customer as string, {
+                    invoice_settings: {
+                      default_payment_method: (object as Stripe.PaymentMethod)
+                        .id,
+                    },
+                  })
+                  .then(() => Promise.resolve())
+          )
       : Promise.resolve()
   )
     .then(() => {
