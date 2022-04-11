@@ -174,6 +174,11 @@ const UserIndex = () => {
         name={"ConvertKit"}
         fields={["API Secret"]}
       />
+      <CustomConnectedAccount
+        svgSrc="https://etherscan.io/images/favicon3.ico"
+        name={"Etherscan"}
+        fields={["API Key Token"]}
+      />
     </div>
   );
 };

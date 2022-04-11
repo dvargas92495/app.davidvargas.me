@@ -5,6 +5,7 @@ import { Link, Outlet, useMatches } from "remix";
 
 const TABS = [
   { id: "convertkit" },
+  { id: "etherscan" },
   { id: "mysql" },
   { id: "stripe" },
   { id: "terraform" },
