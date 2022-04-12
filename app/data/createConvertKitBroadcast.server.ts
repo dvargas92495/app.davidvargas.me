@@ -94,7 +94,10 @@ const createConvertKitBroadcast = ({
       }
       return axios
         .get<{ token: string }[]>(
-          `https://api.clerk.dev/v1/${userId}/oauth_access_tokens/oauth_github`
+          `https://api.clerk.dev/v1/${userId}/oauth_access_tokens/oauth_github`,
+          {
+            headers: { Authorization: `Bearer ${process.env.CLERK_API_KEY}` },
+          }
         )
         .then((r) => {
           const { username } = githubProvider;
