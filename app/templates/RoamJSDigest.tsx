@@ -1,5 +1,26 @@
 import React from "react";
 import dateFnsFormat from "date-fns/format";
+import Markdown from "markdown-to-jsx";
+
+const Update = ({ message, date }: { message: string; date: Date }) => {
+  return (
+    <li>
+      <Markdown
+        options={{
+          overrides: {
+            a: {
+              props: { className: "keychainify-checked" },
+            },
+          },
+        }}
+      >
+        {`${message} (${dateFnsFormat(date, "MM/dd")})`}
+      </Markdown>
+    </li>
+  );
+};
+
+const ignored = ["roamjs-base", "roamjs-components", "roamjs-scripts"];
 
 const RoamJSDigest = ({
   data,
@@ -13,15 +34,16 @@ const RoamJSDigest = ({
   }[];
   date: Date;
 }) => {
-  console.log("Found", data.length, "commits");
-  const updatesByExtension = data.reduce((p, { repo, ...c }) => {
-    if (p[repo]) {
-      p[repo].push(c);
-    } else {
-      p[repo] = [c];
-    }
-    return p;
-  }, {} as Record<string, { message: string; date: Date; url: string }[]>);
+  const updatesByExtension = data
+    .filter((s) => !ignored.includes(s.repo))
+    .reduce((p, { repo, ...c }) => {
+      if (p[repo]) {
+        p[repo].push(c);
+      } else {
+        p[repo] = [c];
+      }
+      return p;
+    }, {} as Record<string, { message: string; date: Date; url: string }[]>);
   return (
     <>
       <p style={{ textAlign: "center" }}>
@@ -61,9 +83,7 @@ const RoamJSDigest = ({
                 :
                 <ul>
                   {upd.map(({ message, url, date }) => (
-                    <li key={url}>
-                      {message} ({dateFnsFormat(date, "MM/dd")})
-                    </li>
+                    <Update key={url} message={message} date={date} />
                   ))}
                 </ul>
               </li>
@@ -74,10 +94,8 @@ const RoamJSDigest = ({
         <strong>Site News</strong>
       </h2>
       <ul>
-        {updatesByExtension["roam-js-extensions"].map((upd) => (
-          <li key={upd.url}>
-            {upd.message} ({dateFnsFormat(upd.date, "MM/dd")})
-          </li>
+        {(updatesByExtension["roam-js-extensions"] || []).map((upd) => (
+          <Update key={upd.url} message={upd.message} date={upd.date} />
         ))}
       </ul>
       <p>

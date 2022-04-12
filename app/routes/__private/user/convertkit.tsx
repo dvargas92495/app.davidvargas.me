@@ -23,7 +23,7 @@ const UserConvertKit = () => {
   const actionData = useActionData();
   const [toastMessage, setToastMessage] = useState("");
   useEffect(() => {
-    if (actionData?.success || true)
+    if (actionData?.success)
       setToastMessage("Successfully created broadcast!");
   }, [setToastMessage]);
   return (
@@ -41,7 +41,7 @@ const UserConvertKit = () => {
           <div className="flex-grow border-2 border-gray-500 border-opacity-50 border-dashed rounded-lg p-4">
             <h1 className="text-2xl font-bold mb-6">Response</h1>
             <pre className="p-8 bg-green-800 bg-opacity-10 text-green-900 border-green-900 border-2 rounded-sm overflow-auto">
-              {JSON.stringify(actionData)}
+              {JSON.stringify(actionData.data, null, 4)}
             </pre>
           </div>
         )}
@@ -49,9 +49,9 @@ const UserConvertKit = () => {
       <div>
         <h1 className="text-2xl font-bold mb-6">Latest Broadcasts</h1>
         <ul>
-          {data.broadcasts.map((b) => (
-            <li key={b.id}>
-              {b.subject} ({b.created_at})
+          {data.broadcasts.map(({id, subject, created_at}) => (
+            <li key={id}>
+              {subject} ({created_at})
             </li>
           ))}
         </ul>
@@ -78,7 +78,7 @@ export const action: ActionFunction = (args) => {
       if (e.response) {
         throw new Response(e.response.data, { status: e.response.status });
       } else {
-        throw new Response(`Internal Server Error: ${e.message}`, {
+        throw new Response(`Internal Server Error: ${e.message}\n${e.stack}`, {
           status: 500,
         });
       }

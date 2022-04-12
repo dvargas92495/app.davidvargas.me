@@ -41,7 +41,7 @@ const BaseInput = ({
       </label>
       <input
         name={name}
-        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 disabled:opacity-25${
+        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 disabled:opacity-25 disabled:cursor-not-allowed${
           inputClassname ? ` ${inputClassname}` : ""
         }`}
         required

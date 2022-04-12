@@ -114,23 +114,22 @@ const createConvertKitBroadcast = ({
             since,
             token: r.data[0]?.token,
             username: username || "",
-          })
-            .then((data) =>
-              ReactDOMServer.renderToString(
-                React.createElement(RoamJSDigest, { data, date })
-              )
+          }).then((data) =>
+            ReactDOMServer.renderToStaticMarkup(
+              React.createElement(RoamJSDigest, { data, date })
             )
-            .then((content) =>
-              axios.post("https://api.convertkit.com/v3/broadcasts", {
-                api_secret: convertKit.apiSecret,
-                description: `Broadcast automatically generated at ${date.toLocaleString()}`,
-                subject: "FILL OUT SUBJECT",
-                content,
-              })
-            );
+          )
+          .then((content) =>
+            axios.post("https://api.convertkit.com/v3/broadcasts", {
+              api_secret: convertKit.apiSecret,
+              description: `Broadcast automatically generated at ${date.toLocaleString()}`,
+              subject: "FILL OUT SUBJECT",
+              content,
+            }).then(r => r.data)
+          );
         });
     })
-    .then((r) => ({ success: true, ...r.data }));
+    .then((data) => ({ success: true, data }));
 };
 
 export default createConvertKitBroadcast;
