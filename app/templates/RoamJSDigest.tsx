@@ -29,7 +29,7 @@ const RoamJSDigest = ({
           src="https://roamjs.com/images/logo-low-res.png"
           width={64}
           height={64}
-          style={{ display: "inline-block" }}
+          style={{ display: "inline-block", width: "64px", height: "64px" }}
         />
       </p>
       <p style={{ textAlign: "center" }}>
@@ -76,7 +76,7 @@ const RoamJSDigest = ({
       <ul>
         {updatesByExtension["roam-js-extensions"].map((upd) => (
           <li key={upd.url}>
-            {upd.message} ({upd.date})
+            {upd.message} ({dateFnsFormat(upd.date, "MM/dd")})
           </li>
         ))}
       </ul>

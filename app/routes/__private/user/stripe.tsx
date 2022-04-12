@@ -117,8 +117,7 @@ const UserStripe = () => {
 };
 
 export const loader: LoaderFunction = (args) => {
-  return remixAppLoader(args, ({ userId, searchParams }) => {
-    console.log(searchParams);
+  return remixAppLoader(args, ({ userId }) => {
     if (
       userId !== "user_21WUZXJqWrD2UpiymzkSd5uBB5k" &&
       userId !== "user_27XvTc1WHEc33fbqm6HI5Xe4Ogf"

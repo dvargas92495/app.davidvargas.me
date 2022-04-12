@@ -94,11 +94,16 @@ const createConvertKitBroadcast = ({
       }
       return axios
         .get<{ token: string }[]>(
-          `https://api.clerk.dev/v1/${userId}/oauth_access_tokens/oauth_github`,
+          `https://api.clerk.dev/v1/users/${userId}/oauth_access_tokens/oauth_github`,
           {
             headers: { Authorization: `Bearer ${process.env.CLERK_API_KEY}` },
           }
         )
+        .catch((e) => {
+          throw new Error(
+            `Failed to fetch oauth access tokens for user ${userId}: ${e.response?.data}`
+          );
+        })
         .then((r) => {
           const { username } = githubProvider;
 
@@ -125,7 +130,7 @@ const createConvertKitBroadcast = ({
             );
         });
     })
-    .then(() => ({ success: true }));
+    .then((r) => ({ success: true, ...r.data }));
 };
 
 export default createConvertKitBroadcast;

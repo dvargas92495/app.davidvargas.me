@@ -153,28 +153,28 @@ const Toast = ({
       }${horizontalPosition === "RIGHT" ? "justify-right" : ""}`}
     >
       <div
-        className={`shadow-md p-3 flex flex-col w-96 ${
+        className={`shadow-md p-3 flex flex-col w-96 border-2 rounded-sm ${
           intent === "success"
-            ? "border-2 border-green-900 text-green-900 bg-green-400"
+            ? "border-green-700 text-green-700 bg-green-400"
             : ""
         }${
           intent === "warning"
-            ? "border-2 border-yellow-900 text-yellow-900 bg-yellow-400"
+            ? "border-yellow-700 text-yellow-700 bg-yellow-400"
             : ""
         }${
           intent === "error"
-            ? "border-2 border-red-900 text-red-900 bg-red-400"
+            ? "border-red-700 text-red-700 bg-red-400"
             : ""
         }`}
       >
-        <div className="flex">
+        <div className="flex items-center">
           <div className="mr-3">
             {/* <Icon /> */}
-            <svg />
+            <svg className="w-6 h-6"/>
           </div>
           <div className="flex-grow">
-            {title && <h1 className="font-semibold text-sm mb-1">{title}</h1>}
-            <div className="text-xs mb-2">{message}</div>
+            {title && <h1 className="font-bold text-sm mb-1">{title}</h1>}
+            <div className="font-semibold text-xs">{message}</div>
           </div>
           {showCloseIcon && (
             <div className="ml-3 cursor-pointer">

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActionFunction,
   Form,
   LoaderFunction,
+  useActionData,
   useCatch,
   useLoaderData,
 } from "remix";
@@ -14,20 +15,37 @@ import getConvertKitBroadcasts from "~/data/getConvertKitBroadcasts.server";
 import createConvertKitBroadcast from "~/data/createConvertKitBroadcast.server";
 import DefaultErrorBoundary from "~/components/DefaultErrorBoundary";
 import { CatchBoundaryComponent } from "@remix-run/server-runtime/routeModules";
+import Toast from "~/components/Toast";
 
 const UserConvertKit = () => {
   const data =
     useLoaderData<Awaited<ReturnType<typeof getConvertKitBroadcasts>>>();
+  const actionData = useActionData();
+  const [toastMessage, setToastMessage] = useState("");
+  useEffect(() => {
+    if (actionData?.success || true)
+      setToastMessage("Successfully created broadcast!");
+  }, [setToastMessage]);
   return (
     <>
-      <Form method={"post"} className="mb-6">
-        <TextInput
-          label={"Since"}
-          name={"since"}
-          defaultValue={data.broadcasts[0].created_at}
-        />
-        <Button>Create Broadcast</Button>
-      </Form>
+      <div className="flex h-64">
+        <Form method={"post"} className="mb-6 mr-6 w-96">
+          <TextInput
+            label={"Since"}
+            name={"since"}
+            defaultValue={data.broadcasts[0].created_at}
+          />
+          <Button>Create Broadcast</Button>
+        </Form>
+        {actionData && (
+          <div className="flex-grow border-2 border-gray-500 border-opacity-50 border-dashed rounded-lg p-4">
+            <h1 className="text-2xl font-bold mb-6">Response</h1>
+            <pre className="p-8 bg-green-800 bg-opacity-10 text-green-900 border-green-900 border-2 rounded-sm overflow-auto">
+              {JSON.stringify(actionData)}
+            </pre>
+          </div>
+        )}
+      </div>
       <div>
         <h1 className="text-2xl font-bold mb-6">Latest Broadcasts</h1>
         <ul>
@@ -38,6 +56,11 @@ const UserConvertKit = () => {
           ))}
         </ul>
       </div>
+      <Toast
+        isOpen={!!toastMessage}
+        onClose={() => setToastMessage("")}
+        message={toastMessage}
+      />
     </>
   );
 };
@@ -67,7 +90,17 @@ export const ErrorBoundary = DefaultErrorBoundary;
 
 export const CatchBoundary: CatchBoundaryComponent = () => {
   const caught = useCatch();
-  return <DefaultErrorBoundary error={new Error(caught.data)} />;
+  return (
+    <DefaultErrorBoundary
+      error={
+        new Error(
+          typeof caught.data === "object"
+            ? JSON.stringify(caught.data)
+            : caught.data
+        )
+      }
+    />
+  );
 };
 
 export default UserConvertKit;

@@ -6,7 +6,7 @@
   "repository": "dvargas92495/app",
   "scripts": {
     "tailwind": "npm run generate:css -- --watch",
-    "generate:css": "npx tailwindcss -o ./app/tailwind.css",
+    "generate:css": "tailwindcss -o ./app/tailwind.css",
     "format": "prettier --write \"**/*.tsx\"",
     "lint": "eslint . --ext .ts,.tsx",
     "api": "fuego api",
