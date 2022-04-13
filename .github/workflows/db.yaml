@@ -25,4 +25,4 @@ jobs:
       - name: install
         run: npm install
       - name: migrate
-        run: npx fuego migrate --overwrite 2022-04-08-11-42-fix-revenue-table
+        run: npx fuego migrate

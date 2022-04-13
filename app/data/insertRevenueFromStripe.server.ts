@@ -49,13 +49,14 @@ const insertRevenueFromStripe = async ({
           console.log(`Not Recording chargeless transaction`, id);
           return { values: [] };
         }
-        if (p.charges.data[0].refunded) {
+        const [charge] = p.charges.data;
+        if (charge.refunded) {
           console.log(`Not Recording refunded transaction`, id);
           return { values: [] };
         }
         return Promise.all([
           stripe.balanceTransactions
-            .retrieve(p.charges.data[0].balance_transaction as string)
+            .retrieve(charge.balance_transaction as string)
             .then((t) => t.fee),
           stripe.checkout.sessions
             .list({ payment_intent: p.id })
@@ -64,8 +65,7 @@ const insertRevenueFromStripe = async ({
           .then(([fee, checkout]) => ({
             id: p.id,
             amount: p.amount,
-            charges: p.charges,
-            date: new Date(p.created * 1000),
+            date: new Date(charge.created * 1000),
             fee,
             invoice: p.invoice as Stripe.Invoice,
             checkout,
@@ -105,15 +105,13 @@ const insertRevenueFromStripe = async ({
                       )
                     )
                   )
-              : (p.charges.data[0].application_fee_amount || 0) > 0
+              : (charge.application_fee_amount || 0) > 0
               ? [
                   {
                     product: "RoamJS Smartblocks",
-                    amount:
-                      (p.charges.data[0].application_fee_amount || 0) - p.fee,
+                    amount: (charge.application_fee_amount || 0) - p.fee,
                     connect:
-                      p.charges.data[0].amount -
-                      (p.charges.data[0].application_fee_amount || 0),
+                      charge.amount - (charge.application_fee_amount || 0),
                     id: p.id,
                   },
                 ]
@@ -121,7 +119,7 @@ const insertRevenueFromStripe = async ({
               ? [
                   {
                     product: p.metadata.source,
-                    amount: p.charges.data[0].amount,
+                    amount: charge.amount,
                     connect: 0,
                     id: p.id,
                   },
@@ -129,7 +127,7 @@ const insertRevenueFromStripe = async ({
               : [
                   {
                     product: "Unknown",
-                    amount: p.charges.data[0].amount,
+                    amount: charge.amount,
                     connect: 0,
                     id: p.id,
                   },
@@ -149,7 +147,7 @@ const insertRevenueFromStripe = async ({
             return execute(
               `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) VALUES ${values
                 .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
-                .join(",")}`,
+                .join(",")} ON DUPLICATE KEY UPDATE amount=amount`,
               values.flatMap((v) => [
                 v.uuid,
                 v.source,
