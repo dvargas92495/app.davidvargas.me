@@ -2,7 +2,11 @@ import React from "react";
 import { useTable } from "react-table";
 import { useLoaderData } from "remix";
 
-const Table = () => {
+const Table = ({
+  onRowClick,
+}: {
+  onRowClick?: (row: any, index: number) => void;
+}) => {
   const { data, columns } = useLoaderData();
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -25,15 +29,21 @@ const Table = () => {
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
+        {rows.map((row, index) => {
           prepareRow(row);
           return (
-            <tr {...row.getRowProps()}>
+            <tr
+              {...row.getRowProps()}
+              className={`cursor-pointer ${
+                index % 2 === 0 ? "bg-gray-200" : "bg-gray-300"
+              } hover:bg-gray-400`}
+              onClick={() => onRowClick?.(data[index], index)}
+            >
               {row.cells.map((cell) => {
                 return (
                   <td
                     {...cell.getCellProps()}
-                    className="p-3 border-2 border-gray-500 bg-amber-100"
+                    className={`p-3 border-2 border-gray-500`}
                   >
                     {cell.render("Cell")}
                   </td>

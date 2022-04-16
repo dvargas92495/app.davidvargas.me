@@ -63,7 +63,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
           .then((r) => {
             const [tx] = r as { hash: string }[];
             if (!tx) return 0;
-            return web3.eth.getTransaction(tx.hash).then((r) => r.blockNumber);
+            return web3.eth.getTransaction(tx.hash).then((r) => (r.blockNumber || 0) + 1);
           })
       );
       const address = account.address.toLowerCase();
