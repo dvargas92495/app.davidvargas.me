@@ -19,7 +19,7 @@ const UserIndex = () => {
         fields={["API Key Token", "Address"]}
       />
       <CustomConnectedAccount
-        svgSrc="https://etherscan.io/images/favicon3.ico"
+        svgSrc="https://infura.io/favicon/favicon-32x32.png"
         name={"Infura"}
         fields={["Id"]}
       />

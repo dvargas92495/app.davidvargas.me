@@ -23,6 +23,6 @@
       "api/*": ["./api/*"]
     }
   },
-  "include": ["app", "api", "db", "remix.env.d.ts", "migrations"],
+  "include": ["app", "api", "remix.env.d.ts", "migrations"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }
