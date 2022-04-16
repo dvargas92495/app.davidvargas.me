@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "target": "es2015",
+    "target": "es2019",
     "allowJs": false,
     "lib": ["es2019", "dom", "dom.iterable"],
     "module": "commonjs",
@@ -20,7 +20,10 @@
     "skipLibCheck": true,
     "paths": {
       "~/*": ["./app/*"],
-      "api/*": ["./api/*"]
+      "api/*": ["./api/*"],
+      "@dvargas92495/ui/components/PublicLayout": [
+        "../ui/src/components/PublicLayout.tsx"
+      ]
     }
   },
   "include": ["app", "api", "remix.env.d.ts", "migrations"],
