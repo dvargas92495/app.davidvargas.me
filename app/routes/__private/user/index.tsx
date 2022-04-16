@@ -16,7 +16,12 @@ const UserIndex = () => {
       <CustomConnectedAccount
         svgSrc="https://etherscan.io/images/favicon3.ico"
         name={"Etherscan"}
-        fields={["API Key Token"]}
+        fields={["API Key Token", "Address"]}
+      />
+      <CustomConnectedAccount
+        svgSrc="https://etherscan.io/images/favicon3.ico"
+        name={"Infura"}
+        fields={["Id"]}
       />
     </div>
   );
