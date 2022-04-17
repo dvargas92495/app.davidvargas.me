@@ -22,6 +22,6 @@ export const migrate = ({ connection }: MigrationProps): Promise<void> => {
 
 export const revert = ({ connection }: MigrationProps) => {
   return getMysqlConnection(connection).then((connection) =>
-    connection.execute(`DROP TABLE IF EXISTS web3`)
+    connection.execute(`DROP TABLE IF EXISTS etherscan`)
   );
 };
