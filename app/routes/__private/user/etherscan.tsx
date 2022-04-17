@@ -13,9 +13,8 @@ import DefaultErrorBoundary from "~/components/DefaultErrorBoundary";
 import listEtherscanRecords from "~/data/listEtherscanRecords.server";
 import Dialog from "~/components/Dialog";
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
-import insertRevenueFromEtherscan from "~/data/insertRevenueFromEtherscan.server";
+import insertRecordFromEtherscan from "~/data/insertRecordFromEtherscan.server";
 import TextInput from "~/components/TextInput";
-import axios from "axios";
 import Button from "~/components/Button";
 
 const UserEtherscan = () => {
@@ -69,15 +68,15 @@ const UserEtherscan = () => {
             defaultValue={recordSelected?.type}
           />
           <TextInput
-            label={"Value in ETH"}
+            label={"Category"}
+            name={"category"}
+            defaultValue={"revenue"}
+          />
+          <TextInput label={"Description"} name={"description"} />
+          <TextInput
+            label={"Amount"}
             name={"amount"}
             defaultValue={recordSelected?.value}
-          />
-          <TextInput label={"Product"} name={"product"} />
-          <TextInput
-            label={"Gas I paid"}
-            name={"gasPaid"}
-            defaultValue={recordSelected?.gas}
           />
           <Button>Save</Button>
         </Form>
@@ -99,41 +98,7 @@ export const loader: LoaderFunction = (args) => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, async ({ userId, data }) => {
-    const value = data.value[0];
-    const amount = data.amount[0];
-    const date = new Date(data.date[0]);
-    const price = await axios
-      .get(
-        `https://api.coingecko.com/api/v3/coins/ethereum/history?date=${date
-          .getDate()
-          .toString()
-          .padStart(2, "0")}-${(date.getMonth() + 1)
-          .toString()
-          .padStart(2, "0")}-${date.getFullYear()}`
-      )
-      .then((r) => r.data.market_data.current_price.usd);
-    return insertRevenueFromEtherscan({
-      userId,
-      revenue: {
-        date,
-        amount: Number(amount) * Number(price) * 100,
-        product: data.product?.[0],
-        connect: 0,
-        source: "etherscan",
-        sourceId: data.hash[0],
-      },
-      etherscan: {
-        timestamp: date.valueOf(),
-        value: value,
-        id: data.hash[0],
-        from: data.from[0],
-        to: data.to[0],
-        gas: data.gas[0],
-        type: data.type[0],
-      },
-    });
-  });
+  return remixAppAction(args, insertRecordFromEtherscan);
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;

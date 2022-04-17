@@ -8,7 +8,7 @@ export const migrate = ({ connection }: MigrationProps) => {
 };
 
 export const revert = ({ connection }: MigrationProps) => {
-  return Promise.resolve()/*getMysqlConnection(connection).then((connection) =>
+  return getMysqlConnection(connection).then((connection) =>
     connection.execute(`ALTER TABLE expenses DROP COLUMN code`)
-  );*/
+  );
 };
