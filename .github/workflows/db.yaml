@@ -25,4 +25,4 @@ jobs:
       - name: install
         run: npm install
       - name: migrate
-        run: npx fuego migrate --overwrite 2022-04-15-06-11-create-etherscan-table
+        run: npx fuego migrate
