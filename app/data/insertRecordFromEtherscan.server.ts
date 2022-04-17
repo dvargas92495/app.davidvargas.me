@@ -11,7 +11,7 @@ const insertRecordFromEtherscan = async ({
 }) => {
   const value = data.value[0];
   const amount = data.amount[0];
-  const category = data.amount[0];
+  const category = data.category[0];
   const [hash] = data.hash;
   const [originalDescription] = data.description;
   const [code, ...des] = originalDescription.split(" - ");
@@ -54,7 +54,7 @@ const insertRecordFromEtherscan = async ({
                   "etherscan",
                   hash,
                   date,
-                  Number(amount) * Number(price) * 100,
+                  Number(amount) * Number(price) * 100, //0.20331402
                   originalDescription,
                   0,
                 ]

@@ -35,8 +35,6 @@ jobs:
         run: npm install -g npm@latest
       - name: install
         run: npm install
-      - name: debug
-        run: cat ./node_modules/@remix-run/dev/compiler.js
       - name: build
         run: npm run build
       - name: deploy

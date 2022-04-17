@@ -98,7 +98,11 @@ export const loader: LoaderFunction = (args) => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, insertRecordFromEtherscan);
+  return remixAppAction(args, ({ userId, data }) =>
+    insertRecordFromEtherscan({ userId, data }).catch((e) => {
+      throw new Response(e.message, { status: 500 });
+    })
+  );
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;
