@@ -4,10 +4,12 @@ import getMeta from "@dvargas92495/ui/utils/getMeta";
 import { Link, Outlet, useMatches } from "remix";
 
 const TABS = [
+  { id: "expenses" },
+  { id: "revenue" },
+  { id: "transfers" },
   { id: "convertkit" },
   { id: "etherscan" },
   { id: "mysql" },
-  { id: "revenue" },
   { id: "stripe" },
   { id: "terraform" },
 ];

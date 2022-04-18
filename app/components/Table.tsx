@@ -54,13 +54,16 @@ const Table = ({
         pageSize: size,
       },
       manualPagination: true,
-      pageCount: count || data.length,
+      pageCount: Math.ceil((count || data.length) / size),
     } as Options<typeof data>,
     usePagination
   ) as PaginationTableInstance<typeof data>;
   useEffect(() => {
     if (index !== pageIndex || size !== pageSize) {
-      setSearchParams({ index: index.toString(), size: size.toString() });
+      setSearchParams({
+        index: pageIndex.toString(),
+        size: pageSize.toString(),
+      });
     }
   }, [index, size, setSearchParams, pageIndex, pageSize]);
 
