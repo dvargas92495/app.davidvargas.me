@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Table from "~/components/Table";
-import { ActionFunction, Form, LoaderFunction, useActionData, useCatch } from "remix";
+import { ActionFunction, Form, LoaderFunction, useActionData } from "remix";
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
 import searchExpenses from "~/data/searchExpenses.server";
 import Dialog from "~/components/Dialog";
@@ -10,7 +10,7 @@ import Toast from "~/components/Toast";
 import deleteExpenseRecord from "~/data/deleteExpenseRecord.server";
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
 import DefaultErrorBoundary from "~/components/DefaultErrorBoundary";
-import { CatchBoundaryComponent } from "@remix-run/server-runtime/routeModules";
+import DefaultCatchBoundary from "~/components/DefaultCatchBoundary";
 
 const UserExpensesPage = () => {
   const actionData = useActionData();
@@ -54,19 +54,6 @@ export const action: ActionFunction = (args) => {
 
 export const ErrorBoundary = DefaultErrorBoundary;
 
-export const CatchBoundary: CatchBoundaryComponent = () => {
-  const caught = useCatch();
-  return (
-    <DefaultErrorBoundary
-      error={
-        new Error(
-          typeof caught.data === "object"
-            ? JSON.stringify(caught.data)
-            : caught.data
-        )
-      }
-    />
-  );
-};
+export const CatchBoundary = DefaultCatchBoundary;
 
 export default UserExpensesPage;

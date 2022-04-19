@@ -13,7 +13,7 @@ const deleteExpenseRecord = ({
         .execute(`SELECT source, source_id FROM expenses WHERE uuid = ?`, [
           uuid,
         ])
-        .then((a):Promise<unknown> => {
+        .then((a): Promise<unknown> => {
           const [record] = a as { source: string; source_id: string }[];
           if (record.source === "etherscan")
             return con.execute(
@@ -25,7 +25,8 @@ const deleteExpenseRecord = ({
         .then(() => con.execute(`DELETE FROM expenses WHERE uuid = ?`, [uuid]))
         .then(() => con.destroy())
     )
-    .then(() => ({ success: true }));
+    .then(() => ({ success: true }))
+    .catch((e) => new Response(e.message, { status: 500 }));
 };
 
 export default deleteExpenseRecord;
