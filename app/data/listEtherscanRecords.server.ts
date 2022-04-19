@@ -15,7 +15,7 @@ const addressBook: Record<string, string> = {
   "0x084b1c3c81545d370f3634392de611caabff8148": "ENS",
   "0x514910771af9ca656af840dff83e8264ecf986ca": "Uniswap",
   "0x881d40237659c251811cec9c364ef91dc08d300c": "Uniswap",
-  "0x74de5d4fcbf63e00296fd95d33236b9794016631": "Chainlink",
+  "0x74de5d4fcbf63e00296fd95d33236b9794016631": "Uniswap",
   "0xeb2629a2734e272bcc07bda959863f316f4bd4cf": "Coinbase",
   "0x5fdcca53617f4d2b9134b29090c87d01058e27e9": "Immutable",
   "0xddfabcdc4d8ffc6d5beaf154f18b778f892a0740": "Coinbase",
