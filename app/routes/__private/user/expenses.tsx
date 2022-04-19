@@ -19,7 +19,7 @@ const UserExpensesPage = () => {
   }, [actionData]);
   return (
     <>
-      <Table />
+      <Table onRowClick={(row) => setRecordSelected(row)} />
       <Dialog
         isOpen={!!recordSelected}
         onClose={() => setRecordSelected(undefined)}
