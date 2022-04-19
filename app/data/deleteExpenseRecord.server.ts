@@ -2,10 +2,12 @@ import getMysqlConnection from "@dvargas92495/api/mysql";
 
 const deleteExpenseRecord = ({
   userId,
-  searchParams: { uuid },
+  data: {
+    uuid: [uuid],
+  },
 }: {
   userId: string;
-  searchParams: Record<string, string>;
+  data: Record<string, string[]>;
 }) => {
   return getMysqlConnection()
     .then((con) =>
@@ -26,7 +28,9 @@ const deleteExpenseRecord = ({
         .then(() => con.destroy())
     )
     .then(() => ({ success: true }))
-    .catch((e) => new Response(e.message, { status: 500 }));
+    .catch((e) => {
+      throw new Response(e.message, { status: 500 });
+    });
 };
 
 export default deleteExpenseRecord;
