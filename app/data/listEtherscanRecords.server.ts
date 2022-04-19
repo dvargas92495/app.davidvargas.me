@@ -117,7 +117,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
           data: txlist.data.result
             .map(({ value, ...r }) => ({
               type: "Public",
-              value: `${(Number(r) / Math.pow(10, 18)).toFixed(6)} ETH`,
+              value: `${(Number(value) / Math.pow(10, 18)).toFixed(6)} ETH`,
               ...r,
             }))
             .concat(
