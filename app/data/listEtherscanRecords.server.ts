@@ -56,7 +56,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
           .execute(`SELECT hash FROM etherscan WHERE user_id = ?`, [userId])
           .then((r) => {
             const txs = r as { hash: string }[];
-            return new Set(txs.map((r) => r.hash));
+            return new Set(txs.map((r) => r.hash.toLowerCase()));
           })
       );
       const address = account.address.toLowerCase();
@@ -138,7 +138,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
                 })
               )
             )
-            .filter((t) => !recordedTxs.has(t.hash))
+            .filter((t) => !recordedTxs.has(t.hash.toLowerCase()))
             .map((r) => ({
               gas: `${
                 (Number(r.gasUsed) * Number(r.gasPrice)) / Math.pow(10, 18)
