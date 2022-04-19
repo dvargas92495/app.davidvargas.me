@@ -31,7 +31,9 @@ const insertRecordFromEtherscan = async ({
     .then((connection) => {
       return connection
         .execute(
-          `INSERT INTO etherscan (date, source, target, gas, hash, method, value, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO etherscan (date, source, target, gas, hash, method, value, user_id) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?) 
+          ON DUPLICATE KEY UPDATE value=value`,
           [
             date,
             data.from[0],
