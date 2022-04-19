@@ -65,7 +65,8 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
         axios.get<{
           result: {
             value: string;
-            gas: string;
+            gasUsed: string;
+            gasPrice: string;
             from: string;
             to: string;
             hash: string;
@@ -77,7 +78,8 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
         axios.get<{
           result: {
             value: string;
-            gas: string;
+            gasUsed: string;
+            gasPrice: string;
             from: string;
             to: string;
             hash: string;
@@ -89,7 +91,8 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
         axios.get<{
           result: {
             value: string;
-            gas: string;
+            gasUsed: string;
+            gasPrice: string;
             from: string;
             to: string;
             hash: string;
@@ -112,42 +115,32 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
             { Header: "To", accessor: "to" },
           ],
           data: txlist.data.result
-            .map((r) => ({
+            .map(({ value, ...r }) => ({
               type: "Public",
-              value: `${(Number(r.value) / Math.pow(10, 18)).toFixed(6)} ETH`,
-              hash: r.hash,
-              gas: r.gas,
-              from: r.from,
-              to: r.to,
-              timeStamp: r.timeStamp,
+              value: `${(Number(r) / Math.pow(10, 18)).toFixed(6)} ETH`,
+              ...r,
             }))
             .concat(
-              txlistinternal.data.result.map((r) => ({
-                value: `${(Number(r.value) / Math.pow(10, 18)).toFixed(6)} ETH`,
+              txlistinternal.data.result.map(({ value, ...r }) => ({
+                value: `${(Number(value) / Math.pow(10, 18)).toFixed(6)} ETH`,
                 type: "Internal",
-                hash: r.hash,
-                gas: r.gas,
-                from: r.from,
-                to: r.to,
-                timeStamp: r.timeStamp,
+                ...r,
               }))
             )
             .concat(
-              tokentx.data.result.map((r) => ({
-                type: "Token",
-                value: `${
-                  Number(r.value) / Math.pow(10, Number(r.tokenDecimal))
-                } ${r.tokenName} (${r.tokenSymbol})`,
-                hash: r.hash,
-                gas: r.gas,
-                from: r.from,
-                to: r.to,
-                timeStamp: r.timeStamp,
-              }))
+              tokentx.data.result.map(
+                ({ tokenName, tokenSymbol, tokenDecimal, value, ...r }) => ({
+                  type: "Token",
+                  value: `${
+                    Number(value) / Math.pow(10, Number(tokenDecimal))
+                  } ${tokenName} (${tokenSymbol})`,
+                  ...r,
+                })
+              )
             )
             .filter((t) => !recordedTxs.has(t.hash))
             .map((r) => ({
-              gas: `${Number(r.gas) / Math.pow(10, 9)} ETH`,
+              gas: `${Number(r.gasUsed) * Number(r.gasPrice) / Math.pow(10, 18)} ETH`,
               value: r.value,
               type: r.type,
               id: r.hash,
