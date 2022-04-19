@@ -1,7 +1,6 @@
 import getMysqlConnection from "@dvargas92495/api/mysql";
 import axios from "axios";
 import dateFnsFormat from "date-fns/format";
-import Web3 from "web3";
 import type mysql from "mysql2";
 
 const addressBook: Record<string, string> = {
@@ -44,7 +43,6 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
         apiKeyToken: string;
         address: string;
       };
-      const infuraId = (user.publicMetadata.Infura as { id?: string })?.id;
       if (!account) {
         throw new Response(
           `User has not yet connected their Etherscan account`,
@@ -53,17 +51,12 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
           }
         );
       }
-      const web3 = new Web3(`https://mainnet.infura.io/v3/${infuraId}`);
-      const blockNumber = await getMysqlConnection(connection).then((con) =>
+      const recordedTxs = await getMysqlConnection(connection).then((con) =>
         con
-          .execute(
-            `SELECT hash FROM etherscan WHERE user_id = ? ORDER BY date DESC LIMIT 1`,
-            [userId]
-          )
+          .execute(`SELECT hash FROM etherscan WHERE user_id = ?`, [userId])
           .then((r) => {
-            const [tx] = r as { hash: string }[];
-            if (!tx) return 0;
-            return web3.eth.getTransaction(tx.hash).then((r) => (r.blockNumber || 0) + 1);
+            const txs = r as { hash: string }[];
+            return new Set(txs.map((r) => r.hash));
           })
       );
       const address = account.address.toLowerCase();
@@ -79,7 +72,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
             timeStamp: string;
           }[];
         }>(
-          `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&apikey=${apikey}&startblock=${blockNumber}&endblock=99999999`
+          `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&apikey=${apikey}&startblock=0&endblock=99999999`
         ),
         axios.get<{
           result: {
@@ -91,7 +84,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
             timeStamp: string;
           }[];
         }>(
-          `https://api.etherscan.io/api?module=account&action=txlistinternal&address=${address}&apikey=${apikey}&startblock=${blockNumber}&endblock=99999999`
+          `https://api.etherscan.io/api?module=account&action=txlistinternal&address=${address}&apikey=${apikey}&startblock=0&endblock=99999999`
         ),
         axios.get<{
           result: {
@@ -106,7 +99,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
             tokenDecimal: string;
           }[];
         }>(
-          `https://api.etherscan.io/api?module=account&action=tokentx&address=${address}&apikey=${apikey}&startblock=${blockNumber}&endblock=99999999`
+          `https://api.etherscan.io/api?module=account&action=tokentx&address=${address}&apikey=${apikey}&startblock=0&endblock=99999999`
         ),
       ]).then(([txlist, txlistinternal, tokentx]) => {
         return {
@@ -152,6 +145,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
                 timeStamp: r.timeStamp,
               }))
             )
+            .filter((t) => !recordedTxs.has(t.hash))
             .map((r) => ({
               gas: `${Number(r.gas) / Math.pow(10, 9)} ETH`,
               value: r.value,
