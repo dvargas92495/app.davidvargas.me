@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Table from "~/components/Table";
-import { ActionFunction, Form, LoaderFunction, useActionData } from "remix";
+import { ActionFunction, Form, LoaderFunction, useActionData, useCatch } from "remix";
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
 import searchExpenses from "~/data/searchExpenses.server";
 import Dialog from "~/components/Dialog";
@@ -8,6 +8,9 @@ import Button from "~/components/Button";
 import TextInput from "~/components/TextInput";
 import Toast from "~/components/Toast";
 import deleteExpenseRecord from "~/data/deleteExpenseRecord.server";
+import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
+import DefaultErrorBoundary from "~/components/DefaultErrorBoundary";
+import { CatchBoundaryComponent } from "@remix-run/server-runtime/routeModules";
 
 const UserExpensesPage = () => {
   const actionData = useActionData();
@@ -23,7 +26,7 @@ const UserExpensesPage = () => {
       <Dialog
         isOpen={!!recordSelected}
         onClose={() => setRecordSelected(undefined)}
-        title={"Save Record"}
+        title={"Delete Record"}
       >
         <Form method="delete">
           <TextInput name={"uuid"} defaultValue={recordSelected?.uuid} />
@@ -46,7 +49,24 @@ export const loader: LoaderFunction = (args) => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppLoader(args, deleteExpenseRecord);
+  return remixAppAction(args, deleteExpenseRecord);
+};
+
+export const ErrorBoundary = DefaultErrorBoundary;
+
+export const CatchBoundary: CatchBoundaryComponent = () => {
+  const caught = useCatch();
+  return (
+    <DefaultErrorBoundary
+      error={
+        new Error(
+          typeof caught.data === "object"
+            ? JSON.stringify(caught.data)
+            : caught.data
+        )
+      }
+    />
+  );
 };
 
 export default UserExpensesPage;
