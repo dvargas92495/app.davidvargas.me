@@ -23,6 +23,11 @@ const UserIndex = () => {
         name={"Infura"}
         fields={["Id"]}
       />
+      <CustomConnectedAccount
+        svgSrc="https://mercury.com/favicon.ico"
+        name={"Mercury"}
+        fields={["API Token"]}
+      />
     </div>
   );
 };

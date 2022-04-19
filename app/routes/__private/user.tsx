@@ -9,6 +9,7 @@ const TABS = [
   { id: "transfers" },
   { id: "convertkit" },
   { id: "etherscan" },
+  { id: "mercury" },
   { id: "mysql" },
   { id: "stripe" },
   { id: "terraform" },

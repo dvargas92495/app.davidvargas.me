@@ -91,8 +91,6 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
         axios.get<{
           result: {
             value: string;
-            gasUsed: string;
-            gasPrice: string;
             from: string;
             to: string;
             hash: string;
@@ -116,31 +114,35 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
           ],
           data: txlist.data.result
             .map(({ value, ...r }) => ({
+              ...r,
               type: "Public",
               value: `${(Number(value) / Math.pow(10, 18)).toFixed(6)} ETH`,
-              ...r,
             }))
             .concat(
               txlistinternal.data.result.map(({ value, ...r }) => ({
+                ...r,
                 value: `${(Number(value) / Math.pow(10, 18)).toFixed(6)} ETH`,
                 type: "Internal",
-                ...r,
               }))
             )
             .concat(
               tokentx.data.result.map(
                 ({ tokenName, tokenSymbol, tokenDecimal, value, ...r }) => ({
+                  ...r,
+                  gasPrice: "0",
+                  gasUsed: "0",
                   type: "Token",
                   value: `${
                     Number(value) / Math.pow(10, Number(tokenDecimal))
                   } ${tokenName} (${tokenSymbol})`,
-                  ...r,
                 })
               )
             )
             .filter((t) => !recordedTxs.has(t.hash))
             .map((r) => ({
-              gas: `${Number(r.gasUsed) * Number(r.gasPrice) / Math.pow(10, 18)} ETH`,
+              gas: `${
+                (Number(r.gasUsed) * Number(r.gasPrice)) / Math.pow(10, 18)
+              } ETH`,
               value: r.value,
               type: r.type,
               id: r.hash,
