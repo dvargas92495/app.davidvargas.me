@@ -1,90 +1,70 @@
 import axios from "axios";
-import { BadRequestError } from "aws-sdk-plus/dist/errors";
-
-type Workspaces = { data: { id: string; attributes: { name: string } }[] };
-type Vars = { data: { id: string; attributes: { key: string } }[] };
+import listTerraformWorkspaces from "./listTerraformWorkspaces.server";
 
 const editTerraformVariable = ({
-  name,
-  token,
-  workspaceIds,
+  userId,
+  key = "NULL",
   value,
-  variables,
 }: {
-  name?: string;
-  workspaceIds?: string[];
   value?: string;
-  variables?: { workspaceId: string; variableId: string }[];
-  token: string;
+  key?: string;
+  userId: string;
 }) => {
-  const opts = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/vnd.api+json",
-    },
-  };
-  if (name) {
-    const getWorkspaces = (page = 1): Promise<Workspaces["data"]> =>
-      axios
-        .get<Workspaces>(
-          `https://app.terraform.io/api/v2/organizations/${encodeURIComponent(
-            name
-          )}/workspaces?page[number]=${page}`,
-          opts
-        )
-        .then((r) =>
-          r.data.data.length === 20
-            ? getWorkspaces(page + 1).then((n) => [...r.data.data, ...n])
-            : r.data.data
-        );
-    return getWorkspaces().then((ws) => ({
-      workspaces: ws.map((w) => ({
-        id: w.id,
-        name: w.attributes.name,
-        vars: [],
-      })),
-    }));
-  } else if (workspaceIds) {
-    return Promise.all(
-      workspaceIds.map((id) =>
-        axios
-          .get<Vars>(
-            `https://app.terraform.io/api/v2/workspaces/${id}/vars`,
-            opts
-          )
-          .then((r) => ({
-            vars: r.data.data.map((k) => ({
-              id: k.id,
-              name: k.attributes.key,
-            })),
-            id,
-            name: "",
-          }))
-      )
-    ).then((workspaces) => ({
-      workspaces,
-    }));
-  } else if (value && variables) {
-    return Promise.all(
-      variables.map((v) =>
-        axios.patch<Vars>(
-          `https://app.terraform.io/api/v2/workspaces/${v.workspaceId}/vars/${v.variableId}`,
+  return import("@clerk/clerk-sdk-node")
+    .then((clerk) => clerk.users.getUser(userId))
+    .then(async (user) => {
+      const account = user.publicMetadata.Terraform as {
+        username: string;
+        organization: string;
+        organizationApiToken: string;
+      };
+      if (!account) {
+        throw new Response(
+          `User has not yet connected their Etherscan account`,
           {
-            data: {
-              type: "vars",
-              id: v.variableId,
-              attributes: {
-                value,
-              },
-            },
-          },
-          opts
+            status: 403,
+          }
+        );
+      }
+      const opts = {
+        headers: {
+          Authorization: `Bearer ${account.organizationApiToken}`,
+          "Content-Type": "application/vnd.api+json",
+        },
+      };
+      return listTerraformWorkspaces({
+        userId: { opts, org: account.organization },
+      })
+        .then(({ workspaces }) =>
+          Promise.all(
+            workspaces
+              .map((w) => ({
+                ...w,
+                vars: w.vars.filter((v) => new RegExp(key).test(v.name)),
+              }))
+              .filter((w) => w.vars.length)
+              .flatMap((w) =>
+                w.vars.map((v) => ({ workspaceId: w.id, variableId: v.id }))
+              )
+              .map((v) =>
+                axios.patch(
+                  `https://app.terraform.io/api/v2/workspaces/${v.workspaceId}/vars/${v.variableId}`,
+                  {
+                    data: {
+                      type: "vars",
+                      id: v.variableId,
+                      attributes: {
+                        value,
+                      },
+                    },
+                  },
+                  opts
+                )
+              )
+          )
         )
-      )
-    ).then(() => ({ workspaces: [] }));
-  } else {
-    throw new BadRequestError(`Bad request`);
-  }
+        .then(() => ({ success: true }));
+    });
 };
 
 export default editTerraformVariable;

@@ -1,112 +1,77 @@
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
-import React from "react";
-import { useState, useCallback, useMemo } from "react";
-import { ActionFunction, useFetcher } from "remix";
+import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
+import React, { useState } from "react";
+import { ActionFunction, Form, LoaderFunction, useLoaderData } from "remix";
+import Button from "~/components/Button";
+import DefaultCatchBoundary from "~/components/DefaultCatchBoundary";
+import DefaultErrorBoundary from "~/components/DefaultErrorBoundary";
+import SuccessfulActionToast from "~/components/SuccessfulActionToast";
+import TextInput from "~/components/TextInput";
 import editTerraformVariable from "~/data/editTerraformVariable.server";
+import listTerraformWorkspaces from "~/data/listTerraformWorkspaces.server";
 
 const UserTerraform = () => {
-  const fetcher =
-    useFetcher<Awaited<ReturnType<typeof editTerraformVariable>>>();
-  const [name, setName] = useState("");
-  const [token, setToken] = useState("");
-  const refresh = useCallback(() => {
-    fetcher.submit({ name, token, operation: "terraform" });
-  }, [name, token]);
-  const listVariables = useCallback(() => {
-    if (fetcher.data) {
-      const formData = new FormData();
-      fetcher.data.workspaces.forEach((w) =>
-        formData.append("workspaceIds", w.id)
-      );
-      formData.append("token", token);
-      formData.append("operation", "terraform");
-      fetcher.submit(formData);
-    }
-  }, [token, fetcher]);
+  const loaderData =
+    useLoaderData<Awaited<ReturnType<typeof listTerraformWorkspaces>>>();
   const [key, setKey] = useState("");
-  const [value, setValue] = useState("");
-  const filteredWorkspaces = useMemo(
-    () =>
-      fetcher.data
-        ? fetcher.data.workspaces.filter(
-            (w) => !key || w.vars.map((v) => v.name).includes(key)
-          )
-        : [],
-    [key, fetcher]
-  );
-  const fixVariables = useCallback(() => {
-    const formData = new FormData();
-    filteredWorkspaces.forEach((w) =>
-      formData.append(
-        "variables",
-        `${w.id}::${w.vars.find((v) => v.name === key)?.id || key}`
-      )
-    );
-    formData.append("token", token);
-    formData.append("value", value);
-    formData.append("operation", "terraform");
-    fetcher.submit(formData);
-  }, [value, filteredWorkspaces, token, key]);
-  const [action, setAction] = useState(0);
-  const actions = [refresh, listVariables, fixVariables];
   return (
     <div style={{ marginBottom: 64 }}>
-      <h1>Terraform</h1>
-      <div style={{ display: "flex", marginBottom: 16 }}>
-        <input value={name} onChange={(e) => setName(e.target.value)} />
-        <input value={token} onChange={(e) => setToken(e.target.value)} />
-        <select
-          value={action}
-          onChange={(e) => setAction(Number(e.target.value))}
-        >
-          <option value={0}>Refresh</option>
-          <option value={1}>List Variables</option>
-          <option value={2}>Bulk Update Variable</option>
-        </select>
-        <button onClick={actions[action]}>Go</button>
-      </div>
-      <div style={{ display: "flex", marginBottom: 16 }}>
-        {action === 2 && (
-          <input value={key} onChange={(e) => setKey(e.target.value)} />
-        )}
-        {action === 2 && (
-          <input value={value} onChange={(e) => setValue(e.target.value)} />
-        )}
-      </div>
-      {!!filteredWorkspaces.length && (
-        <>
-          <h3>Workspaces:</h3>
-          <ul>
-            {filteredWorkspaces.map((w) => (
-              <li key={w.id}>
-                {w.name}
-                {!!w.vars.length && (
-                  <ul>
-                    {w.vars.map((v) => (
+      <Form className="w-96" method="post">
+        <TextInput
+          label={"Key"}
+          name={"key"}
+          onChange={(e) => setKey(e.target.value)}
+        />
+        <TextInput label={"Value"} name={"value"} />
+        <Button>Update</Button>
+      </Form>
+      <h3>Workspaces:</h3>
+      <ul className="list-disc">
+        {loaderData.workspaces
+          .map((w) => ({
+            ...w,
+            vars: w.vars.filter((v) => new RegExp(key).test(v.name)),
+          }))
+          .filter((w) => w.vars.length)
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((w) => (
+            <li key={w.id}>
+              {w.name}
+              {!!w.vars.length && (
+                <ul className="ml-4 list-disc">
+                  {w.vars
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((v) => (
                       <li key={v.id}>{v.name}</li>
                     ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+                </ul>
+              )}
+            </li>
+          ))}
+      </ul>
+      <SuccessfulActionToast />
     </div>
   );
 };
+
+export const loader: LoaderFunction = (args) => {
+  return remixAppLoader(args, ({ userId }) => {
+    return listTerraformWorkspaces({ userId });
+  });
+};
+
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ data }) => {
+  return remixAppAction(args, ({ data, userId }) => {
     return editTerraformVariable({
-      name: data.name?.[0],
-      token: data.token?.[0],
-      workspaceIds: data.workspaceIds,
+      userId,
+      key: data.key?.[0],
       value: data.value?.[0],
-      variables: data.variables
-        .map((v) => v.split("::"))
-        .map(([workspaceId, variableId]) => ({ workspaceId, variableId })),
     });
   });
 };
+
+export const ErrorBoundary = DefaultErrorBoundary;
+
+export const CatchBoundary = DefaultCatchBoundary;
 
 export default UserTerraform;

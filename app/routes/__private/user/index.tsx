@@ -28,6 +28,11 @@ const UserIndex = () => {
         name={"Mercury"}
         fields={["API Token"]}
       />
+      <CustomConnectedAccount
+        svgSrc="https://app.terraform.io//favicon.ico"
+        name={"Terraform"}
+        fields={["Organization", "Organization API Token"]}
+      />
     </div>
   );
 };
