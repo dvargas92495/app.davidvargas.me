@@ -3,7 +3,7 @@ on:
   push:
     branches: main
     paths:
-      - "functions/**"
+      - "api/**"
       - "package.json"
       - ".github/workflows/api.yaml"
 
