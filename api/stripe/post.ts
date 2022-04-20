@@ -290,9 +290,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
           body: e.message,
           headers: e.headers || {},
         }))
-        .catch(() => ({
+        .catch((err) => ({
           statusCode: 500,
-          body: "Failed to send webhook failure email",
+          body: `Failed to send webhook failure email: ${err.message}\nOriginal: ${e?.message}`,
         }))
     );
 };
