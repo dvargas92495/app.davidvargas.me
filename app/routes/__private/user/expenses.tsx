@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Table from "~/components/Table";
-import { ActionFunction, Form, LoaderFunction, useActionData } from "remix";
+import Table from "@dvargas92495/ui/components/Table";
+import { Form, useActionData } from "@remix-run/react";
+import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
 import searchExpenses from "~/data/searchExpenses.server";
-import Dialog from "~/components/Dialog";
-import Button from "~/components/Button";
-import TextInput from "~/components/TextInput";
-import Toast from "~/components/Toast";
+import Dialog from "@dvargas92495/ui/components/Dialog";
+import Button from "@dvargas92495/ui/components/Button";
+import TextInput from "@dvargas92495/ui/components/TextInput";
+import Toast from "@dvargas92495/ui/components/Toast";
 import deleteExpenseRecord from "~/data/deleteExpenseRecord.server";
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
-import DefaultErrorBoundary from "~/components/DefaultErrorBoundary";
-import DefaultCatchBoundary from "~/components/DefaultCatchBoundary";
+import DefaultErrorBoundary from "@dvargas92495/ui/components/DefaultErrorBoundary";
+import DefaultCatchBoundary from "@dvargas92495/ui/components/DefaultCatchBoundary";
 
 const UserExpensesPage = () => {
   const actionData = useActionData();

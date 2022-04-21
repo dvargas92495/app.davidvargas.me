@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Chart, ChartOptions } from "react-charts";
-import { LoaderFunction, useLoaderData } from "remix";
+import { useLoaderData } from "@remix-run/react";
+import type { LoaderFunction } from "@remix-run/server-runtime";
 import listRevenue from "~/data/listRevenue.server";
 
 const dateToMonth = (d: Date) =>

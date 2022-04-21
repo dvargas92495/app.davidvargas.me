@@ -2,18 +2,17 @@ import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
 import React from "react";
 import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
   Outlet,
-  useActionData,
   useLoaderData,
   useNavigate,
   useSearchParams,
-} from "remix";
-import Button from "~/components/Button";
-import NumberInput from "~/components/NumberInput";
-import TextInput from "~/components/TextInput";
+  Form,
+  useActionData,
+} from "@remix-run/react";
+import type { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import Button from "@dvargas92495/ui/components/Button";
+import NumberInput from "@dvargas92495/ui/components/NumberInput";
+import TextInput from "@dvargas92495/ui/components/TextInput";
 import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
 import listRevenueFromStripe from "~/data/listRevenueFromStripe.server";
 

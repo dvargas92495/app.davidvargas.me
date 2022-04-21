@@ -1,7 +1,12 @@
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
 import React from "react";
-import { ActionFunction, Form, LoaderFunction, redirect } from "remix";
+import { Form } from "@remix-run/react";
+import {
+  ActionFunction,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/server-runtime";
 import deleteMigrationRecord from "~/data/deleteMigrationRecord.server";
 
 const UserMysqlUuid = () => {

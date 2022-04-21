@@ -1,12 +1,7 @@
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
 import React from "react";
-import {
-  Link,
-  LoaderFunction,
-  Outlet,
-  useLoaderData,
-  useNavigate,
-} from "remix";
+import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
+import { LoaderFunction } from "@remix-run/server-runtime";
 import listMigrations from "~/data/listMigrations.server";
 
 const PAGE_SIZE = 20;

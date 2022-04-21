@@ -1,15 +1,16 @@
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
-import { ActionFunction, Form, LoaderFunction, useActionData } from "remix";
-import Table from "~/components/Table";
+import { Form, useActionData } from "@remix-run/react";
+import type { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import Table from "@dvargas92495/ui/components/Table";
 import React, { useState } from "react";
-import DefaultErrorBoundary from "~/components/DefaultErrorBoundary";
-import Dialog from "~/components/Dialog";
+import DefaultErrorBoundary from "@dvargas92495/ui/components/DefaultErrorBoundary";
+import Dialog from "@dvargas92495/ui/components/Dialog";
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
 import insertRecordFromEtherscan from "~/data/insertRecordFromEtherscan.server";
-import TextInput from "~/components/TextInput";
-import Button from "~/components/Button";
+import TextInput from "@dvargas92495/ui/components/TextInput";
+import Button from "@dvargas92495/ui/components/Button";
 import listMercuryRecords from "~/data/listMercuryRecords.server";
-import DefaultCatchBoundary from "~/components/DefaultCatchBoundary";
+import DefaultCatchBoundary from "@dvargas92495/ui/components/DefaultCatchBoundary";
 
 const UserMercury = () => {
   const actionData = useActionData();

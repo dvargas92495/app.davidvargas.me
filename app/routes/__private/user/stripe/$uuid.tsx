@@ -1,13 +1,8 @@
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
 import React from "react";
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  redirect,
-  useLoaderData,
-} from "remix";
+import { Form, useLoaderData } from "@remix-run/react";
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/server-runtime";
 import deleteRevenueRecord from "~/data/deleteRevenueRecord.server";
 import getRevenue from "~/data/getRevenue.server";
 

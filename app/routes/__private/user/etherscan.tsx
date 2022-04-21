@@ -1,21 +1,16 @@
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  useActionData,
-  useCatch,
-} from "remix";
-import { CatchBoundaryComponent } from "@remix-run/server-runtime/routeModules";
-import Table from "~/components/Table";
+import { Form, useActionData } from "@remix-run/react";
+import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import Table from "@dvargas92495/ui/components/Table";
 import React, { useState } from "react";
-import DefaultErrorBoundary from "~/components/DefaultErrorBoundary";
+import DefaultErrorBoundary from "@dvargas92495/ui/components/DefaultErrorBoundary";
 import listEtherscanRecords from "~/data/listEtherscanRecords.server";
-import Dialog from "~/components/Dialog";
+import Dialog from "@dvargas92495/ui/components/Dialog";
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
 import insertRecordFromEtherscan from "~/data/insertRecordFromEtherscan.server";
-import TextInput from "~/components/TextInput";
-import Button from "~/components/Button";
+import TextInput from "@dvargas92495/ui/components/TextInput";
+import Button from "@dvargas92495/ui/components/Button";
+import DefaultCatchBoundary from "@dvargas92495/ui/components/DefaultCatchBoundary";
 
 const UserEtherscan = () => {
   const actionData = useActionData();
@@ -106,19 +101,6 @@ export const action: ActionFunction = (args) => {
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;
-export const CatchBoundary: CatchBoundaryComponent = () => {
-  const caught = useCatch();
-  return (
-    <DefaultErrorBoundary
-      error={
-        new Error(
-          typeof caught.data === "object"
-            ? JSON.stringify(caught.data)
-            : caught.data
-        )
-      }
-    />
-  );
-};
+export const CatchBoundary = DefaultCatchBoundary;
 
 export default UserEtherscan;

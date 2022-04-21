@@ -1,12 +1,13 @@
 import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
 import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
 import React, { useState } from "react";
-import { ActionFunction, Form, LoaderFunction, useLoaderData } from "remix";
-import Button from "~/components/Button";
-import DefaultCatchBoundary from "~/components/DefaultCatchBoundary";
-import DefaultErrorBoundary from "~/components/DefaultErrorBoundary";
-import SuccessfulActionToast from "~/components/SuccessfulActionToast";
-import TextInput from "~/components/TextInput";
+import { Form, useLoaderData } from "@remix-run/react";
+import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import Button from "@dvargas92495/ui/components/Button";
+import DefaultCatchBoundary from "@dvargas92495/ui/components/DefaultCatchBoundary";
+import DefaultErrorBoundary from "@dvargas92495/ui/components/DefaultErrorBoundary";
+import SuccessfulActionToast from "@dvargas92495/ui/components/SuccessfulActionToast";
+import TextInput from "@dvargas92495/ui/components/TextInput";
 import editTerraformVariable from "~/data/editTerraformVariable.server";
 import listTerraformWorkspaces from "~/data/listTerraformWorkspaces.server";
 
