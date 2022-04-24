@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Form, useActionData, useLocation } from "@remix-run/react";
 import Button from "@dvargas92495/ui/components/Button";
-import TextInput from "./TextInput";
-import Toast from "./Toast";
+import TextInput from "@dvargas92495/ui/components/TextInput";
+import Toast from "@dvargas92495/ui/components/Toast";
 
 const CustomConnectedAccount = ({
   svgSrc,
