@@ -58,6 +58,10 @@ variable "stripe_webhook_secret" {
   type = string
 }
 
+variable "npm_token" {
+  type = string
+}
+
 provider "aws" {
   region = "us-east-1"
   access_key = var.aws_access_token
@@ -168,4 +172,10 @@ resource "github_actions_secret" "stripe_webhook_secret" {
   repository       = "app"
   secret_name      = "STRIPE_WEBHOOK_SECRET"
   plaintext_value  = var.stripe_webhook_secret
+}
+
+resource "github_actions_secret" "npm_token" {
+  repository      = "app"
+  secret_name     = "NPM_TOKEN"
+  plaintext_value = var.npm_token
 }
