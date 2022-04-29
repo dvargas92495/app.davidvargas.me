@@ -22,8 +22,8 @@ jobs:
         run: npm install -g npm@latest
       - name: install
         run: npm install
-      # - name: patch
-      #   run: node patch.js
+      - name: patch
+        run: node patch.js
       - name: build
         run: npx tsc
       - name: prepare
