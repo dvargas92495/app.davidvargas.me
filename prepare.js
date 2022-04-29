@@ -2,6 +2,7 @@ const fs = require("fs");
 
 const content = JSON.parse(fs.readFileSync("package.json").toString());
 delete content.dependencies;
+delete content.scripts.postinstall;
 content.files = fs.readdirSync("dist/app/package").map((d) => {
   fs.renameSync(`dist/app/package/${d}`, `dist/${d}`);
   return `/${d}`;
