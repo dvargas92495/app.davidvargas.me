@@ -1,7 +1,7 @@
 import React from "react";
-import Table from "@dvargas92495/ui/components/Table";
+import Table from "~/package/components/Table";
 import type { LoaderFunction } from "@remix-run/server-runtime";
-import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
+import remixAppLoader from "~/package/utils/remixAppLoader.server";
 import searchTransfers from "~/data/searchTransfers.server";
 
 const UserTransfersPage = () => {

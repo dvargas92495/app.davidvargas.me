@@ -1,2 +1,2 @@
-import EntryServer from "@dvargas92495/ui/components/EntryServer";
+import EntryServer from "~/package/components/EntryServer";
 export default EntryServer;

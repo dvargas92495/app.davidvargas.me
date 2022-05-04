@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Table from "@dvargas92495/ui/components/Table";
+import Table from "~/package/components/Table";
 import { Form, useActionData } from "@remix-run/react";
 import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
-import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
+import remixAppLoader from "~/package/utils/remixAppLoader.server";
 import searchExpenses from "~/data/searchExpenses.server";
-import Dialog from "@dvargas92495/ui/components/Dialog";
-import Button from "@dvargas92495/ui/components/Button";
-import TextInput from "@dvargas92495/ui/components/TextInput";
-import Toast from "@dvargas92495/ui/components/Toast";
+import Dialog from "~/package/components/Dialog";
+import Button from "~/package/components/Button";
+import TextInput from "~/package/components/TextInput";
+import Toast from "~/package/components/Toast";
 import deleteExpenseRecord from "~/data/deleteExpenseRecord.server";
-import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
-import DefaultErrorBoundary from "@dvargas92495/ui/components/DefaultErrorBoundary";
-import DefaultCatchBoundary from "@dvargas92495/ui/components/DefaultCatchBoundary";
+import remixAppAction from "~/package/utils/remixAppAction.server";
+import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
+import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 
 const UserExpensesPage = () => {
   const actionData = useActionData();

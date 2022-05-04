@@ -1,6 +1,6 @@
 import React from "react";
 import { UserButton, useUser } from "@clerk/remix";
-import getMeta from "@dvargas92495/ui/utils/getMeta";
+import getMeta from "~/package/utils/getMeta";
 import { Link, Outlet, useMatches } from "@remix-run/react";
 
 const TABS = [

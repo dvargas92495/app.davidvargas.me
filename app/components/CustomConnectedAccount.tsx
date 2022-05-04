@@ -3,9 +3,9 @@ import { useUser } from "@clerk/remix";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Form, useActionData, useLocation } from "@remix-run/react";
-import Button from "@dvargas92495/ui/components/Button";
-import TextInput from "@dvargas92495/ui/components/TextInput";
-import Toast from "@dvargas92495/ui/components/Toast";
+import Button from "~/package/components/Button";
+import TextInput from "~/package/components/TextInput";
+import Toast from "~/package/components/Toast";
 
 const CustomConnectedAccount = ({
   svgSrc,

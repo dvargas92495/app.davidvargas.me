@@ -1,5 +1,5 @@
-import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
-import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
+import remixAppAction from "~/package/utils/remixAppAction.server";
+import remixAppLoader from "~/package/utils/remixAppLoader.server";
 import React from "react";
 import { Form } from "@remix-run/react";
 import {

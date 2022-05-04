@@ -1,16 +1,16 @@
-import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
+import remixAppLoader from "~/package/utils/remixAppLoader.server";
 import { Form, useActionData } from "@remix-run/react";
 import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
-import Table from "@dvargas92495/ui/components/Table";
+import Table from "~/package/components/Table";
 import React, { useState } from "react";
-import DefaultErrorBoundary from "@dvargas92495/ui/components/DefaultErrorBoundary";
+import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import listEtherscanRecords from "~/data/listEtherscanRecords.server";
-import Dialog from "@dvargas92495/ui/components/Dialog";
-import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
+import Dialog from "~/package/components/Dialog";
+import remixAppAction from "~/package/utils/remixAppAction.server";
 import insertRecordFromEtherscan from "~/data/insertRecordFromEtherscan.server";
-import TextInput from "@dvargas92495/ui/components/TextInput";
-import Button from "@dvargas92495/ui/components/Button";
-import DefaultCatchBoundary from "@dvargas92495/ui/components/DefaultCatchBoundary";
+import TextInput from "~/package/components/TextInput";
+import Button from "~/package/components/Button";
+import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 
 const UserEtherscan = () => {
   const actionData = useActionData();

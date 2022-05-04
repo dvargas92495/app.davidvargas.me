@@ -1,5 +1,5 @@
-import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
-import remixAppLoader from "@dvargas92495/ui/utils/remixAppLoader.server";
+import remixAppAction from "~/package/utils/remixAppAction.server";
+import remixAppLoader from "~/package/utils/remixAppLoader.server";
 import React from "react";
 import {
   Outlet,
@@ -10,9 +10,9 @@ import {
   useActionData,
 } from "@remix-run/react";
 import type { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
-import Button from "@dvargas92495/ui/components/Button";
-import NumberInput from "@dvargas92495/ui/components/NumberInput";
-import TextInput from "@dvargas92495/ui/components/TextInput";
+import Button from "~/package/components/Button";
+import NumberInput from "~/package/components/NumberInput";
+import TextInput from "~/package/components/TextInput";
 import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
 import listRevenueFromStripe from "~/data/listRevenueFromStripe.server";
 

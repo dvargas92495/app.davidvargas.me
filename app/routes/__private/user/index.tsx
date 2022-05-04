@@ -1,6 +1,6 @@
 import React from "react";
 import type { ActionFunction } from "@remix-run/server-runtime";
-import remixAppAction from "@dvargas92495/ui/utils/remixAppAction.server";
+import remixAppAction from "~/package/utils/remixAppAction.server";
 import CustomConnectedAccount from "~/components/CustomConnectedAccount";
 import { UserProfile } from "@clerk/clerk-react";
 
