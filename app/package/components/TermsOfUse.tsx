@@ -387,12 +387,18 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
     <h1> Your Privacy.</h1>
     <p>
       Please read our{" "}
-      <a target="_blank" rel="noopener" href={"/privacy-policy"}>Privacy Policy</a>.
+      <a target="_blank" rel="noreferrer" href={"/privacy-policy"}>
+        Privacy Policy
+      </a>
+      .
     </p>
     <h1> Contact Information</h1>
     <p>
       Please read our{" "}
-      <a target="_blank" rel="noopener" href={"/contact"}>Contact Page</a>.
+      <a target="_blank" rel="noreferrer" href={"/contact"}>
+        Contact Page
+      </a>
+      .
     </p>
   </div>
 );

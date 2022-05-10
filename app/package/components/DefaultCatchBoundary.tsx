@@ -9,9 +9,9 @@ const DefaultCatchBoundary: CatchBoundaryComponent = () => {
     <DefaultErrorBoundary
       error={
         new Error(
-          typeof caught.data === "object"
+          typeof caught?.data === "object"
             ? JSON.stringify(caught.data)
-            : caught.data
+            : caught?.data || "No Caught Data"
         )
       }
     />

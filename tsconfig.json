@@ -19,10 +19,9 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "paths": {
-      "~/*": ["./app/*"],
-      "api/*": ["./api/*"]
+      "~/*": ["./app/*"]
     }
   },
-  "include": ["app", "api", "remix.env.d.ts", "migrations"],
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }

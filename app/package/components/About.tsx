@@ -43,7 +43,11 @@ const About = ({
       />
       {title} is part of the Vargas Arts portfolio of projects. Check out some
       of my other projects at{" "}
-      <a target="_blank" rel="noopener" href={"https://davidvargas.me/projects"}>
+      <a
+        target="_blank"
+        rel="noreferrer"
+        href={"https://davidvargas.me/projects"}
+      >
         https://davidvargas.me/projects
       </a>
       !

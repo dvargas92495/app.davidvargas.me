@@ -1,5 +1,5 @@
-import remixAppAction from "~/package/utils/remixAppAction.server";
-import remixAppLoader from "~/package/utils/remixAppLoader.server";
+import remixAppAction from "~/package/backend/remixAppAction.server";
+import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import React from "react";
 import { Form, useLoaderData } from "@remix-run/react";
 import {
@@ -19,7 +19,7 @@ const UserStripeUuid = () => {
       </Form>
       <a
         href={`https://dashboard.stripe.com/payments/${data.source_id}`}
-        rel="noopener"
+        rel="noreferrer"
         target={"_blank"}
       >
         LINK

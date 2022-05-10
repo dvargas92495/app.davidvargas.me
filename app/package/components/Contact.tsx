@@ -13,7 +13,7 @@ const Contact = ({ email }: { email: string }) => (
       Our DMs are also open on Twitter at{" "}
       <a
         target="_blank"
-        rel="noopener"
+        rel="noreferrer"
         href={"https://twitter.com/dvargas92495"}
       >
         @dvargas92495

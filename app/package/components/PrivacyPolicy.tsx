@@ -21,7 +21,10 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
     <p>
       If you have additional questions or require more information about our
       Privacy Policy, do not hesitate to{" "}
-      <a target="_blank" rel="noopener" href={"/contact"}>contact us</a>.
+      <a target="_blank" rel="noreferrer" href={"/contact"}>
+        contact us
+      </a>
+      .
     </p>
     <p>
       This Privacy Policy applies only to our online activities and is valid for
@@ -35,7 +38,10 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
     <p>
       By using our websites, you hereby consent to our Privacy Policy and agree
       to its terms. For our Terms and Conditions, please visit the{" "}
-      <a target="_blank" rel="noopener" href={"/terms-of-use"}>Terms Of Use</a>.
+      <a target="_blank" rel="noreferrer" href={"/terms-of-use"}>
+        Terms Of Use
+      </a>
+      .
     </p>
     <h6>Information we collect</h6>
     <p>
@@ -54,9 +60,7 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
       including items such as name, email address, and telephone number.
     </p>
     <h6>How we use your information</h6>
-    <p>
-      We use the information we collect in various ways, including to:
-    </p>
+    <p>We use the information we collect in various ways, including to:</p>
     <ul>
       <li>Provide, operate, and maintain our websites</li>
       <li>Improve, personalize, and expand our websites</li>

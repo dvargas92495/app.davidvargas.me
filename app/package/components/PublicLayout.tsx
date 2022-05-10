@@ -1,11 +1,16 @@
 import { SignedIn, SignedOut, UserButton } from "@clerk/remix";
 import React from "react";
-import { Outlet } from "@remix-run/react";
+import { Outlet, useMatches } from "@remix-run/react";
 
 const PublicPage: React.FC<{
   homeIcon?: React.ReactNode;
   pages?: string[];
 }> = ({ pages = [], homeIcon = "Home" }) => {
+  const matches = useMatches();
+  const mainClassName =
+    matches.reverse().find((m) => m.handle?.mainClassName)?.handle
+      ?.mainClassName ||
+    "my-16 mx-auto flex justify-center max-w-3xl w-full p-0 flex-grow";
   return (
     <div className="flex flex-col min-h-full">
       <div className="static bg-transparent shadow-xl">
@@ -54,7 +59,7 @@ const PublicPage: React.FC<{
           </div>
         </div>
       </div>
-      <main className="my-16 mx-auto flex justify-center max-w-3xl w-full p-0 flex-grow">
+      <main className={mainClassName}>
         <Outlet />
       </main>
       <footer className="px-6 py-4 m-t-auto bg-orange-400 bg-opacity-25">
