@@ -3,7 +3,7 @@ import DefaultErrorBoundary from "./DefaultErrorBoundary";
 import { CatchBoundaryComponent } from "@remix-run/server-runtime/routeModules";
 import { useCatch } from "@remix-run/react";
 
-const DefaultCatchBoundary: CatchBoundaryComponent = () => {
+const DefaultCatchBoundary: CatchBoundaryComponent = (): React.ReactElement => {
   const caught = useCatch();
   return (
     <DefaultErrorBoundary

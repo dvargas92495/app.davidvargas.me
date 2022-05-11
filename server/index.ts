@@ -1,2 +1,2 @@
-import getRemixHandler from "@dvargas92495/api/getRemixHandler";
+import getRemixHandler from "~/package/backend/getRemixHandler.server";
 export const handler = getRemixHandler();

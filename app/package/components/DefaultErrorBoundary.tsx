@@ -1,7 +1,7 @@
 import React from "react";
 import type { ErrorBoundaryComponent } from "@remix-run/server-runtime";
 
-const DefaultErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+const DefaultErrorBoundary: ErrorBoundaryComponent = ({ error }): React.ReactElement => {
   return (
     <main className={"font-sans p-8 w-full"}>
       <h1 className={"text-xl font-bold mb-4"}>Application Error</h1>

@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { useUser } from "@clerk/remix";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { Form, useActionData, useLocation } from "@remix-run/react";
 import Button from "~/package/components/Button";
@@ -19,9 +19,9 @@ const CustomConnectedAccount = ({
   const { hash } = useLocation();
   const { user } = useUser();
   const actionData = useActionData();
-  const [isOpen, setIsOpen] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  useEffect(() => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [toastMessage, setToastMessage] = React.useState("");
+  React.useEffect(() => {
     if (actionData?.success) {
       setIsOpen(false);
       setToastMessage(`Successfully updated ${name}!`);

@@ -1,4 +1,4 @@
-import getMysqlConnection from "@dvargas92495/api/mysql";
+import getMysqlConnection from "~/package/backend/mysql.server";
 import type { MigrationProps } from "fuegojs/dist/migrate";
 import Stripe from "stripe";
 

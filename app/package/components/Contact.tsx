@@ -1,6 +1,6 @@
 import React from "react";
 
-const Contact = ({ email }: { email: string }) => (
+const Contact = ({ email }: { email: string }): React.ReactElement => (
   <div
     style={{
       maxWidth: "800px",

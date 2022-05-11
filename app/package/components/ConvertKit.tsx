@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const ConvertKit = ({ id }: { id: string }) => {
+const ConvertKit = ({ id }: { id: string }): React.ReactElement => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     if (!document.getElementById(id)) {
