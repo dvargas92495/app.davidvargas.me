@@ -26,4 +26,5 @@ jobs:
       - name: install
         run: npm install
       - name: migrate
-        run: npx fuego migrate --overwrite 2022-03-22-19-43-fill-revenue-table --overwrite 2022-03-22-19-42-revenue-table --overwrite 2022-04-08-11-42-fix-revenue-table --overwrite 2022-04-09-04-47-fix-revenue-followup --overwrite 2022-04-11-12-23-remaining-stripe-payments --overwrite 2022-04-13-11-36-fix-charge-date --overwrite 2022-04-15-06-11-create-etherscan-table --overwrite 2022-04-16-10-16-create-expenses-table --overwrite 2022-04-16-11-41-add-code-column --overwrite 2022-04-16-11-54-personal-transfers-table --overwrite 2022-04-19-09-47-add-index-column
+        # run: npx fuego migrate --overwrite 2022-03-22-19-43-fill-revenue-table --overwrite 2022-03-22-19-42-revenue-table --overwrite 2022-04-08-11-42-fix-revenue-table --overwrite 2022-04-09-04-47-fix-revenue-followup --overwrite 2022-04-11-12-23-remaining-stripe-payments --overwrite 2022-04-13-11-36-fix-charge-date --overwrite 2022-04-15-06-11-create-etherscan-table --overwrite 2022-04-16-10-16-create-expenses-table --overwrite 2022-04-16-11-41-add-code-column --overwrite 2022-04-16-11-54-personal-transfers-table --overwrite 2022-04-19-09-47-add-index-column
+        run: npx fuego migrate --revert
