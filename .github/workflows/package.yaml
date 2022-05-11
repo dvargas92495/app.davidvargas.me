@@ -4,7 +4,6 @@ on:
   push:
     branches: main
     paths:
-      - "package.json"
       - "prepare.js"
       - ".github/workflows/package.yaml"
 env:
