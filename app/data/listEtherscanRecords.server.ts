@@ -1,4 +1,4 @@
-import getMysqlConnection from "@dvargas92495/api/mysql";
+import getMysqlConnection from "~/package/backend/mysql.server";
 import axios from "axios";
 import dateFnsFormat from "date-fns/format";
 import type mysql from "mysql2";
@@ -150,7 +150,12 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
                 })
               )
             )
-            .filter((t) => !recordedTxs.has(`${t.hash.toLowerCase()}-${t.transactionIndex}`))
+            .filter(
+              (t) =>
+                !recordedTxs.has(
+                  `${t.hash.toLowerCase()}-${t.transactionIndex}`
+                )
+            )
             .map((r) => ({
               gas: `${
                 (Number(r.gasUsed) * Number(r.gasPrice)) / Math.pow(10, 18)

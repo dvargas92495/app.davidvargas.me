@@ -15,11 +15,20 @@ const UserFooter = () => {
 };
 
 const UserDashboard = ({
+  title,
   tabs,
 }: {
+  title?: string;
   tabs: Parameters<typeof Dashboard>[0]["tabs"];
 }) => {
-  return <Dashboard footer={<UserFooter />} root={"user"} tabs={tabs} />;
+  return (
+    <Dashboard
+      footer={<UserFooter />}
+      root={"user"}
+      tabs={tabs}
+      title={title}
+    />
+  );
 };
 
 export default UserDashboard;

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useCallback, useEffect, useRef } from "react";
-// import SuccessIcon from "../../assets/Success.svg";
-// import WarningIcon from "../../assets/Warning.svg";
-// import ErrorIcon from "../../assets/Error.svg";
+// import SuccessIcon from "~/assets/Success.svg";
+// import WarningIcon from "~/assets/Warning.svg";
+// import ErrorIcon from "~/assets/Error.svg";
 
 // const Icons = {
 //   success: SuccessIcon,
@@ -161,16 +161,12 @@ const Toast = ({
           intent === "warning"
             ? "border-yellow-700 text-yellow-700 bg-yellow-400"
             : ""
-        }${
-          intent === "error"
-            ? "border-red-700 text-red-700 bg-red-400"
-            : ""
-        }`}
+        }${intent === "error" ? "border-red-700 text-red-700 bg-red-400" : ""}`}
       >
         <div className="flex items-center">
           <div className="mr-3">
             {/* <Icon /> */}
-            <svg className="w-6 h-6"/>
+            <svg className="w-6 h-6" />
           </div>
           <div className="flex-grow">
             {title && <h1 className="font-bold text-sm mb-1">{title}</h1>}

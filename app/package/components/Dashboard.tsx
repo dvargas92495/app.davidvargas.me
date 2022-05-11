@@ -2,10 +2,12 @@ import React from "react";
 import { Link, Outlet, useMatches } from "@remix-run/react";
 
 const Dashboard = ({
+  title = "App",
   root,
   tabs,
   footer,
 }: {
+  title?: string;
   root: string;
   tabs: { id: string; label: string }[] | string[];
   footer: React.ReactNode;
@@ -31,7 +33,7 @@ const Dashboard = ({
   const currentTab = labelByTab[activeTab] || "Dashboard";
   return (
     <div className="min-h-full flex">
-      <nav className="bg-gray-800 min-h-full w-60 flex flex-col text-gray-200">
+      <nav className="bg-sky-700 min-h-full w-60 flex flex-col text-gray-200">
         <div className="p-4 flex items-center">
           <div className="flex-shrink-0 mr-4">
             <img
@@ -40,7 +42,7 @@ const Dashboard = ({
               alt="Workflow"
             />
           </div>
-          <h2 className="text-white text-2xl font-bold">App</h2>
+          <h2 className="text-white text-2xl font-bold">{title}</h2>
         </div>
         <div className="flex-grow">
           {TABS.map((tab) => (
@@ -48,8 +50,8 @@ const Dashboard = ({
               <Link to={`/${root}/${tab.id}`}>
                 <div
                   className={`p-2 min-h-full flex items-center ${
-                    activeTab === tab.id ? "bg-gray-900 rounded-md" : ""
-                  } capitalize`}
+                    activeTab === tab.id ? "bg-sky-900 rounded-md" : ""
+                  } capitalize hover:bg-sky-800`}
                 >
                   <svg viewBox="0 0 24 24" className="h-4 w-4 stroke-gray-200">
                     <path
@@ -65,7 +67,7 @@ const Dashboard = ({
             </div>
           ))}
         </div>
-        <div className="h-12 bg-gray-700 flex items-center px-4">{footer}</div>
+        <div className="h-12 bg-sky-900 flex items-center px-4">{footer}</div>
       </nav>
       <div className="p-8 flex-grow flex flex-col">
         <h1 className="capitalize text-2xl font-bold mb-4">{currentTab}</h1>

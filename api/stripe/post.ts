@@ -1,5 +1,5 @@
-import getMysqlConnection from "@dvargas92495/api/mysql";
-import insertRevenueFromStripe from "../../app/data/insertRevenueFromStripe.server";
+import getMysqlConnection from "~/package/backend/mysql.server";
+import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from "aws-lambda";
 import axios, { AxiosError, AxiosRequestHeaders } from "axios";
 import Stripe from "stripe";

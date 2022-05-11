@@ -1,2 +1,2 @@
-import EntryClient from "~/package/components/EntryClient";
+import EntryClient from "./package/components/EntryClient";
 EntryClient();

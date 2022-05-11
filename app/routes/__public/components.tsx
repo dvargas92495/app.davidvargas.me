@@ -38,7 +38,7 @@ const ComponentsPage = () => {
       </div>
       <div className="p-16 flex-grow flex flex-col">
         <h1 className="text-xl font-bold mb-8">{title}</h1>
-        <div className="border-dashed border-gray-200 border flex-grow p-4 rounded-sm">
+        <div className="border-dashed border-gray-200 border flex-grow p-4 rounded-sm relative">
           <Outlet />
         </div>
       </div>

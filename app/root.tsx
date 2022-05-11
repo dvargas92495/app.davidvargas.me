@@ -2,8 +2,8 @@ import RemixRoot, {
   getRootLinks,
   getRootMeta,
   RootCatchBoundary,
-} from "~/package/components/RemixRoot";
-import remixRootLoader from "~/package/backend/remixRootLoader.server";
+} from "./package/components/RemixRoot";
+import remixRootLoader from "./package/backend/remixRootLoader.server";
 import styles from "./tailwind.css";
 
 export const loader = remixRootLoader;

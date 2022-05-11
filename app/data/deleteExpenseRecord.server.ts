@@ -1,4 +1,4 @@
-import getMysqlConnection from "@dvargas92495/api/mysql";
+import getMysqlConnection from "~/package/backend/mysql.server";
 
 const deleteExpenseRecord = ({
   userId,

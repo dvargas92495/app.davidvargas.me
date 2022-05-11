@@ -3,7 +3,7 @@ import {
   createTable,
   useTableInstance,
   getCoreRowModelSync,
-  getColumnFilteredRowModelSync,
+  getFilteredRowModelSync,
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
@@ -28,19 +28,22 @@ const Table = ({
   getTrClassName?: (index: number) => string;
   getTdClassName?: (index: number) => string;
 }) => {
-  const { data, columns: loaderColumns, count } = useLoaderData<{
+  const {
+    data,
+    columns: loaderColumns,
+    count,
+  } = useLoaderData<{
     count: number;
     columns: { Header: string; accessor: string }[];
     data: {}[];
   }>();
   const columns = React.useMemo(
     () =>
-      table.createColumns(
-        loaderColumns.map((col) =>
-          table.createDataColumn(col.accessor, {
-            header: col.Header,
-          })
-        )
+      loaderColumns.map((col) =>
+        table.createDataColumn(() => col.accessor, {
+          id: col.accessor,
+          header: col.Header,
+        })
       ),
     []
   );
@@ -49,8 +52,6 @@ const Table = ({
   const index = Number(searchParams.get("index")) || 0;
   const size = Number(searchParams.get("size")) || 10;
   const {
-    getTableProps,
-    getTableBodyProps,
     getHeaderGroups,
     getRowModel,
     getCanNextPage,
@@ -74,7 +75,7 @@ const Table = ({
     },
 
     getCoreRowModel: getCoreRowModelSync(),
-    getColumnFilteredRowModel: getColumnFilteredRowModelSync(),
+    getFilteredRowModel: getFilteredRowModelSync(),
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: (val) => {
       if (typeof val !== "function") {
@@ -91,30 +92,32 @@ const Table = ({
 
   return (
     <div className="w-full">
-      <table {...getTableProps()} className={className}>
+      <table className={className}>
         <thead className={theadClassName}>
           {getHeaderGroups().map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()} className={thClassName}>
+                <th {...column} key={column.id} className={thClassName}>
                   {column.renderHeader()}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody>
           {getRowModel().rows.map((row, index) => {
             return (
               <tr
-                {...row.getRowProps()}
+                {...row}
+                key={row.id}
                 className={getTrClassName(index)}
                 onClick={() => onRowClick?.(data[index], index)}
               >
                 {row.getAllCells().map((cell, jndex) => {
                   return (
                     <td
-                      {...cell.getCellProps()}
+                      {...cell}
+                      key={cell.id}
                       className={getTdClassName(jndex)}
                     >
                       {cell.renderCell()}

@@ -3,7 +3,7 @@ import Dashboard from "~/package/components/Dashboard";
 
 const DashboardPage = () => {
   return (
-    <div className="-m-4 h-full">
+    <div className="absolute inset-0">
       <Dashboard
         root={"/components/dashboard"}
         tabs={["Tab", "Page", "Settings"]}
