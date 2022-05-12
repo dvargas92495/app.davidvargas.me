@@ -1,11 +1,13 @@
-import { SignedIn, SignedOut, UserButton } from "@clerk/remix";
+import {  UserButton } from "@clerk/remix";
 import React from "react";
-import { Outlet, useMatches } from "@remix-run/react";
+import { Outlet, useLoaderData, useMatches } from "@remix-run/react";
+import type { LoaderFunction } from "@remix-run/node";
 
 const PublicPage: React.FC<{
   homeIcon?: React.ReactNode;
   pages?: string[];
 }> = ({ pages = [], homeIcon = "Home" }) => {
+  const authed = useLoaderData();
   const matches = useMatches();
   const mainClassName =
     matches.reverse().find((m) => m.handle?.mainClassName)?.handle
@@ -39,23 +41,24 @@ const PublicPage: React.FC<{
             ))}
           </div>
           <div className="w-48 flex justify-end items-center">
-            <SignedIn>
+            {authed ? (
               <UserButton />
-            </SignedIn>
-            <SignedOut>
-              <a
-                href={"/login"}
-                className="mx-1 text-sky-400 border-sky-400 border rounded-md px-2 py-1 cursor-pointer hover:bg-sky-100 active:bg-sky-200"
-              >
-                LOGIN
-              </a>
-              <a
-                href={"/signup"}
-                className="mx-1 text-orange-400 border-orange-400 border rounded-md px-2 py-1 cursor-pointer hover:bg-orange-100 active:bg-orange-200"
-              >
-                SIGNUP
-              </a>
-            </SignedOut>
+            ) : (
+              <>
+                <a
+                  href={"/login"}
+                  className="mx-1 text-sky-400 border-sky-400 border rounded-md px-2 py-1 cursor-pointer hover:bg-sky-100 active:bg-sky-200"
+                >
+                  LOGIN
+                </a>
+                <a
+                  href={"/signup"}
+                  className="mx-1 text-orange-400 border-orange-400 border rounded-md px-2 py-1 cursor-pointer hover:bg-orange-100 active:bg-orange-200"
+                >
+                  SIGNUP
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -88,6 +91,12 @@ const PublicPage: React.FC<{
       </footer>
     </div>
   );
+};
+
+export const loader: LoaderFunction = ({ request }) => {
+  return import("@clerk/remix/ssr.server.js")
+    .then((clerk) => clerk.getAuth(request))
+    .then((authData) => !!authData.userId);
 };
 
 export default PublicPage;

@@ -40,10 +40,13 @@ const Table = ({
   const columns = React.useMemo(
     () =>
       loaderColumns.map((col) =>
-        table.createDataColumn(() => col.accessor, {
-          id: col.accessor,
-          header: col.Header,
-        })
+        table.createDataColumn(
+          (row) => (row as Record<string, unknown>)[col.accessor],
+          {
+            id: col.accessor,
+            header: col.Header,
+          }
+        )
       ),
     []
   );
