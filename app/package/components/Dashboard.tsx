@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Link, Outlet, useMatches } from "@remix-run/react";
 
 const Dashboard = ({
@@ -30,10 +30,13 @@ const Dashboard = ({
     matches.find((m) => new RegExp(`^\\/${root}\\/[a-z-]+$`).test(m.pathname))
       ?.pathname || ""
   ).replace(new RegExp(`^\\/${root}\\/$`), "");
-  const currentPageTitle =
+  const DefaultPageTitle = useCallback(
+    () => <>{labelByTab[activeTab] || "Dashboard"}</>,
+    [labelByTab, activeTab]
+  );
+  const CurrentPageTitle =
     matches.reverse().find((m) => m.handle?.Title)?.handle?.Title ||
-    labelByTab[activeTab] ||
-    "Dashboard";
+    DefaultPageTitle;
   return (
     <div className="min-h-full flex">
       <nav className="bg-sky-700 min-h-full w-60 flex flex-col text-gray-200 flex-shrink-0">
@@ -73,7 +76,9 @@ const Dashboard = ({
         <div className="h-12 bg-sky-900 flex items-center px-4">{footer}</div>
       </nav>
       <div className="p-8 flex-grow flex flex-col">
-        <h1 className="capitalize text-2xl font-bold mb-4">{currentPageTitle}</h1>
+        <h1 className="capitalize text-2xl font-bold mb-4">
+          <CurrentPageTitle />
+        </h1>
         <div className="flex-grow">
           <Outlet />
         </div>
