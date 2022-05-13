@@ -1,4 +1,4 @@
-import {  UserButton } from "@clerk/remix";
+import { UserButton } from "@clerk/remix";
 import React from "react";
 import { Outlet, useLoaderData, useMatches } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/node";

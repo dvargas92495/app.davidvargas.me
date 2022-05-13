@@ -2,7 +2,7 @@ import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import { Form, useActionData } from "@remix-run/react";
 import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
 import Table from "~/package/components/Table";
-import React, { useState } from "react";
+import { useState } from "react";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import listEtherscanRecords from "~/data/listEtherscanRecords.server";
 import Dialog from "~/package/components/Dialog";

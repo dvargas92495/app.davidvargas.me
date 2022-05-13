@@ -30,12 +30,15 @@ const Dashboard = ({
     matches.find((m) => new RegExp(`^\\/${root}\\/[a-z-]+$`).test(m.pathname))
       ?.pathname || ""
   ).replace(new RegExp(`^\\/${root}\\/$`), "");
-  const currentTab = labelByTab[activeTab] || "Dashboard";
+  const currentPageTitle =
+    matches.reverse().find((m) => m.handle?.Title)?.handle?.Title ||
+    labelByTab[activeTab] ||
+    "Dashboard";
   return (
     <div className="min-h-full flex">
-      <nav className="bg-sky-700 min-h-full w-60 flex flex-col text-gray-200">
+      <nav className="bg-sky-700 min-h-full w-60 flex flex-col text-gray-200 flex-shrink-0">
         <div className="p-4 flex items-center">
-          <div className="flex-shrink-0 mr-4">
+          <div className="mr-4">
             <img
               className="h-12 w-12"
               src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
@@ -70,7 +73,7 @@ const Dashboard = ({
         <div className="h-12 bg-sky-900 flex items-center px-4">{footer}</div>
       </nav>
       <div className="p-8 flex-grow flex flex-col">
-        <h1 className="capitalize text-2xl font-bold mb-4">{currentTab}</h1>
+        <h1 className="capitalize text-2xl font-bold mb-4">{currentPageTitle}</h1>
         <div className="flex-grow">
           <Outlet />
         </div>
