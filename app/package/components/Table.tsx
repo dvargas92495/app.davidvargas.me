@@ -12,28 +12,23 @@ const table = createTable();
 
 const Table = ({
   onRowClick,
-  className = "border-2 border-blue-600 w-full",
-  thClassName = "border-b-2 border-b-red-500 bg-sky-400 text-black font-bold cursor-pointer",
+  tableClassName = "border-2 border-sky-600 w-full mb-2",
+  thClassName = "border-b-2 border-b-orange-400 bg-sky-400 text-black font-bold cursor-pointer",
   theadClassName = "",
   getTrClassName = (index: number) =>
     `cursor-pointer ${
-      index % 2 === 0 ? "bg-gray-200" : "bg-gray-300"
-    } hover:bg-gray-400`,
-  getTdClassName = () => `p-3 border-2 border-gray-500`,
+      index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
+    } hover:bg-gray-300`,
+  getTdClassName = () => `p-3 border-2 border-gray-400`,
 }: {
   onRowClick?: (row: any, index: number) => void;
-  className?: string;
+  tableClassName?: string;
   thClassName?: string;
   theadClassName?: string;
   getTrClassName?: (index: number) => string;
   getTdClassName?: (index: number) => string;
 }) => {
-  const {
-    data,
-    columns: loaderColumns,
-    count,
-  } = useLoaderData<{
-    count: number;
+  const { data, columns: loaderColumns } = useLoaderData<{
     columns: { Header: string; accessor: string }[];
     data: {}[];
   }>();
@@ -52,7 +47,7 @@ const Table = ({
   );
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const index = Number(searchParams.get("index")) || 0;
+  const index = Number(searchParams.get("index")) || 1;
   const size = Number(searchParams.get("size")) || 10;
   const {
     getHeaderGroups,
@@ -62,8 +57,6 @@ const Table = ({
     setPageIndex,
     previousPage,
     nextPage,
-    getPageCount,
-    getPageOptions,
     setPageSize,
     getState,
   } = useTableInstance(table, {
@@ -71,9 +64,9 @@ const Table = ({
     data,
     state: {
       pagination: {
-        pageIndex: index,
+        pageIndex: index - 1,
         pageSize: size,
-        pageCount: count,
+        pageCount: Math.ceil(data.length / size),
       },
     },
 
@@ -81,6 +74,7 @@ const Table = ({
     getFilteredRowModel: getFilteredRowModelSync(),
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: (val) => {
+      console.log(val);
       if (typeof val !== "function") {
         setSearchParams({
           index: val.pageIndex.toString(),
@@ -90,12 +84,12 @@ const Table = ({
     },
   });
   const {
-    pagination: { pageIndex, pageSize },
+    pagination: { pageIndex, pageSize, pageCount },
   } = getState();
 
   return (
     <div className="w-full">
-      <table className={className}>
+      <table className={tableClassName}>
         <thead className={theadClassName}>
           {getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -132,55 +126,15 @@ const Table = ({
           })}
         </tbody>
       </table>
-      {getPageOptions().length > 1 && (
-        <div className="w-full flex justify-space-between items-center">
+      {pageCount > 1 && (
+        <div className="w-full flex justify-between items-center">
           <div>
-            <button
-              onClick={() => setPageIndex(0)}
-              disabled={!getCanPreviousPage()}
-            >
-              {"<<"}
-            </button>
-            <button
-              onClick={() => previousPage()}
-              disabled={!getCanPreviousPage()}
-            >
-              {"<"}
-            </button>
-            <button onClick={() => nextPage()} disabled={!getCanNextPage()}>
-              {">"}
-            </button>
-            <button
-              onClick={() => setPageIndex(getPageCount() - 1)}
-              disabled={!getCanNextPage()}
-            >
-              {">>"}
-            </button>
-          </div>
-          <div>
-            <span>
-              Page
-              <strong>
-                {pageIndex + 1} of {getPageOptions().length}
-              </strong>
-            </span>
-            <span>
-              | Go to page:
-              <input
-                type="number"
-                defaultValue={pageIndex + 1}
-                onChange={(e) => {
-                  const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                  setPageIndex(page);
-                }}
-                className={" w-24"}
-              />
-            </span>
             <select
               value={pageSize}
               onChange={(e) => {
-                setPageSize(Number(e.target.value));
+                setSearchParams({ ...searchParams, size: e.target.value });
               }}
+              className={"rounded-lg"}
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
@@ -188,6 +142,71 @@ const Table = ({
                 </option>
               ))}
             </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSearchParams({ ...searchParams, index: "1" })}
+              disabled={!getCanPreviousPage()}
+              className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
+            >
+              {"<<"}
+            </button>
+            <button
+              onClick={() =>
+                setSearchParams({
+                  ...searchParams,
+                  index: pageIndex.toString(),
+                })
+              }
+              disabled={!getCanPreviousPage()}
+              className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
+            >
+              {"<"}
+            </button>
+            <button
+              onClick={() =>
+                setSearchParams({
+                  ...searchParams,
+                  index: (pageIndex + 2).toString(),
+                })
+              }
+              disabled={!getCanNextPage()}
+              className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
+            >
+              {">"}
+            </button>
+            <button
+              onClick={() =>
+                setSearchParams({
+                  ...searchParams,
+                  index: pageCount.toString(),
+                })
+              }
+              disabled={!getCanNextPage()}
+              className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
+            >
+              {">>"}
+            </button>
+            <span>
+              Page{" "}
+              <strong>
+                {pageIndex + 1} of {pageCount}
+              </strong>
+            </span>
+            <span>
+              | Go to page:{" "}
+              <input
+                type="number"
+                defaultValue={pageIndex + 1}
+                onChange={(e) => {
+                  setSearchParams({
+                    ...searchParams,
+                    index: (Number(e.target.value) || 1).toString(),
+                  });
+                }}
+                className={"w-16 rounded-lg"}
+              />
+            </span>
           </div>
         </div>
       )}

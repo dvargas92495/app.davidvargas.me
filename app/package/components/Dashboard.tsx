@@ -34,9 +34,11 @@ const Dashboard = ({
     () => <>{labelByTab[activeTab] || "Dashboard"}</>,
     [labelByTab, activeTab]
   );
-  const CurrentPageTitle =
-    matches.reverse().find((m) => m.handle?.Title)?.handle?.Title ||
-    DefaultPageTitle;
+  const matchWithTitle = matches.reverse().find((m) => m.handle?.Title);
+  const Title = matchWithTitle?.handle?.Title as React.FC;
+  const CurrentPageTitle = matchWithTitle
+    ? () => <Title {...matchWithTitle.data} />
+    : DefaultPageTitle;
   return (
     <div className="min-h-full flex">
       <nav className="bg-sky-700 min-h-full w-60 flex flex-col text-gray-200 flex-shrink-0">
