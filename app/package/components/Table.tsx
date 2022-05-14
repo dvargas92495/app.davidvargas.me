@@ -81,7 +81,7 @@ const Table = ({
           {getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
-                <th {...column} key={column.id} className={thClassName}>
+                <th key={column.id} className={thClassName}>
                   {column.renderHeader()}
                 </th>
               ))}
@@ -92,7 +92,6 @@ const Table = ({
           {getRowModel().rows.map((row, index) => {
             return (
               <tr
-                {...row}
                 key={row.id}
                 className={getTrClassName(index)}
                 onClick={() => onRowClick?.(data[index], index)}

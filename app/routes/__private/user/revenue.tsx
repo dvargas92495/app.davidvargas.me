@@ -34,16 +34,13 @@ const UserRevenuePage = () => {
           >
             Search
           </Button>
-          <Form
-            method="put"
-            className="flex gap-4 items-center ml-4"
-          >
-            <input name={'product'} defaultValue={product} type={'hidden'}/>
+          <Form method="put" className="flex gap-4 items-center ml-4">
+            <input name={"product"} defaultValue={product} type={"hidden"} />
             <TextInput label={"Product"} name={"newProduct"} />
             <Button>Migrate</Button>
           </Form>
         </div>
-        <Table onRowClick={(row) => navigate(`/user/revenue/${row.uuid}`)} />
+        <Table onRowClick={(row) => navigate(`/user/revenue/${row.uuid}${searchParams.toString()}`)} />
       </div>
       <div>
         <Outlet />

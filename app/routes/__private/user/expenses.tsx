@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Table from "~/package/components/Table";
-import { Form, useActionData } from "@remix-run/react";
+import {
+  Form,
+  Outlet,
+  useActionData,
+  useNavigate,
+  useSearchParams,
+} from "@remix-run/react";
 import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import searchExpenses from "~/data/searchExpenses.server";
-import Dialog from "~/package/components/Dialog";
-import Button from "~/package/components/Button";
-import TextInput from "~/package/components/TextInput";
 import Toast from "~/package/components/Toast";
 import deleteExpenseRecord from "~/data/deleteExpenseRecord.server";
 import remixAppAction from "~/package/backend/remixAppAction.server";
@@ -14,33 +17,31 @@ import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 
 const UserExpensesPage = () => {
-  const actionData = useActionData();
-  const [recordSelected, setRecordSelected] =
-    useState<Awaited<ReturnType<typeof searchExpenses>>["data"][number]>();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [toastOpen, setToastOpen] = useState(false);
   useEffect(() => {
-    if (actionData?.success) setToastOpen(true);
-  }, [actionData]);
+    if (searchParams.get("delete") === "true") setToastOpen(true);
+  }, [searchParams, setToastOpen]);
   return (
     <>
-      <Table onRowClick={(row) => setRecordSelected(row)} />
-      <Dialog
-        isOpen={!!recordSelected}
-        onClose={() => setRecordSelected(undefined)}
-        title={"Delete Record"}
-      >
-        <Form method="delete">
-          <TextInput name={"uuid"} defaultValue={recordSelected?.uuid} />
-          <Button>Delete</Button>
-        </Form>
-      </Dialog>
-      {actionData?.success && (
-        <Toast
-          message={"Successfully Deleted Row!"}
-          isOpen={toastOpen}
-          onClose={() => setToastOpen(false)}
-        />
-      )}
+      <div className="flex gap-8">
+        <div className="max-w-3xl w-full">
+          <Table
+            onRowClick={(row) =>
+              navigate(`/user/expenses/${row.uuid}${searchParams.toString()}`)
+            }
+          />
+        </div>
+        <div>
+          <Outlet />
+        </div>
+      </div>
+      <Toast
+        message={"Successfully Deleted Row!"}
+        isOpen={toastOpen}
+        onClose={() => setToastOpen(false)}
+      />
     </>
   );
 };
