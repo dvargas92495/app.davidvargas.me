@@ -14,7 +14,11 @@ const SuccessfulActionToast = ({
     if (data?.success) setIsOpen(true);
   }, [data]);
   return (
-    <Toast isOpen={isOpen} onClose={() => setIsOpen(false)} message={message} />
+    <Toast
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      message={message}
+    />
   );
 };
 

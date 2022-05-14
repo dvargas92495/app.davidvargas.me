@@ -54,10 +54,6 @@ const Table = ({
     getRowModel,
     getCanNextPage,
     getCanPreviousPage,
-    setPageIndex,
-    previousPage,
-    nextPage,
-    setPageSize,
     getState,
   } = useTableInstance(table, {
     columns,
@@ -73,15 +69,6 @@ const Table = ({
     getCoreRowModel: getCoreRowModelSync(),
     getFilteredRowModel: getFilteredRowModelSync(),
     getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: (val) => {
-      console.log(val);
-      if (typeof val !== "function") {
-        setSearchParams({
-          index: val.pageIndex.toString(),
-          size: val.pageSize.toString(),
-        });
-      }
-    },
   });
   const {
     pagination: { pageIndex, pageSize, pageCount },
@@ -132,7 +119,10 @@ const Table = ({
             <select
               value={pageSize}
               onChange={(e) => {
-                setSearchParams({ ...searchParams, size: e.target.value });
+                setSearchParams({
+                  ...Object.fromEntries(searchParams),
+                  size: e.target.value,
+                });
               }}
               className={"rounded-lg"}
             >
@@ -145,7 +135,12 @@ const Table = ({
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setSearchParams({ ...searchParams, index: "1" })}
+              onClick={() =>
+                setSearchParams({
+                  ...Object.fromEntries(searchParams),
+                  index: "1",
+                })
+              }
               disabled={!getCanPreviousPage()}
               className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
             >
@@ -154,7 +149,7 @@ const Table = ({
             <button
               onClick={() =>
                 setSearchParams({
-                  ...searchParams,
+                  ...Object.fromEntries(searchParams),
                   index: pageIndex.toString(),
                 })
               }
@@ -166,7 +161,7 @@ const Table = ({
             <button
               onClick={() =>
                 setSearchParams({
-                  ...searchParams,
+                  ...Object.fromEntries(searchParams),
                   index: (pageIndex + 2).toString(),
                 })
               }
@@ -178,7 +173,7 @@ const Table = ({
             <button
               onClick={() =>
                 setSearchParams({
-                  ...searchParams,
+                  ...Object.fromEntries(searchParams),
                   index: pageCount.toString(),
                 })
               }
@@ -192,20 +187,6 @@ const Table = ({
               <strong>
                 {pageIndex + 1} of {pageCount}
               </strong>
-            </span>
-            <span>
-              | Go to page:{" "}
-              <input
-                type="number"
-                defaultValue={pageIndex + 1}
-                onChange={(e) => {
-                  setSearchParams({
-                    ...searchParams,
-                    index: (Number(e.target.value) || 1).toString(),
-                  });
-                }}
-                className={"w-16 rounded-lg"}
-              />
             </span>
           </div>
         </div>
