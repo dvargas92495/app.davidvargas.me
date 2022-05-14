@@ -15,7 +15,7 @@ const getRevenue = (uuid: string) =>
       })
     )
     .then((a) => {
-      return (
+      const record = (
         a as {
           uuid: string;
           source: string;
@@ -26,6 +26,12 @@ const getRevenue = (uuid: string) =>
           connect: number;
         }[]
       )[0];
+      return {
+        source: record.source,
+        source_id: record.source_id,
+        date: record.date.toLocaleString(),
+        product: record.product,
+      }
     });
 
 export default getRevenue;
