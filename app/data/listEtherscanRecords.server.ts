@@ -179,21 +179,3 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
     });
 
 export default listEtherscanRecords;
-
-/**
- * QUERY NFTs
- * 
-axios.get<{
-result: {
-    tokenName: string;
-    tokenID: string;
-    tokenSymbol: string;
-    gas: string;
-    from: string;
-    to: string;
-    hash: string;
-}[];
-}>(
-`https://api.etherscan.io/api?module=account&action=tokennfttx&address=${address}&apikey=${apikey}&startblock=0&endblock=99999999`
-)
- */
