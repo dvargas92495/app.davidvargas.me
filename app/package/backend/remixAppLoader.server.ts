@@ -18,9 +18,12 @@ const remixAppLoader = (
       const searchParams = Object.fromEntries(
         new URL(request.url).searchParams
       );
-      return callback
+      const response = callback
         ? callback({ userId: authData.userId, params, searchParams })
         : {};
+      return Promise.resolve(response).catch((e) => {
+        throw new Response(e.message, { status: e.code || 500 });
+      });
     });
 };
 

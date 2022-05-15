@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Table from "~/package/components/Table";
 import {
   Form,
@@ -20,6 +20,10 @@ const UserExpensesPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [toastOpen, setToastOpen] = useState(false);
+  const paramString = useMemo(() => {
+    const sp = searchParams.toString();
+    return sp ? `?${sp}` : "";
+  }, [searchParams]);
   useEffect(() => {
     if (searchParams.get("delete") === "true") setToastOpen(true);
   }, [searchParams, setToastOpen]);
@@ -29,7 +33,7 @@ const UserExpensesPage = () => {
         <div className="max-w-3xl w-full">
           <Table
             onRowClick={(row) =>
-              navigate(`/user/expenses/${row.uuid}${searchParams.toString()}`)
+              navigate(`/user/expenses/${row.uuid}${paramString}`)
             }
           />
         </div>
