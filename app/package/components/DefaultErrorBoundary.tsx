@@ -1,9 +1,12 @@
 import React from "react";
 import type { ErrorBoundaryComponent } from "@remix-run/server-runtime";
+import { useMatches } from "@remix-run/react";
 
 const DefaultErrorBoundary: ErrorBoundaryComponent = ({
   error,
 }): React.ReactElement => {
+  const matches = useMatches();
+  const logUrl = matches[0].data.logUrl;
   return (
     <main className={"font-sans p-8 w-full"}>
       <h1 className={"text-xl font-bold mb-4"}>Application Error</h1>
@@ -12,14 +15,14 @@ const DefaultErrorBoundary: ErrorBoundaryComponent = ({
         {error.stack}
       </pre>
       <p>
-        Check out more logs on{" "}
+        Check out the rest of the logs on{" "}
         <a
-          href={`https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/$252Faws$252Flambda$252F${region}.staging-constancy-fund_origin-request`}
+          href={logUrl}
           target={"_blank"}
           rel={"noreferrer"}
         >
           AWS
-        </a>
+        </a>.
       </p>
     </main>
   );
