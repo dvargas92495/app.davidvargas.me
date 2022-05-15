@@ -26,13 +26,17 @@ const remixAppAction = (
       const searchParams = Object.fromEntries(
         new URL(request.url).searchParams
       );
-      const formData = await request.formData();
-      const data = Object.fromEntries(
-        Array.from(formData.keys()).map((k) => [
-          k,
-          formData.getAll(k).map((v) => v as string),
-        ])
-      );
+      const data = await request
+        .formData()
+        .then((formData) =>
+          Object.fromEntries(
+            Array.from(formData.keys()).map((k) => [
+              k,
+              formData.getAll(k).map((v) => v as string),
+            ])
+          )
+        )
+        .catch(() => ({}));
       const response = callback({
         userId,
         data,

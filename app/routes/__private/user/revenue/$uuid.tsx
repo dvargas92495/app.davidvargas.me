@@ -29,9 +29,15 @@ export const loader: LoaderFunction = (args) => {
 export const action: ActionFunction = (args) => {
   return remixAppAction(args, ({ params, method, searchParams }) => {
     if (method === "DELETE")
-      deleteRevenueRecord(params["uuid"] || "").then(() =>
-        redirect(`/user/revenue${new URLSearchParams(searchParams).toString()}`)
-      );
+      deleteRevenueRecord(params["uuid"] || "").then(() => {
+        redirect(
+          `/user/revenue${
+            Object.keys(searchParams).length
+              ? ""
+              : `?${new URLSearchParams(searchParams).toString()}`
+          }&used=${args.request.bodyUsed}&body=${args.request.body}`
+        );
+      });
     else throw new Response(`Method ${method} not found`, { status: 404 });
   });
 };

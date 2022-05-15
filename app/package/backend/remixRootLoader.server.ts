@@ -17,7 +17,7 @@ const remixRootLoader = (
         }
       ).lambdaContext as Context;
       const region = lambdaContext.invokedFunctionArn.match(
-        /^arn:aws:lambda:([a-z0-9-]):/
+        /^arn:aws:lambda:([a-z0-9-]+):/
       )?.[1];
       return {
         ENV: {
