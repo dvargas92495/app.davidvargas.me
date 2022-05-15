@@ -3,7 +3,13 @@ import Table from "~/package/components/Table";
 import type { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import searchRevenue from "~/data/searchRevenue.server";
-import { Form, Outlet, useNavigate, useSearchParams } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  Outlet,
+  useNavigate,
+  useSearchParams,
+} from "@remix-run/react";
 import TextInput from "~/package/components/TextInput";
 import Button from "~/package/components/Button";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
@@ -50,8 +56,13 @@ const UserRevenuePage = () => {
           }
         />
       </div>
-      <div>
+      <div className="relative">
         <Outlet />
+        <Link to={"/user/revenue"}>
+          <span className="absolute right-4 top-4 px-4 py-2 bg-orange-400 rounded-md cursor-pointer">
+            {"<- Back"}
+          </span>
+        </Link>
       </div>
       <SuccessfulActionToast />
     </div>

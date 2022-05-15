@@ -12,7 +12,7 @@ const remixRootLoader = (
         args.context || {
           lambdaContext: {
             invokedFunctionArn: "",
-            logGroupName: ""
+            logGroupName: "",
           },
         }
       ).lambdaContext as Context;
@@ -28,9 +28,7 @@ const remixRootLoader = (
           STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
           ...args.env,
         },
-        logUrl: `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${
-          lambdaContext.invokedFunctionArn
-        }#logsV2:log-groups/log-group/${encodeURIComponent(
+        logUrl: `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/${encodeURIComponent(
           lambdaContext.logGroupName
         )}/log-events/${encodeURIComponent(lambdaContext.logStreamName)}`,
       };

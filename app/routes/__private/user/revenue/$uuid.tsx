@@ -30,7 +30,7 @@ export const action: ActionFunction = (args) => {
   return remixAppAction(args, ({ params, method, searchParams }) => {
     if (method === "DELETE")
       deleteRevenueRecord(params["uuid"] || "").then(() => {
-        redirect(
+        return redirect(
           `/user/revenue${
             Object.keys(searchParams).length
               ? ""
