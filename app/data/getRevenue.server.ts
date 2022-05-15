@@ -1,10 +1,5 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
-// import Stripe from "stripe";
-
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-//   maxNetworkRetries: 3,
-//   apiVersion: "2020-08-27",
-// });
+import { NotFoundError } from "aws-sdk-plus/dist/errors";
 
 const getRevenue = (uuid: string) =>
   getMysqlConnection()
@@ -26,12 +21,14 @@ const getRevenue = (uuid: string) =>
           connect: number;
         }[]
       )[0];
+      if (!record)
+        throw new NotFoundError(`Could not find Revenue record: ${uuid}`);
       return {
         source: record.source,
         source_id: record.source_id,
         date: record.date.toLocaleString(),
         product: record.product,
-      }
+      };
     });
 
 export default getRevenue;

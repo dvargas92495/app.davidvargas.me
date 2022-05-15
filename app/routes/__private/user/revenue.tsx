@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Table from "~/package/components/Table";
 import type { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
@@ -16,6 +16,10 @@ const UserRevenuePage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultProduct = (searchParams.get("product") as string) || "";
+  const paramString = useMemo(() => {
+    const sp = searchParams.toString();
+    return sp ? `?${sp}` : "";
+  }, [searchParams]);
   const [product, setProduct] = useState(defaultProduct);
   return (
     <div className="flex gap-8">
@@ -40,7 +44,11 @@ const UserRevenuePage = () => {
             <Button>Migrate</Button>
           </Form>
         </div>
-        <Table onRowClick={(row) => navigate(`/user/revenue/${row.uuid}${searchParams.toString()}`)} />
+        <Table
+          onRowClick={(row) =>
+            navigate(`/user/revenue/${row.uuid}${paramString}`)
+          }
+        />
       </div>
       <div>
         <Outlet />

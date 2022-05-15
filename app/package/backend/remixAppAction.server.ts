@@ -33,12 +33,15 @@ const remixAppAction = (
           formData.getAll(k).map((v) => v as string),
         ])
       );
-      return callback({
+      const response = callback({
         userId,
         data,
         method: request.method as ActionMethod,
         searchParams,
         params,
+      });
+      return Promise.resolve(response).catch((e) => {
+        throw new Response(e.message, { status: e.code || 500 });
       });
     });
 };
