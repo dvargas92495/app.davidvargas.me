@@ -56,6 +56,7 @@ export const loader: LoaderFunction = () => {
     "DefaultErrorBoundary",
     "Dialog",
     "Landing",
+    "Loading",
     "NumberInput",
     "SuccessfulActionToast",
     "Table",

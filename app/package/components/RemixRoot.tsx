@@ -9,38 +9,39 @@ import {
   useCatch,
   ScrollRestoration,
   useLoaderData,
+  useTransition,
 } from "@remix-run/react";
 import { ClerkApp, ClerkCatchBoundary } from "@clerk/remix";
+import Loading from "./Loading";
 // primary: "sky-400",
 // secondary: "orange-400",
 
-export const getRootMeta = (
-  tags: ReturnType<MetaFunction> = {}
-): MetaFunction => () => {
-  return {
-    charSet: "utf-8",
-    viewport: "width=device-width,initial-scale=1",
-    "og:type": "website",
-    "twitter:card": "summary",
-    "twitter:creator": "@dvargas92495",
-    ...tags,
+export const getRootMeta =
+  (tags: ReturnType<MetaFunction> = {}): MetaFunction =>
+  () => {
+    return {
+      charSet: "utf-8",
+      viewport: "width=device-width,initial-scale=1",
+      "og:type": "website",
+      "twitter:card": "summary",
+      "twitter:creator": "@dvargas92495",
+      ...tags,
+    };
   };
-};
 
-export const getRootLinks = (
-  links: ReturnType<LinksFunction> = []
-): LinksFunction => () => {
-  return [
-    { rel: "preconnect", href: "https://fonts.googleapis.com" },
-    { rel: "preconnect", href: "https://fonts.gstatic.com" },
-    {
-      rel: "stylesheet",
-      href:
-        "https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap",
-    },
-    ...links,
-  ];
-};
+export const getRootLinks =
+  (links: ReturnType<LinksFunction> = []): LinksFunction =>
+  () => {
+    return [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap",
+      },
+      ...links,
+    ];
+  };
 
 export const RootCatchBoundary = ClerkCatchBoundary(() => {
   const caught = useCatch();
@@ -61,6 +62,15 @@ export const RootCatchBoundary = ClerkCatchBoundary(() => {
   );
 });
 
+const PageTransition = () => {
+  const transition = useTransition();
+  return transition.state === "loading" ? (
+    <div className="left-2 bottom-2 fixed z-50">
+      <Loading />
+    </div>
+  ) : null;
+};
+
 const App = () => {
   const data = useLoaderData<{ ENV: Record<string, string> }>();
   return (
@@ -71,6 +81,7 @@ const App = () => {
       </head>
       <body className="h-full">
         <Outlet />
+        <PageTransition />
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{
