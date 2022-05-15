@@ -43,6 +43,14 @@ const remixAppAction = (
       return Promise.resolve(response).catch((e) => {
         throw new Response(e.message, { status: e.code || 500 });
       });
+    })
+    .catch((e) => {
+      if (e.status === 401) throw e;
+      else
+        throw new Response(
+          `Something went wrong while parsing the app callback:\n${e.message}`,
+          { status: 500 }
+        );
     });
 };
 

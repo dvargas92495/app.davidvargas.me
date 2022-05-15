@@ -15,9 +15,9 @@ const Button = ({
   return (
     <button
       type="submit"
-      className={`px-8 py-3 font-semibold rounded-full bg-sky-500 hover:bg-sky-700 active:bg-sky-900 hover:shadow-md active:shadow-none${
+      className={`px-6 py-3 font-semibold rounded-full bg-sky-500 shadow-sm hover:bg-sky-700 active:bg-sky-900 hover:shadow-md active:shadow-none disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:opacity-50 disabled:hover:bg-sky-500 disabled:hover:shadow-none disabled:active:bg-sky-500 disabled:hover:bg-opacity-50${
         className ? ` ${className}` : ""
-      } disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:opacity-50 disabled:hover:bg-sky-500 disabled:hover:shadow-none disabled:active:bg-sky-500 disabled:hover:bg-opacity-50`}
+      }`}
       disabled={typeof disabled === "undefined" ? loading : disabled}
       {...buttonProps}
     >

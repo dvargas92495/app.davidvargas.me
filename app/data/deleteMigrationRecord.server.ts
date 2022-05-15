@@ -1,6 +1,6 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
 
-const deleteRevenueRecord = (uuid: string) => {
+const deleteMigrationRecord = (uuid: string) => {
   return getMysqlConnection()
     .then((con) =>
       con
@@ -10,4 +10,4 @@ const deleteRevenueRecord = (uuid: string) => {
     .then(() => ({ success: true }));
 };
 
-export default deleteRevenueRecord;
+export default deleteMigrationRecord;

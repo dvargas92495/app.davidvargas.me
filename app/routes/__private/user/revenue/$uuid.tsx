@@ -5,7 +5,7 @@ import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import getRevenue from "~/data/getRevenue.server";
 import { Form, useLoaderData } from "@remix-run/react";
 import remixAppAction from "~/package/backend/remixAppAction.server";
-import deleteRevenueRecord from "~/data/deleteMigrationRecord.server";
+import deleteRevenueRecord from "~/data/deleteRevenueRecord.server";
 import Button from "~/package/components/Button";
 
 const RevenueRecord = () => {

@@ -46,7 +46,7 @@ const Dashboard = ({
           <div className="mr-4">
             <img
               className="h-12 w-12"
-              src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+              src="/images/logo.png"
               alt="Workflow"
             />
           </div>

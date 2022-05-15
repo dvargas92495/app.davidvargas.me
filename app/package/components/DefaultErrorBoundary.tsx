@@ -20,6 +20,7 @@ const DefaultErrorBoundary: ErrorBoundaryComponent = ({
           href={logUrl}
           target={"_blank"}
           rel={"noreferrer"}
+          className={'text-sky-800 underline hover:no-underline active:text-sky-900'}
         >
           AWS
         </a>.
