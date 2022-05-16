@@ -15,7 +15,7 @@ const PublicPage: React.FC<{
     "my-16 mx-auto flex justify-center max-w-3xl w-full p-0 flex-grow";
   return (
     <div className="flex flex-col min-h-full">
-      <div className="static bg-transparent shadow-xl">
+      <div className="static bg-transparent shadow-xl z-10">
         <div className="px-6 h-16 flex items-center">
           <a href={"/"} className="w-48 flex">
             {homeIcon}
