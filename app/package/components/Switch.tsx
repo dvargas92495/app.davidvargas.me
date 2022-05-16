@@ -10,12 +10,11 @@ const Switch = ({
 }: {
   defaultChecked?: boolean;
   onChange?: (b: boolean) => void;
-  label?: string;
+  label?: React.ReactNode;
   name?: string;
   labelClassname?: string;
 }) => {
   const [enabled, setEnabled] = useState(defaultChecked);
-
   return (
     <HeadlessSwitch.Group>
       <div className="mb-6 flex items-center gap-4">
