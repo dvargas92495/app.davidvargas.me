@@ -1,81 +1,27 @@
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
-import { Form, useActionData } from "@remix-run/react";
+import { Outlet, useActionData, useNavigate } from "@remix-run/react";
 import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
 import Table from "~/package/components/Table";
 import { useState } from "react";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import listEtherscanRecords from "~/data/listEtherscanRecords.server";
-import Dialog from "~/package/components/Dialog";
 import remixAppAction from "~/package/backend/remixAppAction.server";
 import insertRecordFromEtherscan from "~/data/insertRecordFromEtherscan.server";
-import TextInput from "~/package/components/TextInput";
-import Button from "~/package/components/Button";
 import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 
 const UserEtherscan = () => {
   const actionData = useActionData();
+  const navigate = useNavigate();
   const [recordSelected, setRecordSelected] =
     useState<
       Awaited<ReturnType<typeof listEtherscanRecords>>["data"][number]
     >();
   return (
     <>
-      <Table onRowClick={(row) => setRecordSelected(row)} />
-      <Dialog
-        isOpen={!!recordSelected}
-        onClose={() => setRecordSelected(undefined)}
-        title={"Save Record"}
-      >
-        <Form method="post">
-          <TextInput
-            label={"Transaction"}
-            name={"hash"}
-            defaultValue={recordSelected?.id}
-          />
-          <TextInput
-            label={"Date"}
-            name={"date"}
-            defaultValue={recordSelected?.date}
-          />
-          <TextInput
-            label={"Original Value"}
-            name={"value"}
-            defaultValue={recordSelected?.value}
-          />
-          <TextInput
-            label={"From"}
-            name={"from"}
-            defaultValue={recordSelected?.from}
-          />
-          <TextInput
-            label={"To"}
-            name={"to"}
-            defaultValue={recordSelected?.to}
-          />
-          <TextInput
-            label={"Original Gas"}
-            name={"gas"}
-            defaultValue={recordSelected?.gas}
-          />
-          <TextInput
-            label={"Type"}
-            name={"type"}
-            defaultValue={recordSelected?.type}
-          />
-          <TextInput
-            label={"Category"}
-            name={"category"}
-            defaultValue={"revenue"}
-          />
-          <TextInput label={"Description"} name={"description"} />
-          <TextInput
-            label={"Amount"}
-            name={"amount"}
-            defaultValue={recordSelected?.value}
-          />
-          <Button>Save</Button>
-        </Form>
-      </Dialog>
+      <Table onRowClick={(row) => {
+        setRecordSelected(row);
+        navigate(`/user/etherscan/${row.id}`)
+      }} />
       {actionData && (
         <div className="flex-grow border-2 border-gray-500 border-opacity-50 border-dashed rounded-lg p-4">
           <h1 className="text-2xl font-bold mb-6">Response</h1>
@@ -84,20 +30,15 @@ const UserEtherscan = () => {
           </pre>
         </div>
       )}
+      <Outlet 
+        context={recordSelected}
+      />
     </>
   );
 };
 
 export const loader: LoaderFunction = (args) => {
   return remixAppLoader(args, ({ userId }) => listEtherscanRecords(userId));
-};
-
-export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ userId, data }) =>
-    insertRecordFromEtherscan({ userId, data }).catch((e) => {
-      throw new Response(e.message, { status: 500 });
-    })
-  );
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;

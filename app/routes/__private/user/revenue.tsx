@@ -58,11 +58,6 @@ const UserRevenuePage = () => {
       </div>
       <div className="relative">
         <Outlet />
-        <Link to={"/user/revenue"}>
-          <span className="absolute right-4 top-4 px-4 py-2 bg-orange-400 rounded-md cursor-pointer">
-            {"<- Back"}
-          </span>
-        </Link>
       </div>
       <SuccessfulActionToast />
     </div>

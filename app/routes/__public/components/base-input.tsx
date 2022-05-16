@@ -1,4 +1,3 @@
-import React from "react";
 import BaseInput from "~/package/components/BaseInput";
 
 const BaseInputPage = () => {

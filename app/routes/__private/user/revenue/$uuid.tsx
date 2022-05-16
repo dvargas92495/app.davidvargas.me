@@ -3,7 +3,7 @@ import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import getRevenue from "~/data/getRevenue.server";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import remixAppAction from "~/package/backend/remixAppAction.server";
 import deleteRevenueRecord from "~/data/deleteRevenueRecord.server";
 import Button from "~/package/components/Button";
@@ -18,6 +18,11 @@ const RevenueRecord = () => {
       <Form method="delete">
         <Button>Delete</Button>
       </Form>
+      <Link to={"/user/revenue"}>
+        <span className="absolute right-4 top-4 px-4 py-2 bg-orange-400 rounded-md cursor-pointer">
+          {"<- Back"}
+        </span>
+      </Link>
     </div>
   );
 };

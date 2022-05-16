@@ -13,6 +13,7 @@ const insertRecordFromEtherscan = async ({
   const amount = data.amount[0];
   const category = data.category[0];
   const [hash] = data.hash;
+  const [index] = data.index;
   const [originalDescription] = data.description;
   const [code, ...des] = originalDescription.split(" - ");
   const description = des.join(" - ");
@@ -31,8 +32,8 @@ const insertRecordFromEtherscan = async ({
     .then((connection) => {
       return connection
         .execute(
-          `INSERT INTO etherscan (date, source, target, gas, hash, method, value, user_id) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?) 
+          `INSERT INTO etherscan (date, source, target, gas, hash, method, value, user_id, tx_index) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
           ON DUPLICATE KEY UPDATE value=value`,
           [
             date,
@@ -43,6 +44,7 @@ const insertRecordFromEtherscan = async ({
             data.type[0],
             value,
             userId,
+            index,
           ]
         )
         .then(() =>
@@ -56,7 +58,7 @@ const insertRecordFromEtherscan = async ({
                   "etherscan",
                   hash,
                   date,
-                  Number(amount) * Number(price) * 100, //0.20331402
+                  Number(amount) * Number(price) * 100,
                   originalDescription,
                   0,
                 ]

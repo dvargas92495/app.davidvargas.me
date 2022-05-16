@@ -120,8 +120,6 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
             { Header: "Gas", accessor: "gas" },
             { Header: "From", accessor: "from" },
             { Header: "To", accessor: "to" },
-            { Header: "Index", accessor: "index" },
-            { Header: "Number", accessor: "number" },
           ],
           data: txlist.data.result
             .map(({ value, ...r }) => ({
@@ -162,7 +160,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
               } ETH`,
               value: r.value,
               type: r.type,
-              id: r.hash,
+              hash: r.hash.toLowerCase(),
               from: r.from === address ? "ME" : addressBook[r.from] || r.from,
               to: r.to === address ? "ME" : addressBook[r.to] || r.to,
               timestamp: Number(r.timeStamp) * 1000,
@@ -171,7 +169,7 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
                 "yyyy-MM-dd hh:mm a"
               ),
               index: Number(r.transactionIndex),
-              number: Number(r.blockNumber),
+              id: `${r.hash.toLowerCase()}-${r.transactionIndex}`,
             }))
             .sort((a, b) => a.timestamp - b.timestamp),
         };

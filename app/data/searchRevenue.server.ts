@@ -13,7 +13,7 @@ const searchRevenue = ({
     .then((con) =>
       con
         .execute(
-          `SELECT date, amount, product, uuid, connect 
+          `SELECT date, amount, product, uuid, connect, source
           FROM revenue 
           ${product ? "WHERE product = ?" : ""}
           ORDER BY date`, // LIMIT ?, ?`,
@@ -31,6 +31,7 @@ const searchRevenue = ({
         product: string;
         uuid: string;
         connect: number;
+        source: string;
       }[];
       return {
         data: values.map((v) => ({
@@ -41,6 +42,7 @@ const searchRevenue = ({
         })),
         columns: [
           { Header: "Date", accessor: "date" },
+          { Header: "Source", accessor: "source" },
           { Header: "Product", accessor: "product" },
           { Header: "Amount", accessor: "amount" },
           { Header: "Connect", accessor: "connect" },

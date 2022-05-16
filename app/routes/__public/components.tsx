@@ -59,6 +59,7 @@ export const loader: LoaderFunction = () => {
     "Loading",
     "NumberInput",
     "SuccessfulActionToast",
+    "Switch",
     "Table",
     "Textarea",
     "TextInput",
