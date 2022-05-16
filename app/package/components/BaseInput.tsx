@@ -25,10 +25,7 @@ const BaseInput = ({
   ...inputProps
 }: InputProps) => {
   const transition = useTransition();
-  const loading = useMemo(
-    () => transition.state === "submitting",
-    [transition]
-  );
+  const loading = useMemo(() => transition.state !== "idle", [transition]);
   return (
     <div className={`mb-6${className ? ` ${className}` : ""}`}>
       <label

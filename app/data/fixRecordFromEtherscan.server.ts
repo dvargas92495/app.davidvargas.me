@@ -1,12 +1,9 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
 
 const fixRecordFromEtherscan = async ({
-  userId,
-  data,
   params,
 }: {
   userId: string;
-  data: Record<string, string[]>;
   params: Record<string, string | undefined>;
 }) => {
   const id = params["id"] || "";
@@ -14,22 +11,10 @@ const fixRecordFromEtherscan = async ({
   return getMysqlConnection()
     .then((connection) => {
       return connection
-        .execute(
-          `INSERT INTO etherscan (date, source, target, gas, hash, method, value, user_id, tx_index) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
-          ON DUPLICATE KEY UPDATE value=value`,
-          [
-            new Date(data.date[0]),
-            data.from[0],
-            data.to[0],
-            data.gas[0],
-            hash,
-            data.type[0],
-            data.value[0],
-            userId,
-            Number(index),
-          ]
-        )
+        .execute(`UPDATE etherscan SET tx_index = ? WHERE hash = ?`, [
+          Number(index),
+          hash,
+        ])
         .then(() =>
           Promise.all([
             connection

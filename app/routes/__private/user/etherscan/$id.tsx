@@ -142,7 +142,7 @@ export const action: ActionFunction = (args) => {
           throw new Response(e.message, { status: 500 });
         });
     else if (method === "PUT")
-      return fixRecordFromEtherscan({ userId, data, params })
+      return fixRecordFromEtherscan({ userId, params })
         .then(() => redirect("/user/etherscan"))
         .catch((e) => {
           throw new Response(e.message, { status: 500 });
