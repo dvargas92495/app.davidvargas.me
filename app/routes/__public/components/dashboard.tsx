@@ -5,7 +5,7 @@ const DashboardPage = () => {
   return (
     <div className="absolute inset-0">
       <Dashboard
-        root={"/components/dashboard"}
+        root={"components/dashboard"}
         tabs={["Tab", "Page", "Settings"]}
         footer={<>Hello World!</>}
       />
