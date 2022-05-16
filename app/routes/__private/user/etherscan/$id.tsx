@@ -11,6 +11,7 @@ import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import getEtherscan from "~/data/getEtherscan.server";
 import { useMemo } from "react";
 import fixRecordFromEtherscan from "~/data/fixRecordFromEtherscan.server";
+import NumberInput from "~/package/components/NumberInput";
 
 const EtherscanRecord = () => {
   const recordSelected =
@@ -42,10 +43,10 @@ const EtherscanRecord = () => {
             defaultValue={recordSelected?.hash}
             type={"hidden"}
           />
-          <input
+          <NumberInput
             name={"index"}
             defaultValue={recordSelected?.index}
-            type={"hidden"}
+            disabled
           />
           <TextInput
             name={"date"}

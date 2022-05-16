@@ -12,10 +12,10 @@ const getEtherscan = async ({
       connection
         .execute(
           `SELECT hash, tx_index FROM etherscan
-              WHERE hash = ? AND tx_index = ?`,
-          [hash, index]
+              WHERE hash = ?`,
+          [hash]
         )
-        .then((a) => (a as {}[]).length),
+        .then((a) => a as { hash: string; tx_index: number }[]),
       connection
         .execute(
           `SELECT amount, product as description FROM revenue WHERE source_id = ? AND source = "etherscan"`,
