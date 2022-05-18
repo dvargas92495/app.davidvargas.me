@@ -27,7 +27,11 @@ const Select = ({
 }) => {
   const transition = useTransition();
   const loading = useMemo(() => transition.state !== "idle", [transition]);
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [selectedOption, setSelectedOption] = useState(options[0].id);
+  const labelById = useMemo(
+    () => Object.fromEntries(options.map((o) => [o.id, o.label])),
+    []
+  );
   return (
     <div className={className}>
       <label htmlFor={name} className={labelClassName}>
@@ -40,7 +44,7 @@ const Select = ({
         disabled={typeof disabled === "undefined" ? loading : disabled}
       >
         <Listbox.Button className={buttonClassName}>
-          <span className="block truncate">{selectedOption.label}</span>
+          <span className="block truncate">{labelById[selectedOption]}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <SelectorIcon
               className="h-5 w-5 text-gray-400"
@@ -57,9 +61,11 @@ const Select = ({
             {options.map((option) => (
               <Listbox.Option
                 key={option.id}
-                value={option}
+                value={option.id}
                 className={({ active }) =>
-                  `${optionClassName} ${active ? "bg-sky-100 text-sky-900" : ""}`
+                  `${optionClassName} ${
+                    active ? "bg-sky-100 text-sky-900" : ""
+                  }`
                 }
               >
                 {({ selected }) => (
