@@ -37,18 +37,16 @@ const Dashboard = ({
   const matchWithTitle = matches.reverse().find((m) => m.handle?.Title);
   const Title = matchWithTitle?.handle?.Title as React.FC;
   const CurrentPageTitle = matchWithTitle
-    ? () => <Title {...matchWithTitle.data} />
+    ? typeof Title === "string"
+      ? () => Title
+      : () => <Title {...matchWithTitle.data} />
     : DefaultPageTitle;
   return (
     <div className="min-h-full flex max-h-full">
       <nav className="bg-sky-700 min-h-full w-60 flex flex-col text-gray-200 flex-shrink-0">
         <div className="p-4 flex items-center">
           <div className="mr-4">
-            <img
-              className="h-12 w-12"
-              src="/images/logo.png"
-              alt="Workflow"
-            />
+            <img className="h-12 w-12" src="/images/logo.png" alt="Workflow" />
           </div>
           <h2 className="text-white text-2xl font-bold">{title}</h2>
         </div>
@@ -78,7 +76,7 @@ const Dashboard = ({
         <div className="h-12 bg-sky-900 flex items-center px-4">{footer}</div>
       </nav>
       <div className="p-8 flex-grow flex flex-col overflow-auto">
-        <h1 className="capitalize text-2xl font-bold mb-4">
+        <h1 className="capitalize text-4xl font-bold mb-8">
           <CurrentPageTitle />
         </h1>
         <div className="flex-grow">

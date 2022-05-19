@@ -22,7 +22,8 @@ const remixAppLoader = (
         ? callback({ userId: authData.userId, params, searchParams })
         : {};
       return Promise.resolve(response).catch((e) => {
-        throw new Response(e.message, { status: e.code || 500 });
+        if (e instanceof Response) throw e;
+        throw new Response(e.message, { status: e.status || 500 });
       });
     });
 };

@@ -5,6 +5,8 @@ import axios, { AxiosError, AxiosRequestHeaders } from "axios";
 import Stripe from "stripe";
 import sendEmail from "aws-sdk-plus/dist/sendEmail";
 import React from "react";
+import FailedInvoice from "~/emails/FailedInvoice";
+import getFailedInvoiceData from "~/data/getFailedInvoiceData.server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   maxNetworkRetries: 3,
@@ -59,95 +61,16 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                   .then(() => Promise.resolve())
           )
       : type === "invoice.payment_failed"
-      ? sendEmail({
-          to: "dvargas92495@gmail.com",
-          subject: "Invoice Failed",
-          body: React.createElement(
-            "div",
-            {
-              style: {
-                margin: "0 auto",
-                maxWidth: 600,
-                fontFamily: `"Proxima Nova","proxima-nova",Helvetica,Arial sans-serif`,
-                padding: `20px 0`,
-              },
-            },
-            React.createElement(
-              "div",
-              {
-                style: {
-                  width: "80%",
-                  margin: "0 auto",
-                  paddingBottom: 20,
-                  borderBottom: "1px dashed #dadada",
-                  textAlign: "center",
-                },
-              },
-              React.createElement("img", {
-                src: "https://davidvargas.me/favicon.ico",
-                width: 128,
-              })
-            ),
-            React.createElement(
-              "div",
-              {
-                style: {
-                  width: "80%",
-                  margin: "30px auto",
-                  fontSize: 16,
-                },
-              },
-              React.createElement(
-                "p",
-                {},
-                `A user failed to pay their latest invoice.`
-              ),
-              React.createElement(
-                "a",
-                { href: `https://dashboard.stripe.com/events/${id}` },
-                `Click here for more info.`
-              )
-            ),
-            React.createElement(
-              "div",
-              {
-                style: {
-                  width: "80%",
-                  margin: "30px auto",
-                  borderTop: "1px dashed #dadada",
-                  display: "flex",
-                  color: "#a8a8a8",
-                  paddingTop: 15,
-                },
-              },
-              React.createElement(
-                "div",
-                { style: { width: "50%" } },
-                "Sent From ",
-                React.createElement(
-                  "a",
-                  {
-                    href: "https://davidvargas.me",
-                    style: { color: "#3ba4dc", textDecoration: "none" },
-                  },
-                  "Vargas Arts"
-                )
-              ),
-              React.createElement(
-                "div",
-                { style: { width: "50%", textAlign: "right" } },
-                React.createElement(
-                  "a",
-                  {
-                    href: "mailto:hello@davidvargas.me",
-                    style: { color: "#3ba4dc", textDecoration: "none" },
-                  },
-                  "Contact Support"
-                )
-              )
-            )
-          ),
-        })
+      ? getFailedInvoiceData(object as Stripe.Invoice, stripe).then((args) =>
+          sendEmail({
+            to: "dvargas92495@gmail.com",
+            subject: "Invoice Failed",
+            body: React.createElement(FailedInvoice, {
+              id,
+              ...args,
+            }),
+          })
+        )
       : Promise.resolve()
   )
     .then(() => {

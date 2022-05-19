@@ -1,11 +1,14 @@
 import React from "react";
 import getMeta from "~/package/utils/getMeta";
 import UserDashboard from "~/package/components/UserDashboard";
+export { default as ErrorBoundary } from "~/package/components/DefaultErrorBoundary";
+export { default as CatchBoundary } from "~/package/components/DefaultCatchBoundary";
 
 const TABS = [
   "Expenses",
   "Revenue",
   "Transfers",
+  "Emails",
   "Convertkit",
   "Etherscan",
   "Mercury",
