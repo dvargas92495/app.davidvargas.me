@@ -29,7 +29,7 @@ const UserIndex = () => {
         fields={["API Token"]}
       />
       <CustomConnectedAccount
-        svgSrc="https://app.terraform.io//favicon.ico"
+        svgSrc="https://app.terraform.io/favicon.ico"
         name={"Terraform"}
         fields={["Organization", "Organization API Token"]}
       />

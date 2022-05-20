@@ -11,13 +11,6 @@ const getEtherscan = async ({
     return Promise.all([
       connection
         .execute(
-          `SELECT hash, tx_index FROM etherscan
-              WHERE hash = ?`,
-          [hash]
-        )
-        .then((a) => a as { hash: string; tx_index: number }[]),
-      connection
-        .execute(
           `SELECT amount, product as description FROM revenue WHERE source_id = ? AND source = "etherscan"`,
           [id]
         )
@@ -54,7 +47,6 @@ const getEtherscan = async ({
         .then((a) => a as { amount: number; description: string }[]),
     ]).then(
       ([
-        etherscan,
         correctRevenue,
         incorrectRevenue,
         correctExpense,
@@ -62,7 +54,6 @@ const getEtherscan = async ({
         correctPersonal,
         incorrectPersonal,
       ]) => ({
-        etherscan,
         correctRevenue,
         incorrectRevenue,
         correctExpense,

@@ -37,7 +37,7 @@
     "@typescript-eslint/parser": "5.0.0",
     "concurrently": "6.5.1",
     "eslint": "8.0.1",
-    "fuegojs": "^0.28.4",
+    "fuegojs": "^0.29.1",
     "prettier": "2.4.1",
     "remix-lambda-at-edge": "^0.4.2",
     "tailwindcss": "^3.0.24",

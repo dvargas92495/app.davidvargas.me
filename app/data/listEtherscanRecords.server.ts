@@ -52,16 +52,25 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
         );
       }
       const recordedTxs = await getMysqlConnection(connection).then((con) =>
-        con
-          .execute(`SELECT hash, tx_index FROM etherscan WHERE user_id = ?`, [
-            userId,
-          ])
-          .then((r) => {
-            const txs = r as { hash: string; tx_index: string }[];
-            return new Set(
-              txs.map((r) => `${r.hash.toLowerCase()}-${r.tx_index}`)
-            );
-          })
+        Promise.all([
+          con.execute(
+            `SELECT source_id FROM revenue WHERE source = "etherscan"`,
+            []
+          ),
+          con.execute(
+            `SELECT source_id FROM expenses WHERE source = "etherscan"`,
+            []
+          ),
+          con.execute(
+            `SELECT source_id FROM personal_transfers WHERE source = "etherscan"`,
+            []
+          ),
+        ]).then(([a, b, c]) => {
+          const txs = (a as { source_id: string }[])
+            .concat(b as { source_id: string }[])
+            .concat(c as { source_id: string }[]);
+          return new Set(txs.map((r) => r.source_id));
+        })
       );
       const address = account.address.toLowerCase();
       const apikey = account.apiKeyToken;
