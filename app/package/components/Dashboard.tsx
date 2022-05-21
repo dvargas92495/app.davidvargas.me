@@ -46,9 +46,17 @@ const Dashboard = ({
       <nav className="bg-sky-700 min-h-full w-60 flex flex-col text-gray-200 flex-shrink-0">
         <div className="p-4 flex items-center">
           <div className="mr-4">
-            <img className="h-12 w-12" src="/images/logo.png" alt="Workflow" />
+            <Link to={"/"} className={"cursor-pointer"}>
+              <img
+                className="h-12 w-12"
+                src="/images/logo.png"
+                alt="Workflow"
+              />
+            </Link>
           </div>
-          <h2 className="text-white text-2xl font-bold">{title}</h2>
+          <Link to={"/user"} className={"cursor-pointer"}>
+            <h2 className="text-white text-2xl font-bold">{title}</h2>
+          </Link>
         </div>
         <div className="flex-grow">
           {TABS.map((tab) => (

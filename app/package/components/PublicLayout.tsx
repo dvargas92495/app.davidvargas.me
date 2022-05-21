@@ -1,12 +1,12 @@
 import { UserButton } from "@clerk/remix";
 import React from "react";
-import { Outlet, useLoaderData, useMatches } from "@remix-run/react";
+import { Link, Outlet, useLoaderData, useMatches } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/node";
 
 const PublicPage: React.FC<{
   homeIcon?: React.ReactNode;
   pages?: string[];
-}> = ({ pages = [], homeIcon = "Home" }) => {
+}> = ({ pages = [], homeIcon = <img src={`/images/logo.png`} /> }) => {
   const authed = useLoaderData();
   const matches = useMatches();
   const mainClassName =
@@ -17,9 +17,9 @@ const PublicPage: React.FC<{
     <div className="flex flex-col min-h-full">
       <div className="static bg-transparent shadow-xl z-10">
         <div className="px-6 h-16 flex items-center">
-          <a href={"/"} className="w-48 flex">
+          <Link to={"/"} className="w-48 flex max-h-full">
             {homeIcon}
-          </a>
+          </Link>
           <div className="justify-center flex-grow flex">
             {pages.map((p, i) => (
               <React.Fragment key={i}>

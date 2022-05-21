@@ -37,15 +37,17 @@ const EtherscanRecord = () => {
   return (
     <div className="flex gap-8">
       <Form method="post" className="mt-4 flex gap-2">
-        <div>
-          <input
+        <div key={recordSelected.id}>
+          <TextInput
             name={"hash"}
             defaultValue={recordSelected?.hash}
-            type={"hidden"}
+            label={"Hash"}
+            disabled
           />
           <NumberInput
             name={"index"}
             defaultValue={recordSelected?.index}
+            label={"Index"}
             disabled
           />
           <TextInput
