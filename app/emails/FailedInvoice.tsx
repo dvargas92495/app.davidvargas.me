@@ -1,3 +1,5 @@
+import React from "react";
+
 const FailedInvoice = ({
   id,
   customerName,
@@ -10,7 +12,7 @@ const FailedInvoice = ({
   project: string;
   reason: string;
   url: string;
-}) => {
+}): React.ReactElement => {
   const userLink = `${url}/user`;
   return (
     <div
