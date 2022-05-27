@@ -69,7 +69,7 @@ const Select = ({
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          className={'relative'}
+          className={"relative"}
         >
           <Listbox.Options className={optionsClassName}>
             {options.map((option) => (
