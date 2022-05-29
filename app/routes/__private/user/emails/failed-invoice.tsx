@@ -23,7 +23,7 @@ const FailedInvoicePage = () => {
         <Select
           label="Event"
           options={events}
-          onChange={navigate}
+          onChange={(s) => navigate(`${s}`)}
           defaultValue={params["id"]}
         />
       </div>

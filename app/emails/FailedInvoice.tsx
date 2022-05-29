@@ -75,8 +75,8 @@ const FailedInvoice = ({
           </a>
           .
         </p>
-        <p style={{ marginTop: 32 }}>Best,</p>
-        <p>Vargas</p>
+        <p style={{ marginTop: 32, marginBottom: 0 }}>Best,</p>
+        <p style={{ marginTop: 0 }}>Vargas</p>
       </div>
       <div
         style={{
