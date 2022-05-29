@@ -9,6 +9,7 @@ const getFailedInvoiceData = (invoice: Stripe.Invoice, stripe: Stripe) => {
     stripe.subscriptions.retrieve(invoice.subscription as string),
     stripe.charges.retrieve(invoice.charge as string)
   ]).then(([c, sub, charge]) => ({
+    customerEmail: c.deleted ? "dvargas92495@gmail.com" : c.email || "dvargas92495@gmail.com",
     customerName: c.deleted ? "Deleted Customer" : c.name || "Unknown Customer",
     url: "https://roamjs.com",
     project: sub.metadata.project,

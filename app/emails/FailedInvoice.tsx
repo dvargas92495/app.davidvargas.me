@@ -3,12 +3,14 @@ import React from "react";
 const FailedInvoice = ({
   id,
   customerName,
+  customerEmail,
   url,
   project,
   reason,
 }: {
   id: string;
   customerName: string;
+  customerEmail: string;
   project: string;
   reason: string;
   url: string;
@@ -56,7 +58,7 @@ const FailedInvoice = ({
             Click here for more info.
           </a>
         </p>
-        <p style={{ marginBottom: 16 }}>Here's what I would send them:</p>
+        <p style={{ marginBottom: 16 }}>Here's what I would send to {customerEmail}:</p>
         <h1 style={{ fontSize: 32, fontWeight: 600, marginBottom: 32 }}>
           Failed to pay latest invoice
         </h1>

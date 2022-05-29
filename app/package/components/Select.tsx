@@ -4,7 +4,7 @@ import { useTransition } from "@remix-run/react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 
-type Option = { id: string; label: React.ReactNode };
+type Option = { id: string | number; label: React.ReactNode };
 
 const Select = ({
   name,
@@ -28,8 +28,8 @@ const Select = ({
   buttonClassName?: string;
   optionsClassName?: string;
   optionClassName?: string;
-  onChange?: (opt: string) => void;
-  defaultValue?: string;
+  onChange?: (opt: string | number) => void;
+  defaultValue?: string | number;
 }) => {
   const transition = useTransition();
   const loading = useMemo(() => transition.state !== "idle", [transition]);

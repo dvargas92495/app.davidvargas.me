@@ -49,7 +49,7 @@ const remixAppAction = (
       });
     })
     .catch((e) => {
-      if (e.status === 401) throw e;
+      if (e instanceof Response) throw e;
       else
         throw new Response(
           `Something went wrong while parsing the app callback:\n${e.message}`,
