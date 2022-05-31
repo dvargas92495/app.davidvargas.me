@@ -51,6 +51,7 @@ export const loader: LoaderFunction = () => {
     "BaseInput",
     "Button",
     "Checkbox",
+    "CodeInput",
     "ConvertKit",
     "Dashboard",
     "DefaultCatchBoundary",

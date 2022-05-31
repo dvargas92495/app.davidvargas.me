@@ -17,7 +17,7 @@ const PublicPage: React.FC<{
     <div className="flex flex-col min-h-full">
       <div className="static bg-transparent shadow-xl z-10">
         <div className="px-6 h-16 flex items-center">
-          <Link to={"/"} className="w-48 flex max-h-full">
+          <Link to={"/"} className="flex max-h-full w-16">
             {homeIcon}
           </Link>
           <div className="justify-center flex-grow flex">

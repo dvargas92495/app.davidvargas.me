@@ -11,11 +11,11 @@ const Select = ({
   disabled,
   options = [],
   label,
-  className = "mb-6",
-  labelClassName = "block mb-2 text-sm font-medium text-gray-900",
-  buttonClassName = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full py-2 px-4 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed shadow-md relative text-left",
-  optionsClassName = "rounded-md bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0",
-  optionClassName = "cursor-pointer relative select-none pl-10 pr-4 py-2",
+  className = "",
+  labelClassName = "",
+  buttonClassName = "",
+  optionsClassName = "",
+  optionClassName = "",
   onChange,
   defaultValue = options[0]?.id,
 }: {
@@ -39,8 +39,11 @@ const Select = ({
     []
   );
   return (
-    <div className={className}>
-      <label htmlFor={name} className={labelClassName}>
+    <div className={`mb-6 ${className}`}>
+      <label
+        htmlFor={name}
+        className={`block mb-2 text-sm font-medium text-gray-900 ${labelClassName}`}
+      >
         {label}
       </label>
       <Listbox
@@ -52,7 +55,9 @@ const Select = ({
         name={name}
         disabled={typeof disabled === "undefined" ? loading : disabled}
       >
-        <Listbox.Button className={buttonClassName}>
+        <Listbox.Button
+          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full py-2 px-4 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed shadow-md relative text-left ${buttonClassName}`}
+        >
           <span className="block truncate">
             {labelById[selectedOption] || (
               <span className="opacity-50">Select an option...</span>
@@ -71,15 +76,17 @@ const Select = ({
           leaveTo="opacity-0"
           className={"relative"}
         >
-          <Listbox.Options className={optionsClassName}>
+          <Listbox.Options
+            className={`rounded-md bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 ${optionsClassName}`}
+          >
             {options.map((option) => (
               <Listbox.Option
                 key={option.id}
                 value={option.id}
                 className={({ active }) =>
-                  `${optionClassName} ${
+                  `cursor-pointer relative select-none pl-10 pr-4 py-2 ${
                     active ? "bg-sky-100 text-sky-900" : ""
-                  }`
+                  } ${optionClassName}`
                 }
               >
                 {({ selected }) => (
