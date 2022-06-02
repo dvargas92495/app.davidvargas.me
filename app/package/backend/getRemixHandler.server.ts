@@ -10,6 +10,7 @@ const getRemixHandler = ({
     originPaths: [
       "favicon.ico",
       /^\/build\/.*/,
+      /^\/data\/.*/,
       /^\/images\/.*/,
       /^\/svgs\/.*/,
       ...originPaths,
