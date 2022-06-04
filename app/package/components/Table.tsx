@@ -1,14 +1,4 @@
-import React from "react";
-import {
-  createTable,
-  useTableInstance,
-  getCoreRowModelSync,
-  getFilteredRowModelSync,
-  getPaginationRowModel,
-} from "@tanstack/react-table";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
-
-const table = createTable();
 
 const Table = ({
   onRowClick,
@@ -28,82 +18,52 @@ const Table = ({
   getTrClassName?: (index: number) => string;
   getTdClassName?: (index: number) => string;
 }) => {
-  const { data, columns: loaderColumns } = useLoaderData<{
+  const { data, columns } = useLoaderData<{
     columns: { Header: string; accessor: string }[];
-    data: {}[];
+    data: Record<string, string | number>[];
   }>();
-  const columns = React.useMemo(
-    () =>
-      loaderColumns.map((col) =>
-        table.createDataColumn(
-          (row) => (row as Record<string, unknown>)[col.accessor],
-          {
-            id: col.accessor,
-            header: col.Header,
-          }
-        )
-      ),
-    []
-  );
 
   const [searchParams, setSearchParams] = useSearchParams();
   const index = Number(searchParams.get("index")) || 1;
   const size = Number(searchParams.get("size")) || 10;
   const {
-    getHeaderGroups,
-    getRowModel,
-    getCanNextPage,
-    getCanPreviousPage,
-    getState,
-  } = useTableInstance(table, {
-    columns,
-    data,
-    state: {
-      pagination: {
-        pageIndex: index - 1,
-        pageSize: size,
-        pageCount: Math.ceil(data.length / size),
-      },
-    },
-
-    getCoreRowModel: getCoreRowModelSync(),
-    getFilteredRowModel: getFilteredRowModelSync(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
-  const {
     pagination: { pageIndex, pageSize, pageCount },
-  } = getState();
+  } = {
+    pagination: {
+      pageIndex: index - 1,
+      pageSize: size,
+      pageCount: Math.ceil(data.length / size),
+    },
+  };
 
   return (
     <div className="w-full">
       <table className={tableClassName}>
         <thead className={theadClassName}>
-          {getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((column) => (
-                <th key={column.id} className={thClassName}>
-                  {column.renderHeader()}
-                </th>
-              ))}
-            </tr>
-          ))}
+          <tr>
+            {columns.map((column) => (
+              <th key={column.accessor} className={thClassName}>
+                {column.Header}
+              </th>
+            ))}
+          </tr>
         </thead>
         <tbody>
-          {getRowModel().rows.map((row, index) => {
+          {data.map((row, index) => {
             return (
               <tr
-                key={row.id}
+                key={row.uuid || row.id || index}
                 className={getTrClassName(index)}
                 onClick={() => onRowClick?.(data[index], index)}
               >
-                {row.getAllCells().map((cell, jndex) => {
+                {columns.map((cell, jndex) => {
                   return (
                     <td
                       {...cell}
-                      key={cell.id}
+                      key={cell.accessor}
                       className={getTdClassName(jndex)}
                     >
-                      {cell.renderCell()}
+                      {row[cell.accessor]}
                     </td>
                   );
                 })}
@@ -140,7 +100,7 @@ const Table = ({
                   index: "1",
                 })
               }
-              disabled={!getCanPreviousPage()}
+              disabled={pageIndex === 0}
               className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
             >
               {"<<"}
@@ -152,7 +112,7 @@ const Table = ({
                   index: pageIndex.toString(),
                 })
               }
-              disabled={!getCanPreviousPage()}
+              disabled={pageIndex === 0}
               className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
             >
               {"<"}
@@ -164,7 +124,7 @@ const Table = ({
                   index: (pageIndex + 2).toString(),
                 })
               }
-              disabled={!getCanNextPage()}
+              disabled={false}
               className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
             >
               {">"}
@@ -176,7 +136,7 @@ const Table = ({
                   index: pageCount.toString(),
                 })
               }
-              disabled={!getCanNextPage()}
+              disabled={false}
               className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
             >
               {">>"}
