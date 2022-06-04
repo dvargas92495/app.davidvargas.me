@@ -6,6 +6,7 @@ const downloadFile = ({
 }: Partial<Pick<PutObjectCommandInput, "Key">>) => {
   if (process.env.NODE_ENV === "development") {
     const path = `public/${Key}`;
+    if (!fs.existsSync(path)) return "";
     return fs.readFileSync(path).toString();
   } else {
     const s3 = new S3({ region: "us-east-1" });

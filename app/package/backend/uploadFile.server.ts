@@ -1,5 +1,6 @@
 import { S3, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import fs from "fs";
+import nodepath from "path";
 import { Readable } from "stream";
 
 const uploadFile = ({
@@ -8,6 +9,8 @@ const uploadFile = ({
 }: Partial<Pick<PutObjectCommandInput, "Body" | "Key">>) => {
   if (process.env.NODE_ENV === "development") {
     const path = `public/${Key}`;
+    const dir = nodepath.dirname(path);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     if (typeof Body === "string") fs.writeFileSync(path, Body);
     else if (
       Body instanceof Buffer ||
