@@ -7,15 +7,19 @@ const downloadFile = ({
   if (process.env.NODE_ENV === "development") {
     const path = `public/${Key}`;
     if (!fs.existsSync(path)) return "";
-    return fs.readFileSync(path).toString();
+    return Promise.resolve(fs.readFileSync(path).toString());
   } else {
     const s3 = new S3({ region: "us-east-1" });
-    return s3
-      .getObject({
-        Bucket: (process.env.ORIGIN || "").replace(/^https:\/\//, ""),
-        Key,
-      })
-      .then((r) => r.Body);
+    const Bucket = (process.env.ORIGIN || "").replace(/^https:\/\//, "");
+    return s3.listObjectsV2({ Bucket, Prefix: Key }).then((r) => {
+      if (r.KeyCount === 0) return new Blob();
+      return s3
+        .getObject({
+          Bucket,
+          Key,
+        })
+        .then((r) => r.Body);
+    });
   }
 };
 

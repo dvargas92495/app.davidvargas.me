@@ -6,7 +6,7 @@ const removeFile = ({
 }: Partial<Pick<PutObjectCommandInput, "Key">>) => {
   if (process.env.NODE_ENV === "development") {
     const path = `public/${Key}`;
-    fs.rmSync(path);
+    if (fs.existsSync(path)) fs.rmSync(path);
     return Promise.resolve(true);
   } else {
     const s3 = new S3({ region: "us-east-1" });
