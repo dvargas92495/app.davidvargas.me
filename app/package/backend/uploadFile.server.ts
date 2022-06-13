@@ -14,11 +14,12 @@ const uploadFile = ({
     if (typeof Body === "string") fs.writeFileSync(path, Body);
     else if (
       Body instanceof Buffer ||
-      Body instanceof Blob ||
       Body instanceof Uint8Array
     )
-      fs.writeFileSync(path, Body.toString());
+      fs.writeFileSync(path, Buffer.from(Body).toString());
     else if (Body instanceof Readable) Body.pipe(fs.createWriteStream(path));
+    else if (Body instanceof Blob) Body.stream().pipe(fs.createWriteStream(path));
+    // else if (Body instanceof ReadableStream) Body.pipeTo(fs.createWriteStream(path));
     return true;
   } else {
     const s3 = new S3({ region: "us-east-1" });

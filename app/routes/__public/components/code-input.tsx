@@ -1,4 +1,5 @@
 import CodeInput from "~/package/components/CodeInput";
+import codemirrorStyles from "@dvargas92495/codemirror/lib/codemirror.css";
 
 const CodeInputPage = () => {
   return (
@@ -9,7 +10,7 @@ const CodeInputPage = () => {
 };
 
 export function links() {
-  return [CodeInput.link];
+  return [{ rel: "stylesheet", href: codemirrorStyles }];
 }
 
 export default CodeInputPage;

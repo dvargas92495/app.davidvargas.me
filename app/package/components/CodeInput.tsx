@@ -1,7 +1,6 @@
 import { Controlled as CodeMirror } from "@dvargas92495/react-codemirror2";
 import "@dvargas92495/codemirror/mode/xml/xml";
 import "@dvargas92495/codemirror/mode/javascript/javascript";
-import codemirrorStyles from "@dvargas92495/codemirror/lib/codemirror.css";
 import { useState } from "react";
 
 const CodeInput = ({
@@ -52,7 +51,5 @@ const CodeInput = ({
     </div>
   );
 };
-
-CodeInput.link = { rel: "stylesheet", href: codemirrorStyles };
 
 export default CodeInput;
