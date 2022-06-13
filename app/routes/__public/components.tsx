@@ -48,6 +48,7 @@ const ComponentsPage = () => {
 
 export const loader: LoaderFunction = () => {
   return [
+    "AutoCompleteInput",
     "BaseInput",
     "Button",
     "Checkbox",
