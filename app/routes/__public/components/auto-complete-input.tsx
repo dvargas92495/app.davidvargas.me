@@ -1,4 +1,3 @@
-import React from "react";
 import AutoCompleteInput from "~/package/components/AutoCompleteInput";
 
 const AutoCompleteInputPage = () => {
@@ -7,21 +6,35 @@ const AutoCompleteInputPage = () => {
       <AutoCompleteInput
         label={"Pick an Option"}
         options={[
-          { id: "1", label: "First Option" },
-          { id: "2", label: "Second Guess" },
+          { id: "1", label: "Alpha" },
+          { id: "2", label: "Beta" },
           {
             id: "3",
-            label: (
-              <>
-                <img
-                  src={"/images/logo.png"}
-                  width={16}
-                  height={16}
-                  className={"inline-block"}
-                />{" "}
-                With a logo
-              </>
-            ),
+            label: "Gamma",
+          },
+          {
+            id: "4",
+            label: "Delta",
+          },
+          {
+            id: "5",
+            label: "Epsilon",
+          },
+          {
+            id: "6",
+            label: "Zeta",
+          },
+          {
+            id: "7",
+            label: "Eta",
+          },
+          {
+            id: "8",
+            label: "Theta",
+          },
+          {
+            id: "9",
+            label: "Iota",
           },
         ]}
       />

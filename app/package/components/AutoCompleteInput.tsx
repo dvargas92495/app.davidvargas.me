@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { useMemo } from "react";
 import { useTransition } from "@remix-run/react";
-import { Listbox, Transition } from "@headlessui/react";
+import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 
-type Option = { id: string | number; label: React.ReactNode };
+type Option = { id: string | number; label: string };
 
-const Select = ({
+const AutoCompleteInput = ({
   name,
   disabled,
   options = [],
   label,
   className = "",
   labelClassName = "",
-  buttonClassName = "",
+  inputClassname = "",
   optionsClassName = "",
   optionClassName = "",
   onChange,
@@ -25,7 +25,7 @@ const Select = ({
   label?: string;
   className?: string;
   labelClassName?: string;
-  buttonClassName?: string;
+  inputClassname?: string;
   optionsClassName?: string;
   optionClassName?: string;
   onChange?: (opt: string | number) => void;
@@ -38,6 +38,16 @@ const Select = ({
     () => Object.fromEntries(options.map((o) => [o.id, o.label])),
     []
   );
+  const [query, setQuery] = useState("");
+  const filteredOptions =
+    query === ""
+      ? options
+      : options.filter((option) =>
+          option.label
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .includes(query.toLowerCase().replace(/\s+/g, ""))
+        );
   return (
     <div className={`mb-6 ${className}`}>
       <label
@@ -46,7 +56,7 @@ const Select = ({
       >
         {label}
       </label>
-      <Listbox
+      <Combobox
         onChange={(e) => {
           setSelectedOption(e);
           onChange?.(e);
@@ -55,64 +65,71 @@ const Select = ({
         name={name}
         disabled={typeof disabled === "undefined" ? loading : disabled}
       >
-        <Listbox.Button
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full py-2 px-4 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed shadow-md relative text-left ${buttonClassName}`}
+        <div
+          className={`bg-gray-50 border border-gray-300 text-gray-900 cursor-default text-sm rounded-lg block w-full disabled:opacity-25 disabled:cursor-not-allowed shadow-md relative text-left ${inputClassname}`}
         >
-          <span className="block truncate">
-            {labelById[selectedOption] || (
-              <span className="opacity-50">Select an option...</span>
-            )}
-          </span>
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+          <Combobox.Input
+            className={`block border-none bg-transparent py-2 pl-4 pr-10 w-full relative text-left focus:ring-0 ${inputClassname}`}
+            displayValue={(id) => labelById[id as string]}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
             <SelectorIcon
               className="h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
-          </span>
-        </Listbox.Button>
+          </Combobox.Button>
+        </div>
         <Transition
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
           className={"relative z-10"}
+          afterLeave={() => setQuery("")}
         >
-          <Listbox.Options
+          <Combobox.Options
             className={`rounded-md bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 ${optionsClassName}`}
           >
-            {options.map((option) => (
-              <Listbox.Option
-                key={option.id}
-                value={option.id}
-                className={({ active }) =>
-                  `cursor-pointer relative select-none pl-10 pr-4 py-2 ${
-                    active ? "bg-sky-100 text-sky-900" : ""
-                  } ${optionClassName}`
-                }
-              >
-                {({ selected }) => (
-                  <>
-                    <span
-                      className={`block truncate ${
-                        selected ? "font-medium" : "font-normal"
-                      }`}
-                    >
-                      {" "}
-                      {option.label}
-                    </span>
-                    {selected ? (
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-800">
-                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+            {filteredOptions.length === 0 && query !== "" ? (
+              <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                Nothing found.
+              </div>
+            ) : (
+              filteredOptions.map((option) => (
+                <Combobox.Option
+                  key={option.id}
+                  value={option.id}
+                  className={({ active }) =>
+                    `cursor-pointer relative select-none pl-10 pr-4 py-2 ${
+                      active ? "bg-sky-100 text-sky-900" : ""
+                    } ${optionClassName}`
+                  }
+                >
+                  {({ selected }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        {" "}
+                        {option.label}
                       </span>
-                    ) : null}
-                  </>
-                )}
-              </Listbox.Option>
-            ))}
-          </Listbox.Options>
+                      {selected ? (
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-800">
+                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Combobox.Option>
+              ))
+            )}
+          </Combobox.Options>
         </Transition>
-      </Listbox>
+      </Combobox>
     </div>
   );
 };
 
-export default Select;
+export default AutoCompleteInput;
