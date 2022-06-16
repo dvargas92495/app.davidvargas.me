@@ -71,7 +71,10 @@ const AutoCompleteInput = ({
           <Combobox.Input
             className={`block border-none bg-transparent py-2 pl-4 pr-10 w-full relative text-left focus:ring-0 ${inputClassname}`}
             displayValue={(id) => labelById[id as string]}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              e.stopPropagation();
+            }}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
             <SelectorIcon
@@ -84,11 +87,11 @@ const AutoCompleteInput = ({
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          className={"relative z-10"}
+          className={"relative z-10 h-64"}
           afterLeave={() => setQuery("")}
         >
           <Combobox.Options
-            className={`rounded-md bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 ${optionsClassName}`}
+            className={`rounded-md bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 h-full overflow-scroll scrollbar-thin ${optionsClassName}`}
           >
             {filteredOptions.length === 0 && query !== "" ? (
               <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
