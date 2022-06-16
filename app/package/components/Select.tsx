@@ -52,9 +52,9 @@ const Select = ({
           onChange?.(e);
         }}
         value={selectedOption}
-        name={name}
         disabled={typeof disabled === "undefined" ? loading : disabled}
       >
+        <input name={name} type={"hidden"} value={selectedOption} />
         <Listbox.Button
           className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full py-2 px-4 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed shadow-md relative text-left ${buttonClassName}`}
         >
@@ -74,10 +74,10 @@ const Select = ({
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          className={"relative z-10"}
+          className={"relative z-10 h-64"}
         >
           <Listbox.Options
-            className={`rounded-md bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 ${optionsClassName}`}
+            className={`rounded-md bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 overflow-auto scrollbar-thin ${optionsClassName}`}
           >
             {options.map((option) => (
               <Listbox.Option
