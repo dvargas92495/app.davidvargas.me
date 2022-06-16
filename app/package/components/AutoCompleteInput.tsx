@@ -75,6 +75,7 @@ const AutoCompleteInput = ({
               setQuery(e.target.value);
               e.stopPropagation();
             }}
+            autoComplete={"off"}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
             <SelectorIcon
