@@ -26,7 +26,7 @@ const insertRecordFromEtherscan = async ({
 }) => {
   const data = dataSchema.parse(_data);
   const value = data.value[0];
-  const amount = data.amount[0].replace(/ ETH$/, "");
+  const amount = data.amount[0];
   const category = data.category[0];
   const [hash] = data.hash;
   const [index] = data.index;
@@ -34,14 +34,14 @@ const insertRecordFromEtherscan = async ({
   const [code, ...des] = originalDescription.split(" - ");
   const description = des.join(" - ");
   const date = new Date(data.date[0]);
-  const price = await axios
+  const dateArg = `${date.getDate().toString().padStart(2, "0")}-${(
+    date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${date.getFullYear()}`;
+  const ethPrice = await axios
     .get(
-      `https://api.coingecko.com/api/v3/coins/ethereum/history?date=${date
-        .getDate()
-        .toString()
-        .padStart(2, "0")}-${(date.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}-${date.getFullYear()}`
+      `https://api.coingecko.com/api/v3/coins/ethereum/history?date=${dateArg}`
     )
     .then((r) => r.data.market_data.current_price.usd)
     .catch((e) => {
@@ -49,6 +49,22 @@ const insertRecordFromEtherscan = async ({
         `Failed to get ETH price from CoinGecko: ${e.response?.data}`
       );
     });
+  const [tokenAmount, tokenType] = amount.split(" ");
+  const tokenPrice =
+    !tokenType || /^eth$/.test(tokenType)
+      ? 1
+      : await axios
+          .get(
+            `https://api.coingecko.com/api/v3/coins/${tokenType.toLowerCase()}/history?date=${dateArg}`
+          )
+          .then((r) => r.data.market_data.current_price.eth)
+          .catch((e) => {
+            throw new Response(
+              `Failed to get ETH price from CoinGecko for token type ${tokenType}: ${e.response?.data}`
+            );
+          });
+  const total =
+    Number(tokenAmount) * Number(tokenPrice) * Number(ethPrice) * 100;
   return getMysqlConnection()
     .then((connection) => {
       return connection
@@ -74,45 +90,21 @@ const insertRecordFromEtherscan = async ({
                 `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE amount=VALUES(amount)+amount`,
-                [
-                  v4(),
-                  "etherscan",
-                  hash,
-                  date,
-                  Number(amount) * Number(price) * 100,
-                  originalDescription,
-                  0,
-                ]
+                [v4(), "etherscan", hash, date, total, originalDescription, 0]
               )
             : category === "expense"
             ? connection.execute(
                 `INSERT INTO expenses (uuid, source, source_id, date, amount, description, code) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE VALUES(amount)+amount`,
-                [
-                  v4(),
-                  "etherscan",
-                  hash,
-                  date,
-                  Number(amount) * Number(price) * 100,
-                  description,
-                  code,
-                ]
+                [v4(), "etherscan", hash, date, total, description, code]
               )
             : category === "personal"
             ? connection.execute(
                 `INSERT INTO personal_transfers (uuid, source, source_id, date, amount, description, code) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE VALUES(amount)+amount`,
-                [
-                  v4(),
-                  "etherscan",
-                  hash,
-                  date,
-                  Number(amount) * Number(price) * 100,
-                  description,
-                  code,
-                ]
+                [v4(), "etherscan", hash, date, total, description, code]
               )
             : Promise.reject(
                 `Unsupported category ${category} for hash ${hash}`
