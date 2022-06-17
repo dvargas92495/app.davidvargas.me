@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, useActionData, useCatch, useLoaderData } from "@remix-run/react";
-import type { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import Button from "~/package/components/Button";
 import TextInput from "~/package/components/TextInput";
 import remixAppAction from "~/package/backend/remixAppAction.server";
@@ -8,7 +8,7 @@ import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import getConvertKitBroadcasts from "~/data/getConvertKitBroadcasts.server";
 import createConvertKitBroadcast from "~/data/createConvertKitBroadcast.server";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
-import { CatchBoundaryComponent } from "@remix-run/server-runtime/routeModules";
+import { CatchBoundaryComponent } from "@remix-run/node/routeModules";
 import Toast from "~/package/components/Toast";
 
 const UserConvertKit = () => {

@@ -1,6 +1,6 @@
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import { Form, useActionData } from "@remix-run/react";
-import type { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import Table from "~/package/components/Table";
 import React, { useState } from "react";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";

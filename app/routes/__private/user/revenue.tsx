@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import Table from "~/package/components/Table";
-import type { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import searchRevenue from "~/data/searchRevenue.server";
 import {

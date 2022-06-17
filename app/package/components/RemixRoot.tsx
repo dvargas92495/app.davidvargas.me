@@ -1,5 +1,5 @@
 import React from "react";
-import type { LinksFunction, MetaFunction } from "@remix-run/server-runtime";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,

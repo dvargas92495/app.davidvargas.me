@@ -1,17 +1,24 @@
-import { ActionFunction } from "@remix-run/server-runtime";
+import { ActionFunction } from "@remix-run/node";
 import type { Params } from "react-router";
 
 type ActionMethod = "POST" | "PUT" | "DELETE";
 
+type CallbackArgs = {
+  userId: string;
+  data: Record<string, string[]>;
+  params: Params<string>;
+  searchParams: Record<string, string>;
+};
+
 const remixAppAction = (
   { request, params }: Parameters<ActionFunction>[0],
-  callback?: (args: {
-    userId: string;
-    data: Record<string, string[]>;
-    method: ActionMethod;
-    params: Params<string>;
-    searchParams: Record<string, string>;
-  }) => ReturnType<ActionFunction>
+  callback?:
+    | ((
+        args: CallbackArgs & {
+          method: ActionMethod;
+        }
+      ) => ReturnType<ActionFunction>)
+    | Record<ActionMethod, (args: CallbackArgs) => ReturnType<ActionFunction>>
 ) => {
   return import("@clerk/remix/ssr.server.js")
     .then((clerk) => clerk.getAuth(request))
@@ -37,16 +44,31 @@ const remixAppAction = (
           )
         )
         .catch(() => ({}));
-      const response = callback({
-        userId,
-        data,
-        method: request.method as ActionMethod,
-        searchParams,
-        params,
-      });
-      return Promise.resolve(response).catch((e) => {
-        throw new Response(e.message, { status: e.code || 500 });
-      });
+      const method = request.method as ActionMethod;
+      if (typeof callback === "function") {
+        const response = callback({
+          userId,
+          data,
+          method: request.method as ActionMethod,
+          searchParams,
+          params,
+        });
+        return Promise.resolve(response).catch((e) => {
+          throw new Response(e.message, { status: e.code || 500 });
+        });
+      } else if (callback[method]) {
+        const response = callback[method]({
+          userId,
+          data,
+          searchParams,
+          params,
+        });
+        return Promise.resolve(response).catch((e) => {
+          throw new Response(e.message, { status: e.code || 500 });
+        });
+      } else {
+        throw new Response(`Unsupported method ${method}`, { status: 404 });
+      }
     })
     .catch((e) => {
       if (e instanceof Response) throw e;

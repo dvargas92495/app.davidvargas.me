@@ -1,6 +1,6 @@
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import { Outlet, useActionData, useNavigate } from "@remix-run/react";
-import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import Table from "~/package/components/Table";
 import { useState } from "react";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
@@ -16,10 +16,12 @@ const UserEtherscan = () => {
     >();
   return (
     <>
-      <Table onRowClick={(row) => {
-        setRecordSelected(row);
-        navigate(`/user/etherscan/${row.id}`)
-      }} />
+      <Table
+        onRowClick={(row) => {
+          setRecordSelected(row);
+          navigate(`/user/etherscan/${row.id}`);
+        }}
+      />
       {actionData && (
         <div className="flex-grow border-2 border-gray-500 border-opacity-50 border-dashed rounded-lg p-4">
           <h1 className="text-2xl font-bold mb-6">Response</h1>
@@ -28,9 +30,7 @@ const UserEtherscan = () => {
           </pre>
         </div>
       )}
-      <Outlet 
-        context={recordSelected}
-      />
+      <Outlet context={recordSelected} />
     </>
   );
 };

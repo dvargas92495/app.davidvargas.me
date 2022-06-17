@@ -79,10 +79,10 @@ const Select = ({
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          className={"relative z-10 h-64"}
+          className={"relative z-10"}
         >
           <Listbox.Options
-            className={`rounded-md bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 overflow-auto scrollbar-thin ${optionsClassName}`}
+            className={`rounded-md max-h-64 bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 overflow-auto scrollbar-thin ${optionsClassName}`}
           >
             {options.map((option) => (
               <Listbox.Option

@@ -1,5 +1,5 @@
 import { rootAuthLoader } from "@clerk/remix/ssr.server";
-import type { LoaderFunction } from "@remix-run/server-runtime";
+import type { LoaderFunction } from "@remix-run/node";
 import type { Context } from "aws-lambda";
 
 const remixRootLoader = (

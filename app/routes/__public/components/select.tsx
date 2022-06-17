@@ -25,6 +25,7 @@ const SelectPage = () => {
           },
         ]}
       />
+      <span>Content underneath.</span>
     </div>
   );
 };

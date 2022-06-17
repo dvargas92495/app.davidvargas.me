@@ -9,7 +9,7 @@ import {
   Form,
   useActionData,
 } from "@remix-run/react";
-import type { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import Button from "~/package/components/Button";
 import NumberInput from "~/package/components/NumberInput";
 import TextInput from "~/package/components/TextInput";

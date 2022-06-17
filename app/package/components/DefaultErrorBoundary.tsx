@@ -1,5 +1,5 @@
 import React from "react";
-import type { ErrorBoundaryComponent } from "@remix-run/server-runtime";
+import type { ErrorBoundaryComponent } from "@remix-run/node";
 import { useMatches } from "@remix-run/react";
 
 const DefaultErrorBoundary: ErrorBoundaryComponent = ({
@@ -19,10 +19,13 @@ const DefaultErrorBoundary: ErrorBoundaryComponent = ({
           href={logUrl}
           target={"_blank"}
           rel={"noreferrer"}
-          className={'text-sky-800 underline hover:no-underline active:text-sky-900'}
+          className={
+            "text-sky-800 underline hover:no-underline active:text-sky-900"
+          }
         >
           AWS
-        </a>.
+        </a>
+        .
       </p>
     </main>
   );

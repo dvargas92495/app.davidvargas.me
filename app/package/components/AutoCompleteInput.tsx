@@ -88,11 +88,11 @@ const AutoCompleteInput = ({
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          className={"relative z-10 h-64"}
+          className={"relative z-10"}
           afterLeave={() => setQuery("")}
         >
           <Combobox.Options
-            className={`rounded-md bg-white py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 h-full overflow-scroll scrollbar-thin ${optionsClassName}`}
+            className={`rounded-md bg-white max-h-64 py-0.5 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 right-0 overflow-scroll scrollbar-thin ${optionsClassName}`}
           >
             {filteredOptions.length === 0 && query !== "" ? (
               <div className="relative cursor-default select-none py-2 px-4 text-gray-700">

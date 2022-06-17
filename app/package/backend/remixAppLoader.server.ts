@@ -1,4 +1,4 @@
-import { LoaderFunction, redirect } from "@remix-run/server-runtime";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import type { Params } from "react-router";
 
 const remixAppLoader = (

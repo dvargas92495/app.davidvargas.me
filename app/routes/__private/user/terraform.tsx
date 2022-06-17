@@ -2,7 +2,7 @@ import remixAppAction from "~/package/backend/remixAppAction.server";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import React, { useState } from "react";
 import { Form, useLoaderData } from "@remix-run/react";
-import { ActionFunction, LoaderFunction } from "@remix-run/server-runtime";
+import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import Button from "~/package/components/Button";
 import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";

@@ -9,14 +9,12 @@ const deleteExpenseRecord = ({
 }) => {
   return getMysqlConnection()
     .then((con) =>
-      con
-        .execute(`DELETE FROM expenses WHERE uuid = ?`, [uuid])
-        .then(() => con.destroy())
+      con.execute(`DELETE FROM expenses WHERE uuid = ?`, [uuid]).then((r) => {
+        con.destroy();
+        return r;
+      })
     )
-    .then(() => ({ success: true }))
-    .catch((e) => {
-      throw new Response(e.message, { status: 500 });
-    });
+    .then((result) => ({ success: true, result }));
 };
 
 export default deleteExpenseRecord;
