@@ -12,6 +12,7 @@ import getEtherscan from "~/data/getEtherscan.server";
 import { useMemo } from "react";
 import fixRecordFromEtherscan from "~/data/fixRecordFromEtherscan.server";
 import NumberInput from "~/package/components/NumberInput";
+import Select from "~/package/components/Select";
 
 const EtherscanRecord = () => {
   const recordSelected =
@@ -42,13 +43,11 @@ const EtherscanRecord = () => {
             name={"hash"}
             defaultValue={recordSelected?.hash}
             label={"Hash"}
-            disabled
           />
           <NumberInput
             name={"index"}
             defaultValue={recordSelected?.index}
             label={"Index"}
-            disabled
           />
           <TextInput
             name={"date"}
@@ -82,10 +81,11 @@ const EtherscanRecord = () => {
           />
         </div>
         <div>
-          <TextInput
+          <Select
             label={"Category"}
             name={"category"}
             defaultValue={defaultCategory}
+            options={["revenue", "expense", "personal"]}
           />
           <TextInput
             label={"Description"}
@@ -139,11 +139,13 @@ const EtherscanRecord = () => {
 export const action: ActionFunction = (args) => {
   return remixAppAction(args, ({ userId, data, method, params }) => {
     if (method === "POST")
-      return insertRecordFromEtherscan({ userId, data })
-        .then(() => redirect("/user/etherscan"));
+      return insertRecordFromEtherscan({ userId, data }).then(() =>
+        redirect("/user/etherscan")
+      );
     else if (method === "PUT")
-      return fixRecordFromEtherscan({ userId, params })
-        .then(() => redirect("/user/etherscan"));
+      return fixRecordFromEtherscan({ userId, params }).then(() =>
+        redirect("/user/etherscan")
+      );
     else throw new Response(`Method ${method} Not Found`, { status: 404 });
   });
 };

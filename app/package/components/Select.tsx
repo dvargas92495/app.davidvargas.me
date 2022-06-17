@@ -9,7 +9,7 @@ type Option = { id: string | number; label: React.ReactNode };
 const Select = ({
   name,
   disabled,
-  options = [],
+  options: _options = [],
   label,
   className = "",
   labelClassName = "",
@@ -17,11 +17,11 @@ const Select = ({
   optionsClassName = "",
   optionClassName = "",
   onChange,
-  defaultValue = options[0]?.id,
+  defaultValue,
 }: {
   name?: string;
   disabled?: boolean;
-  options?: Option[];
+  options?: Option[] | string[];
   label?: string;
   className?: string;
   labelClassName?: string;
@@ -31,9 +31,14 @@ const Select = ({
   onChange?: (opt: string | number) => void;
   defaultValue?: string | number;
 }) => {
+  const options = _options.map((id) =>
+    typeof id === "string" ? { id, label: id } : id
+  );
   const transition = useTransition();
   const loading = useMemo(() => transition.state !== "idle", [transition]);
-  const [selectedOption, setSelectedOption] = useState(defaultValue);
+  const [selectedOption, setSelectedOption] = useState(
+    defaultValue || options[0]?.id
+  );
   const labelById = useMemo(
     () => Object.fromEntries(options.map((o) => [o.id, o.label])),
     []

@@ -1,14 +1,30 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
 import { v4 } from "uuid";
 import axios from "axios";
+import { z } from "zod";
+
+const dataSchema = z.object({
+  value: z.array(z.string()),
+  amount: z.array(z.string()),
+  category: z.array(z.string()),
+  hash: z.array(z.string()),
+  index: z.array(z.string()),
+  description: z.array(z.string()),
+  date: z.array(z.string()),
+  from: z.array(z.string()),
+  to: z.array(z.string()),
+  gas: z.array(z.string()),
+  type: z.array(z.string()),
+});
 
 const insertRecordFromEtherscan = async ({
   userId,
-  data,
+  data: _data,
 }: {
   userId: string;
   data: Record<string, string[]>;
 }) => {
+  const data = dataSchema.parse(_data);
   const value = data.value[0];
   const amount = data.amount[0];
   const category = data.category[0];
