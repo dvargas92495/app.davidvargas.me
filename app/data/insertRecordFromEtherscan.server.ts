@@ -27,7 +27,12 @@ const insertRecordFromEtherscan = async ({
         .toString()
         .padStart(2, "0")}-${date.getFullYear()}`
     )
-    .then((r) => r.data.market_data.current_price.usd);
+    .then((r) => r.data.market_data.current_price.usd)
+    .catch((e) => {
+      throw new Response(
+        `Failed to get ETH price from CoinGecko: ${e.response?.data}`
+      );
+    });
   return getMysqlConnection()
     .then((connection) => {
       return connection

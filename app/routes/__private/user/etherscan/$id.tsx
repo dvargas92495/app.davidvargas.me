@@ -140,16 +140,10 @@ export const action: ActionFunction = (args) => {
   return remixAppAction(args, ({ userId, data, method, params }) => {
     if (method === "POST")
       return insertRecordFromEtherscan({ userId, data })
-        .then(() => redirect("/user/etherscan"))
-        .catch((e) => {
-          throw new Response(e.message, { status: 500 });
-        });
+        .then(() => redirect("/user/etherscan"));
     else if (method === "PUT")
       return fixRecordFromEtherscan({ userId, params })
-        .then(() => redirect("/user/etherscan"))
-        .catch((e) => {
-          throw new Response(e.message, { status: 500 });
-        });
+        .then(() => redirect("/user/etherscan"));
     else throw new Response(`Method ${method} Not Found`, { status: 404 });
   });
 };

@@ -11,7 +11,7 @@ const DefaultCatchBoundary: CatchBoundaryComponent = (): React.ReactElement => {
         new Error(
           typeof caught?.data === "object"
             ? JSON.stringify(caught.data)
-            : caught?.data || "No Caught Data"
+            : caught?.data || `No Caught Data: ${caught}`
         )
       }
     />

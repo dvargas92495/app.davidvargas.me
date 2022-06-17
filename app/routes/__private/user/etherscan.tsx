@@ -5,8 +5,6 @@ import Table from "~/package/components/Table";
 import { useState } from "react";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import listEtherscanRecords from "~/data/listEtherscanRecords.server";
-import remixAppAction from "~/package/backend/remixAppAction.server";
-import insertRecordFromEtherscan from "~/data/insertRecordFromEtherscan.server";
 import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 
 const UserEtherscan = () => {
