@@ -11,7 +11,6 @@ import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import getEtherscan from "~/data/getEtherscan.server";
 import { useMemo } from "react";
 import fixRecordFromEtherscan from "~/data/fixRecordFromEtherscan.server";
-import NumberInput from "~/package/components/NumberInput";
 import Select from "~/package/components/Select";
 
 const EtherscanRecord = () => {
@@ -38,16 +37,11 @@ const EtherscanRecord = () => {
   return (
     <div className="flex gap-8">
       <Form method="post" className="mt-4 flex gap-2">
-        <div key={recordSelected.id}>
+        <div key={recordSelected.hash}>
           <TextInput
             name={"hash"}
             defaultValue={recordSelected?.hash}
             label={"Hash"}
-          />
-          <NumberInput
-            name={"index"}
-            defaultValue={recordSelected?.index}
-            label={"Index"}
           />
           <TextInput
             name={"date"}

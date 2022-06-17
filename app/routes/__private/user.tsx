@@ -10,7 +10,7 @@ const TABS = [
   "Transfers",
   "Emails",
   "Convertkit",
-  "Etherscan",
+  "Ethereum",
   "Mercury",
   "Mysql",
   "Stripe",

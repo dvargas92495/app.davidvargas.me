@@ -58,6 +58,10 @@ variable "npm_token" {
   type = string
 }
 
+variable "infura_project_id" {
+  type = string
+}
+
 provider "aws" {
   region = "us-east-1"
   access_key = var.aws_access_token
@@ -174,4 +178,10 @@ resource "github_actions_secret" "npm_token" {
   repository      = "app"
   secret_name     = "NPM_TOKEN"
   plaintext_value = var.npm_token
+}
+
+resource "github_actions_secret" "infura_project_id" {
+  repository      = "app"
+  secret_name     = "INFURA_PROJECT_ID"
+  plaintext_value = var.infura_project_id
 }

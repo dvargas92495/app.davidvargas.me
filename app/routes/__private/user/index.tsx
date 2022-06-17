@@ -21,7 +21,7 @@ const UserIndex = () => {
       <CustomConnectedAccount
         svgSrc="https://infura.io/favicon/favicon-32x32.png"
         name={"Infura"}
-        fields={["Id"]}
+        fields={["Id", "Address"]}
       />
       <CustomConnectedAccount
         svgSrc="https://mercury.com/favicon.ico"
