@@ -1,13 +1,14 @@
 import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
-import { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import getExpense from "~/data/getExpense.server";
 import { Form, useLoaderData } from "@remix-run/react";
 import remixAppAction from "~/package/backend/remixAppAction.server";
 import Button from "~/package/components/Button";
+import deleteExpenseRecord from "~/data/deleteExpenseRecord.server";
 
-const RevenueRecord = () => {
+const ExpenseRecord = () => {
   const data = useLoaderData<Awaited<ReturnType<typeof getExpense>>>();
   return (
     <div>
@@ -27,10 +28,13 @@ export const loader: LoaderFunction = (args) => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args);
+  return remixAppAction(args, {
+    DELETE: ({ data }) =>
+      deleteExpenseRecord({ data }).then(() => redirect(`/user/expenses`)),
+  });
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;
 export const CatchBoundary = DefaultCatchBoundary;
 
-export default RevenueRecord;
+export default ExpenseRecord;

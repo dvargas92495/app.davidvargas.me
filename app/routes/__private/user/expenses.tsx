@@ -1,12 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Table from "~/package/components/Table";
 import { Outlet, useNavigate, useSearchParams } from "@remix-run/react";
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import searchExpenses from "~/data/searchExpenses.server";
 import Toast from "~/package/components/Toast";
-import deleteExpenseRecord from "~/data/deleteExpenseRecord.server";
-import remixAppAction from "~/package/backend/remixAppAction.server";
+import { LoaderFunction, } from "@remix-run/node";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 
@@ -46,12 +44,6 @@ const UserExpensesPage = () => {
 
 export const loader: LoaderFunction = (args) => {
   return remixAppLoader(args, searchExpenses);
-};
-
-export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ data }) =>
-    deleteExpenseRecord({ data }).then(() => redirect(`/user/expenses`))
-  );
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;

@@ -18,7 +18,9 @@ const remixAppAction = (
           method: ActionMethod;
         }
       ) => ReturnType<ActionFunction>)
-    | Record<ActionMethod, (args: CallbackArgs) => ReturnType<ActionFunction>>
+    | {
+        [k in ActionMethod]?: (args: CallbackArgs) => ReturnType<ActionFunction>;
+      }
 ) => {
   return import("@clerk/remix/ssr.server.js")
     .then((clerk) => clerk.getAuth(request))
@@ -56,8 +58,10 @@ const remixAppAction = (
         return Promise.resolve(response).catch((e) => {
           throw new Response(e.message, { status: e.code || 500 });
         });
-      } else if (callback[method]) {
-        const response = callback[method]({
+      }
+      const methodCallback = callback[method];
+      if (methodCallback) {
+        const response = methodCallback({
           userId,
           data,
           searchParams,
