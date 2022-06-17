@@ -36,7 +36,7 @@ const UserEtherscan = () => {
 };
 
 export const loader: LoaderFunction = (args) => {
-  return remixAppLoader(args, ({ userId }) => listEtherscanRecords(userId));
+  return remixAppLoader(args, ({ userId, searchParams }) => listEtherscanRecords(userId, !!searchParams['smart']));
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;

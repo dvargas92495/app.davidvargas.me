@@ -56,7 +56,7 @@ const UserRevenuePage = () => {
           }
         />
       </div>
-      <div className="relative">
+      <div className="relative flex-grow">
         <Outlet />
       </div>
       <SuccessfulActionToast />

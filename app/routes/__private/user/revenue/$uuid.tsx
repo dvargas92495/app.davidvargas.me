@@ -14,7 +14,7 @@ const RevenueRecord = () => {
     <div>
       <h1 className="font-bold text-xl mb-2">{data.product}</h1>
       <p className="text-md italic font-normal mb-4">{data.date}</p>
-      <h2 className="font-semibold text-lg">{data.source}</h2>
+      <h2 className="font-semibold text-lg">{data.source} - {data.source_id}</h2>
       <Form method="delete">
         <Button>Delete</Button>
       </Form>

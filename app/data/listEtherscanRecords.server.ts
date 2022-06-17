@@ -35,7 +35,11 @@ const addressBook: Record<string, string> = {
   "0xa7da6ce63538c5b11dd2bf62a99102bbdfd0fd6a": "Uniswap",
 };
 
-const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
+const listEtherscanRecords = (
+  userId: string,
+  smart?: boolean,
+  connection?: mysql.Connection
+) =>
   import("@clerk/clerk-sdk-node")
     .then((clerk) => clerk.users.getUser(userId))
     .then(async (user) => {
@@ -75,10 +79,12 @@ const listEtherscanRecords = (userId: string, connection?: mysql.Connection) =>
       );
       const address = account.address.toLowerCase();
       const apikey = account.etherscan || "";
-      const startblock = account.startNumber || 0;
-      const endblock = await new Web3(
-        `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
-      ).eth.getBlockNumber();
+      const startblock = smart ? account.startNumber || 0 : 0;
+      const endblock = smart
+        ? await new Web3(
+            `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
+          ).eth.getBlockNumber()
+        : 99999999;
 
       return Promise.all([
         axios.get<{
