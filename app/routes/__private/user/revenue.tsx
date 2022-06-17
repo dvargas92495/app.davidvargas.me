@@ -10,6 +10,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "@remix-run/react";
+import Select from "~/package/components/Select";
 import TextInput from "~/package/components/TextInput";
 import Button from "~/package/components/Button";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
@@ -20,32 +21,32 @@ import SuccessfulActionToast from "~/package/components/SuccessfulActionToast";
 
 const UserRevenuePage = () => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const defaultProduct = (searchParams.get("product") as string) || "";
+  const defaultSource = (searchParams.get("source") as string) || "";
   const paramString = useMemo(() => {
     const sp = searchParams.toString();
     return sp ? `?${sp}` : "";
   }, [searchParams]);
-  const [product, setProduct] = useState(defaultProduct);
   return (
     <div className="flex gap-8">
       <div className="max-w-3xl w-full">
         <div className="mb-2 flex gap-4 items-center">
-          <TextInput
-            label={"Product"}
-            name={"product"}
-            defaultValue={defaultProduct}
-            onChange={(e) => setProduct(e.target.value)}
-          />
-          <Button
-            onClick={() =>
-              setSearchParams({ ...Object.fromEntries(searchParams), product })
-            }
-          >
-            Search
-          </Button>
-          <Form method="put" className="flex gap-4 items-center ml-4">
-            <input name={"product"} defaultValue={product} type={"hidden"} />
+          <Form className="flex gap-4 items-center">
+            <Select
+              label={"Source"}
+              name={"source"}
+              defaultValue={defaultSource}
+              options={["etherscan", "stripe"]}
+            />
+            <TextInput
+              label={"Product"}
+              name={"product"}
+              defaultValue={defaultProduct}
+            />
+            <Button>Search</Button>
+          </Form>
+          <Form method="put" className="flex gap-4 items-center">
             <TextInput label={"Product"} name={"newProduct"} />
             <Button>Migrate</Button>
           </Form>

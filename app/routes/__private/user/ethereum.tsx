@@ -19,7 +19,7 @@ const UserEtherscan = () => {
       <Table
         onRowClick={(row) => {
           setRecordSelected(row);
-          navigate(`/user/etherscan/${row.id}`);
+          navigate(`/user/ethereum/${row.id}`);
         }}
       />
       {actionData && (

@@ -1,29 +1,28 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
 
 const searchRevenue = ({
-  searchParams: {
-    // index = "0",
-    // size = "10",
-    product = "",
-  },
+  searchParams,
 }: {
   searchParams: Record<string, string>;
 }) =>
   getMysqlConnection()
-    .then((con) =>
-      con
+    .then((con) => {
+      const keys = Object.keys(searchParams);
+      return con
         .execute(
           `SELECT date, amount, product, uuid, connect, source
           FROM revenue 
-          ${product ? "WHERE product = ?" : ""}
+          ${!keys.length ? "" : "WHERE "}${keys
+            .map((k) => `${k} = ?`)
+            .join(" AND ")}
           ORDER BY date`, // LIMIT ?, ?`,
-          product ? [product] : [] //[Number(index) * Number(size), size]
+          keys.map((k) => searchParams[k]) //[Number(index) * Number(size), size]
         )
         .then((a) => {
           con.destroy();
           return a;
-        })
-    )
+        });
+    })
     .then((a) => {
       const values = a as {
         date: Date;

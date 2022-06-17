@@ -33,6 +33,7 @@ const addressBook: Record<string, string> = {
   "0x596bef23db467d0fd7cb996a77b381f9fa113f86": "Uniswap",
   "0xbec26ffa12c90217943d1b2958f60a821ae6e549": "hillis.eth",
   "0xa7da6ce63538c5b11dd2bf62a99102bbdfd0fd6a": "Uniswap",
+  "0x92560c178ce069cc014138ed3c2f5221ba71f58a": "Coinbase",
 };
 
 const listEtherscanRecords = (
