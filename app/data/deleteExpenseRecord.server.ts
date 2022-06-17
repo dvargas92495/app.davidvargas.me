@@ -1,12 +1,14 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
+import { z } from "zod";
+
+const schema = z.object({ uuid: z.string() });
 
 const deleteExpenseRecord = ({
-  data: {
-    uuid: [uuid],
-  },
+  params,
 }: {
-  data: Record<string, string[]>;
+  params: Record<string, string | undefined>;
 }) => {
+  const { uuid } = schema.parse(params);
   return getMysqlConnection()
     .then((con) =>
       con.execute(`DELETE FROM expenses WHERE uuid = ?`, [uuid]).then((r) => {

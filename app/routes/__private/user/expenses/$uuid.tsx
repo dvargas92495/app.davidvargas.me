@@ -29,8 +29,8 @@ export const loader: LoaderFunction = (args) => {
 
 export const action: ActionFunction = (args) => {
   return remixAppAction(args, {
-    DELETE: ({ data }) =>
-      deleteExpenseRecord({ data }).then(() => redirect(`/user/expenses`)),
+    DELETE: ({ params }) =>
+      deleteExpenseRecord({ params }).then(() => redirect(`/user/expenses`)),
   });
 };
 
