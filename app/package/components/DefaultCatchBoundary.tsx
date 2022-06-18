@@ -1,7 +1,7 @@
 import React from "react";
 import DefaultErrorBoundary from "./DefaultErrorBoundary";
-import { CatchBoundaryComponent } from "@remix-run/node/routeModules";
 import { useCatch } from "@remix-run/react";
+import type { CatchBoundaryComponent } from "@remix-run/react/routeModules";
 
 const DefaultCatchBoundary: CatchBoundaryComponent = (): React.ReactElement => {
   const caught = useCatch();
@@ -11,7 +11,9 @@ const DefaultCatchBoundary: CatchBoundaryComponent = (): React.ReactElement => {
         new Error(
           typeof caught?.data === "object"
             ? JSON.stringify(caught.data)
-            : caught?.data || `No Caught Data: ${caught}`
+            : typeof caught === "object"
+            ? JSON.stringify(caught)
+            : `No Caught Data: ${caught}`
         )
       }
     />

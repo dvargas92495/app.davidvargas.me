@@ -9,7 +9,6 @@ import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import TextInput from "~/package/components/TextInput";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import getEtherscan from "~/data/getEtherscan.server";
-import { useMemo } from "react";
 import fixRecordFromEtherscan from "~/data/fixRecordFromEtherscan.server";
 import Select from "~/package/components/Select";
 
@@ -19,21 +18,6 @@ const EtherscanRecord = () => {
       Awaited<ReturnType<typeof listEtherscanRecords>>["data"][number]
     >();
   const data = useLoaderData<Awaited<ReturnType<typeof getEtherscan>>>();
-  const defaultCategory = useMemo(() => {
-    return data.correctRevenue.length || data.incorrectRevenue.length
-      ? "revenue"
-      : data.correctExpense.length || data.incorrectExpense.length
-      ? "expense"
-      : data.correctPersonal.length || data.incorrectPersonal.length
-      ? "personal"
-      : "revenue";
-  }, [data, recordSelected]);
-  const defaultAmount = useMemo(() => {
-    return data.amount || recordSelected?.value;
-  }, [data, recordSelected]);
-  const defaultDescription = useMemo(() => {
-    return data.description || "";
-  }, [data, recordSelected]);
   return (
     <div className="flex gap-8">
       <Form method="post" className="mt-4 flex gap-2">
@@ -78,18 +62,16 @@ const EtherscanRecord = () => {
           <Select
             label={"Category"}
             name={"category"}
-            defaultValue={defaultCategory}
             options={["revenue", "expense", "personal"]}
           />
           <TextInput
             label={"Description"}
             name={"description"}
-            defaultValue={defaultDescription}
           />
           <TextInput
             label={"Amount"}
             name={"amount"}
-            defaultValue={defaultAmount}
+            defaultValue={recordSelected?.value}
           />
           <Button>Save</Button>
         </div>
