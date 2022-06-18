@@ -37,7 +37,7 @@ const Select = ({
   const transition = useTransition();
   const loading = useMemo(() => transition.state !== "idle", [transition]);
   const [selectedOption, setSelectedOption] = useState(
-    defaultValue || options[0]?.id
+    typeof defaultValue !== "undefined" ? defaultValue : options[0]?.id
   );
   const labelById = useMemo(
     () => Object.fromEntries(options.map((o) => [o.id, o.label])),

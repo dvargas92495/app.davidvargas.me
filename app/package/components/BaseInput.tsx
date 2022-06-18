@@ -6,12 +6,9 @@ export type InputProps = {
   label?: React.ReactNode;
   inputClassname?: string;
   labelClassname?: string;
-} & Omit<
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >,
-  "required"
+} & React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
 >;
 
 const BaseInput = ({

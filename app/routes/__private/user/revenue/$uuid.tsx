@@ -14,7 +14,9 @@ const RevenueRecord = () => {
     <div>
       <h1 className="font-bold text-xl mb-2">{data.product}</h1>
       <p className="text-md italic font-normal mb-4">{data.date}</p>
-      <h2 className="font-semibold text-lg">{data.source} - {data.source_id}</h2>
+      <h2 className="font-semibold text-lg">
+        {data.source} - {data.source_id}
+      </h2>
       <Form method="delete">
         <Button>Delete</Button>
       </Form>
@@ -32,8 +34,8 @@ export const loader: LoaderFunction = (args) => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ params, method, searchParams }) => {
-    if (method === "DELETE")
+  return remixAppAction(args, {
+    DELETE: ({ params, searchParams }) =>
       deleteRevenueRecord(params["uuid"] || "").then(() => {
         return redirect(
           `/user/revenue${
@@ -42,8 +44,7 @@ export const action: ActionFunction = (args) => {
               : `?${new URLSearchParams(searchParams).toString()}`
           }&used=${args.request.bodyUsed}&body=${args.request.body}`
         );
-      });
-    else throw new Response(`Method ${method} not found`, { status: 404 });
+      }),
   });
 };
 

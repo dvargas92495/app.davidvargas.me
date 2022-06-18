@@ -43,6 +43,7 @@ const UserRevenuePage = () => {
               label={"Product"}
               name={"product"}
               defaultValue={defaultProduct}
+              required={false}
             />
             <Button>Search</Button>
           </Form>
@@ -70,7 +71,7 @@ export const loader: LoaderFunction = (args) => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, updateRevenueProducts);
+  return remixAppAction(args, { PUT: updateRevenueProducts });
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;
