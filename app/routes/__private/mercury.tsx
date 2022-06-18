@@ -46,8 +46,8 @@ export const loader: LoaderFunction = (args) => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ userId, data }) =>
-    insertRecordFromEtherscan({ userId, data }).catch((e) => {
+  return remixAppAction(args, ({ data, params }) =>
+    insertRecordFromEtherscan({ data, params }).catch((e) => {
       throw new Response(e.message, { status: 500 });
     })
   );

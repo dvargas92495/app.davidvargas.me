@@ -64,10 +64,7 @@ const EtherscanRecord = () => {
             name={"category"}
             options={["revenue", "expense", "personal"]}
           />
-          <TextInput
-            label={"Description"}
-            name={"description"}
-          />
+          <TextInput label={"Description"} name={"description"} />
           <TextInput
             label={"Amount"}
             name={"amount"}
@@ -75,9 +72,6 @@ const EtherscanRecord = () => {
           />
           <Button>Save</Button>
         </div>
-        <pre className="border-yellow-900 border text-yellow-900 bg-yellow-200 p-4">
-          {JSON.stringify(data, null, 4)}
-        </pre>
       </Form>
       <Form method="put" className="mt-4">
         <input
@@ -114,8 +108,8 @@ const EtherscanRecord = () => {
 
 export const action: ActionFunction = (args) => {
   return remixAppAction(args, {
-    POST: ({ data }) =>
-      insertRecordFromEtherscan({ data }).then(() =>
+    POST: ({ data, params }) =>
+      insertRecordFromEtherscan({ data, params }).then(() =>
         redirect("/user/ethereum")
       ),
     PUT: ({ userId, params }) =>

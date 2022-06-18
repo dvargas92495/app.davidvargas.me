@@ -4,7 +4,6 @@ import axios from "axios";
 import { z } from "zod";
 
 const dataSchema = z.object({
-  value: z.array(z.string()),
   amount: z.array(z.string()),
   category: z.array(z.string()),
   hash: z.array(z.string()),
@@ -18,14 +17,15 @@ const dataSchema = z.object({
 
 const insertRecordFromEtherscan = async ({
   data: _data,
+  params,
 }: {
   data: Record<string, string[]>;
+  params: Record<string, string | undefined>;
 }) => {
   const data = dataSchema.parse(_data);
-  const value = data.value[0];
   const amount = data.amount[0];
   const category = data.category[0];
-  const [hash] = data.hash;
+  const {id: hash = ''} = params;
   const [originalDescription] = data.description;
   const [code, ...des] = originalDescription.split(" - ");
   const description = des.join(" - ");
@@ -63,28 +63,30 @@ const insertRecordFromEtherscan = async ({
     Number(tokenAmount) * Number(tokenPrice) * Number(ethPrice) * 100;
   return getMysqlConnection()
     .then((connection) => {
-      return category === "revenue"
-        ? connection.execute(
-            `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) 
+      return (
+        category === "revenue"
+          ? connection.execute(
+              `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE amount=VALUES(amount)+amount`,
-            [v4(), "etherscan", hash, date, total, originalDescription, 0]
-          )
-        : category === "expense"
-        ? connection.execute(
-            `INSERT INTO expenses (uuid, source, source_id, date, amount, description, code) 
+              [v4(), "etherscan", hash, date, total, originalDescription, 0]
+            )
+          : category === "expense"
+          ? connection.execute(
+              `INSERT INTO expenses (uuid, source, source_id, date, amount, description, code) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE VALUES(amount)+amount`,
-            [v4(), "etherscan", hash, date, total, description, code]
-          )
-        : category === "personal"
-        ? connection.execute(
-            `INSERT INTO personal_transfers (uuid, source, source_id, date, amount, description, code) 
+              [v4(), "etherscan", hash, date, total, description, code]
+            )
+          : category === "personal"
+          ? connection.execute(
+              `INSERT INTO personal_transfers (uuid, source, source_id, date, amount, description, code) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE VALUES(amount)+amount`,
-            [v4(), "etherscan", hash, date, total, description, code]
-          )
-        : Promise.reject(`Unsupported category ${category} for hash ${hash}`);
+              [v4(), "etherscan", hash, date, total, description, code]
+            )
+          : Promise.reject(`Unsupported category ${category} for hash ${hash}`)
+      ).then(() => connection.destroy());
     })
     .then(() => ({ success: true }));
 };

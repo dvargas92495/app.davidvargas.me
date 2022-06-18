@@ -8,8 +8,8 @@ import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import getConvertKitBroadcasts from "~/data/getConvertKitBroadcasts.server";
 import createConvertKitBroadcast from "~/data/createConvertKitBroadcast.server";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
-import { CatchBoundaryComponent } from "@remix-run/node/routeModules";
 import Toast from "~/package/components/Toast";
+import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 
 const UserConvertKit = () => {
   const data =
@@ -81,19 +81,6 @@ export const action: ActionFunction = (args) => {
 
 export const ErrorBoundary = DefaultErrorBoundary;
 
-export const CatchBoundary: CatchBoundaryComponent = () => {
-  const caught = useCatch();
-  return (
-    <DefaultErrorBoundary
-      error={
-        new Error(
-          typeof caught.data === "object"
-            ? JSON.stringify(caught.data)
-            : caught.data
-        )
-      }
-    />
-  );
-};
+export const CatchBoundary = DefaultCatchBoundary;
 
 export default UserConvertKit;
