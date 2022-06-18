@@ -131,16 +131,15 @@ const EtherscanRecord = () => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ userId, data, method, params }) => {
-    if (method === "POST")
-      return insertRecordFromEtherscan({ userId, data }).then(() =>
-        redirect("/user/etherscan")
-      );
-    else if (method === "PUT")
-      return fixRecordFromEtherscan({ userId, params }).then(() =>
-        redirect("/user/etherscan")
-      );
-    else throw new Response(`Method ${method} Not Found`, { status: 404 });
+  return remixAppAction(args, {
+    POST: ({ data }) =>
+      insertRecordFromEtherscan({ data }).then(() =>
+        redirect("/user/ethereum")
+      ),
+    PUT: ({ userId, params }) =>
+      fixRecordFromEtherscan({ userId, params }).then(() =>
+        redirect("/user/ethereum")
+      ),
   });
 };
 

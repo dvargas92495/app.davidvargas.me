@@ -42,7 +42,7 @@ export const action: ActionFunction = (args) => {
             Object.keys(searchParams).length
               ? ""
               : `?${new URLSearchParams(searchParams).toString()}`
-          }&used=${args.request.bodyUsed}&body=${args.request.body}`
+          }`
         );
       }),
   });
