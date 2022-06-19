@@ -12,7 +12,6 @@ const dataSchema = z.object({
   from: z.array(z.string()),
   to: z.array(z.string()),
   gas: z.array(z.string()),
-  type: z.array(z.string()),
 });
 
 const insertRecordFromEtherscan = async ({
