@@ -72,6 +72,7 @@ const listEtherscanRecords = (
             []
           ),
         ]).then(([a, b, c]) => {
+          con.destroy();
           const txs = (a as { source_id: string }[])
             .concat(b as { source_id: string }[])
             .concat(c as { source_id: string }[]);
