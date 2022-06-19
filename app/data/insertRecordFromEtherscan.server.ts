@@ -85,14 +85,14 @@ const insertRecordFromEtherscan = async ({
           ? connection.execute(
               `INSERT INTO expenses (uuid, source, source_id, date, amount, description, code) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
-      ON DUPLICATE KEY UPDATE VALUES(amount)+amount`,
+      ON DUPLICATE KEY UPDATE amount=VALUES(amount)+amount`,
               [v4(), "etherscan", hash, date, total, description, code]
             )
           : category === "personal"
           ? connection.execute(
               `INSERT INTO personal_transfers (uuid, source, source_id, date, amount, description, code) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
-      ON DUPLICATE KEY UPDATE VALUES(amount)+amount`,
+      ON DUPLICATE KEY UPDATE amount=VALUES(amount)+amount`,
               [v4(), "etherscan", hash, date, total, description, code]
             )
           : Promise.reject(`Unsupported category ${category} for hash ${hash}`)

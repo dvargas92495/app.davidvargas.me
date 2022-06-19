@@ -18,7 +18,7 @@ const Table = ({
   getTrClassName?: (index: number) => string;
   getTdClassName?: (index: number) => string;
 }) => {
-  const { data, columns } = useLoaderData<{
+  const { data = [], columns = [] } = useLoaderData<{
     columns: { Header: string; accessor: string }[];
     data: Record<string, string | number>[];
   }>();
