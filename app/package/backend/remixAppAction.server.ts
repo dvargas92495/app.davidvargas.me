@@ -1,5 +1,6 @@
 import { ActionFunction } from "@remix-run/node";
 import type { Params } from "react-router";
+import handleAsResponse from "./handleAsResponse.server";
 
 type ActionMethod = "POST" | "PUT" | "DELETE";
 
@@ -19,10 +20,12 @@ const remixAppAction = (
         }
       ) => ReturnType<ActionFunction>)
     | {
-        [k in ActionMethod]?: (args: CallbackArgs) => ReturnType<ActionFunction>;
+        [k in ActionMethod]?: (
+          args: CallbackArgs
+        ) => ReturnType<ActionFunction>;
       }
 ) => {
-  return import("@clerk/remix/ssr.server.js")
+  const output = import("@clerk/remix/ssr.server.js")
     .then((clerk) => clerk.getAuth(request))
     .then(async ({ userId }) => {
       if (!userId) {
@@ -55,9 +58,7 @@ const remixAppAction = (
           searchParams,
           params,
         });
-        return Promise.resolve(response).catch((e) => {
-          throw new Response(e.message, { status: e.code || 500 });
-        });
+        return handleAsResponse(response, "Unknown Application Action Error");
       }
       const methodCallback = callback[method];
       if (methodCallback) {
@@ -67,21 +68,18 @@ const remixAppAction = (
           searchParams,
           params,
         });
-        return Promise.resolve(response).catch((e) => {
-          throw new Response(e.message, { status: e.code || 500 });
-        });
+        return handleAsResponse(
+          response,
+          `Unknown Application ${method} Error`
+        );
       } else {
         throw new Response(`Unsupported method ${method}`, { status: 404 });
       }
-    })
-    .catch((e) => {
-      if (e instanceof Response) throw e;
-      else
-        throw new Response(
-          `Something went wrong while parsing the app callback:\n${e.message}`,
-          { status: 500 }
-        );
     });
+  return handleAsResponse(
+    output,
+    "Something went wrong while parsing the app callback"
+  );
 };
 
 export default remixAppAction;

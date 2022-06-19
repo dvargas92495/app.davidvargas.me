@@ -1,4 +1,7 @@
 import React from "react";
+import ExternalLink from "./ExternalLink";
+import Subtitle from "./Subtitle";
+import Title from "./Title";
 
 const About = ({
   title,
@@ -15,41 +18,24 @@ const About = ({
       width: "100%",
     }}
   >
-    <h1>{title}</h1>
-    <h6>{subtitle}</h6>
+    <Title className="font-bold text-3xl mb-2">{title}</Title>
+    <Subtitle className="font-semibold mb-2">{subtitle}</Subtitle>
     {paragraphs.map((p, i) => (
-      <p
-        key={i}
-        style={{
-          whiteSpace: "pre-wrap",
-          marginTop: "1em",
-          marginBottom: "1em",
-        }}
-      >
+      <p key={i} className={"mb-2 whitespace-pre-wrap"}>
         {p}
       </p>
     ))}
-    <hr style={{ margin: "32px 0" }} />
+    <hr className={"mb-8"} />
     <p>
       <img
         src="https://pbs.twimg.com/profile_images/1272885092545896450/VaEFChlf_400x400.jpg"
-        style={{
-          borderRadius: "80px",
-          width: "160px",
-          display: "inline-grid",
-          marginRight: "16px",
-          float: "left",
-        }}
+        className="rounded-full w-40 inline-grid mr-4 float-left"
       />
-      {title} is part of the Vargas Arts portfolio of projects. Check out some
-      of my other projects at{" "}
-      <a
-        target="_blank"
-        rel="noreferrer"
-        href={"https://davidvargas.me/projects"}
-      >
+      <span className="font-semibold">{title}</span> is part of the Vargas Arts
+      portfolio of projects. Check out some of my other projects at{" "}
+      <ExternalLink href={"https://davidvargas.me/projects"}>
         https://davidvargas.me/projects
-      </a>
+      </ExternalLink>
       !
     </p>
   </div>

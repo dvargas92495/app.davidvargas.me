@@ -1,5 +1,6 @@
 import { LoaderFunction, redirect } from "@remix-run/node";
 import type { Params } from "react-router";
+import handleAsResponse from "./handleAsResponse.server";
 
 const remixAppLoader = (
   { request, params }: Parameters<LoaderFunction>[0],
@@ -21,10 +22,7 @@ const remixAppLoader = (
       const response = callback
         ? callback({ userId: authData.userId, params, searchParams })
         : {};
-      return Promise.resolve(response).catch((e) => {
-        if (e instanceof Response) throw e;
-        throw new Response(e.message, { status: e.status || 500 });
-      });
+      return handleAsResponse(response, "Unknown Application Loader Error");
     });
 };
 

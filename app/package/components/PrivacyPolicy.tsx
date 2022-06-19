@@ -1,13 +1,12 @@
 import React from "react";
+import ExternalLink from "./ExternalLink";
+import Title from "./Title";
 
 const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
   <div
-    style={{
-      maxWidth: "800px",
-      width: "100%",
-    }}
+    className="w-full max-w-4xl"
   >
-    <h2>Privacy Policy for Vargas Arts, LLC</h2>
+    <Title>Privacy Policy for Vargas Arts, LLC</Title>
     <p>
       {name}, accessible from https://{domain}, is an application residing in
       the Vargas Arts, LLC Portfolio. As such, it is subjected to the same
@@ -21,9 +20,9 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
     <p>
       If you have additional questions or require more information about our
       Privacy Policy, do not hesitate to{" "}
-      <a target="_blank" rel="noreferrer" href={"/contact"}>
+      <ExternalLink href={"/contact"}>
         contact us
-      </a>
+      </ExternalLink>
       .
     </p>
     <p>
@@ -38,9 +37,9 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
     <p>
       By using our websites, you hereby consent to our Privacy Policy and agree
       to its terms. For our Terms and Conditions, please visit the{" "}
-      <a target="_blank" rel="noreferrer" href={"/terms-of-use"}>
+      <ExternalLink href={"/terms-of-use"}>
         Terms Of Use
-      </a>
+      </ExternalLink>
       .
     </p>
     <h6>Information we collect</h6>

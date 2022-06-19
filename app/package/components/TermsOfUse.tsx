@@ -1,13 +1,10 @@
 import React from "react";
+import ExternalLink from "./ExternalLink";
+import Title from "./Title";
 
 const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
-  <div
-    style={{
-      maxWidth: "800px",
-      width: "100%",
-    }}
-  >
-    <h1>Terms of Use</h1>
+  <div className="w-full max-w-4xl">
+    <Title>Terms of Use</Title>
     <p>
       The {name} website located at https://{domain} was founded by Vargas Arts,
       LLC. Certain features of the Site may be subject to additional guidelines,
@@ -32,12 +29,12 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       the event of a dispute. These Terms of Use were created with the help of
       the free Terms Of Use Generator.
     </p>
-    <h1>Access to the Site</h1>
+    <Title>Access to the Site</Title>
     <p>
       Subject to these Terms. Company grants you a non-transferable,
       non-exclusive, revocable, limited license to access the Site for your use.
     </p>
-    <h1>Certain Restrictions.</h1>
+    <Title>Certain Restrictions.</Title>
     <p>
       The rights approved to you in these Terms are subject to the following
       restrictions: you shall not sell, rent, lease, transfer, assign,
@@ -49,12 +46,12 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       to you or any third-party for any change, interruption, or termination of
       the Site or any part.
     </p>
-    <h1>No Support or Maintenance</h1>
+    <Title>No Support or Maintenance</Title>
     <p>
       You agree that Company will have no obligation to provide you with any
       support in connection with the Site.
     </p>
-    <h1>Third-Party Links</h1>
+    <Title>Third-Party Links</Title>
     <p>
       The Site may contain links to third-party websites and services. Such
       Third-Party Links are not under the control of Company, and Company is not
@@ -67,7 +64,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       party's terms and policies apply, including the third party's privacy and
       data gathering practices.
     </p>
-    <h1>Other Users</h1>
+    <Title>Other Users</Title>
     <p>
       Each Site user is solely responsible for any and all of its own User
       Content. Because we do not control User Content, you acknowledge and agree
@@ -91,7 +88,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       which if known by him or her must have materially affected his or her
       settlement with the debtor."
     </p>
-    <h1>Cookies and Web Beacons</h1>
+    <Title>Cookies and Web Beacons</Title>
     <p>
       Like any other website, Vargas Arts applications use 'cookies'. These
       cookies are used to store information including visitors' preferences, and
@@ -99,7 +96,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       information is used to optimize the users' experience by customizing our
       web page content based on visitors' browser type and/or other information.
     </p>
-    <h1>Disclaimers</h1>
+    <Title>Disclaimers</Title>
     <p>
       The site is provided on an "as-is" and "as available" basis, and company
       and our suppliers expressly disclaim any and all warranties and conditions
@@ -119,7 +116,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       limitations on how long an implied warranty lasts, so the above limitation
       may not apply to you.
     </p>
-    <h1>Limitation on Liability</h1>
+    <Title>Limitation on Liability</Title>
     <p>
       To the maximum extent permitted by law, in no event shall company or our
       suppliers be liable to you or any third-party for any lost profits, lost
@@ -144,7 +141,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       for incidental or consequential damages, so the above limitation or
       exclusion may not apply to you.
     </p>
-    <h1>Term and Termination</h1>
+    <Title>Term and Termination</Title>
     <p>
       Subject to this Section, these Terms will remain in full force and effect
       while you use the Site. We may suspend or terminate your rights to use the
@@ -159,7 +156,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       provisions of these Terms will remain in effect: Sections 2 through 2.5,
       Section 3 and Sections 4 through 10.
     </p>
-    <h1>General</h1>
+    <Title>General</Title>
     <p>
       These Terms are subject to occasional revision, and if we make any
       substantial changes, we may notify you by sending you an e-mail to the
@@ -180,7 +177,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       rights. It contains procedures for MANDATORY BINDING ARBITRATION AND A
       CLASS ACTION WAIVER.
     </p>
-    <h1> Applicability of Arbitration Agreement.</h1>
+    <Title> Applicability of Arbitration Agreement.</Title>
     <p>
       All claims and disputes in connection with the Terms or the use of any
       product or service provided by the Company that cannot be resolved
@@ -193,7 +190,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       authorized or unauthorized users or beneficiaries of services or goods
       provided under the Terms.
     </p>
-    <h1> Notice Requirement and Informal Dispute Resolution.</h1>
+    <Title> Notice Requirement and Informal Dispute Resolution.</Title>
     <p>
       Before either party may seek arbitration, the party must first send to the
       other party a written Notice of Dispute describing the nature and basis of
@@ -206,7 +203,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       be disclosed to the arbitrator until after the arbitrator has determined
       the amount of the award to which either party is entitled.
     </p>
-    <h1> Arbitration Rules.</h1>
+    <Title> Arbitration Rules.</Title>
     <p>
       Arbitration shall be initiated through the American Arbitration
       Association, an established alternative dispute resolution provider that
@@ -235,7 +232,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       disbursements arising out of the arbitration and shall pay an equal share
       of the fees and costs of the ADR Provider.
     </p>
-    <h1> Additional Rules for Non-Appearance Based Arbitration.</h1>
+    <Title> Additional Rules for Non-Appearance Based Arbitration.</Title>
     <p>
       If non-appearance based arbitration is elected, the arbitration shall be
       conducted by telephone, online and/or based solely on written submissions;
@@ -243,13 +240,13 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       arbitration. The arbitration shall not involve any personal appearance by
       the parties or witnesses unless otherwise agreed by the parties.
     </p>
-    <h1> Time Limits.</h1>
+    <Title> Time Limits.</Title>
     <p>
       If you or the Company pursues arbitration, the arbitration action must be
       initiated and/or demanded within the statute of limitations and within any
       deadline imposed under the AAA Rules for the pertinent claim.
     </p>
-    <h1> Authority of Arbitrator.</h1>
+    <Title> Authority of Arbitrator.</Title>
     <p>
       If arbitration is initiated, the arbitrator will decide the rights and
       liabilities of you and the Company, and the dispute will not be
@@ -264,7 +261,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       an individual basis that a judge in a court of law would have. The award
       of the arbitrator is final and binding upon you and the Company.
     </p>
-    <h1> Waiver of Jury Trial.</h1>
+    <Title> Waiver of Jury Trial.</Title>
     <p>
       THE PARTIES HEREBY WAIVE THEIR CONSTITUTIONAL AND STATUTORY RIGHTS TO GO
       TO COURT AND HAVE A TRIAL IN FRONT OF A JUDGE OR A JURY, instead electing
@@ -277,7 +274,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       COMPANY WAIVE ALL RIGHTS TO A JURY TRIAL, instead electing that the
       dispute be resolved by a judge.
     </p>
-    <h1> Waiver of Class or Consolidated Actions.</h1>
+    <Title> Waiver of Class or Consolidated Actions.</Title>
     <p>
       All claims and disputes within the scope of this arbitration agreement
       must be arbitrated or litigated on an individual basis and not on a class
@@ -285,7 +282,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       or litigated jointly or consolidated with those of any other customer or
       user.
     </p>
-    <h1> Confidentiality.</h1>
+    <Title> Confidentiality.</Title>
     <p>
       All aspects of the arbitration proceeding shall be strictly confidential.
       The parties agree to maintain confidentiality unless otherwise required by
@@ -293,7 +290,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       of law any information necessary to enforce this Agreement, to enforce an
       arbitration award, or to seek injunctive or equitable relief.
     </p>
-    <h1> Severability.</h1>
+    <Title> Severability.</Title>
     <p>
       If any part or parts of this Arbitration Agreement are found under the law
       to be invalid or unenforceable by a court of competent jurisdiction, then
@@ -301,24 +298,24 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       severed and the remainder of the Agreement shall continue in full force
       and effect.
     </p>
-    <h1> Right to Waive.</h1>
+    <Title> Right to Waive.</Title>
     <p>
       Any or all of the rights and limitations set forth in this Arbitration
       Agreement may be waived by the party against whom the claim is asserted.
       Such waiver shall not waive or affect any other portion of this
       Arbitration Agreement.
     </p>
-    <h1> Survival of Agreement. T</h1>
+    <Title> Survival of Agreement. T</Title>
     <p>
       his Arbitration Agreement will survive the termination of your
       relationship with Company.
     </p>
-    <h1> Small Claims Court.</h1>
+    <Title> Small Claims Court.</Title>
     <p>
       Nonetheless the foregoing, either you or the Company may bring an
       individual action in small claims court.
     </p>
-    <h1> Emergency Equitable Relief.</h1>
+    <Title> Emergency Equitable Relief.</Title>
     <p>
       Anyhow the foregoing, either party may seek emergency equitable relief
       before a state or federal court in order to maintain the status quo
@@ -326,7 +323,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       waiver of any other rights or obligations under this Arbitration
       Agreement.
     </p>
-    <h1> Claims Not Subject to Arbitration.</h1>
+    <Title> Claims Not Subject to Arbitration.</Title>
     <p>
       Notwithstanding the foregoing, claims of defamation, violation of the
       Computer Fraud and Abuse Act, and infringement or misappropriation of the
@@ -353,7 +350,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       Affairs by contacting them in writing at 400 R Street, Sacramento, CA
       95814, or by telephone at (800) 952-5210.
     </p>
-    <h1> Electronic Communications.</h1>
+    <Title> Electronic Communications.</Title>
     <p>
       The communications between you and Company use electronic means, whether
       you use the Site or send us emails, or whether Company posts notices on
@@ -364,7 +361,7 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       electronically satisfy any legal obligation that such communications would
       satisfy if it were be in a hard copy writing.
     </p>
-    <h1> Entire Terms.</h1>
+    <Title> Entire Terms.</Title>
     <p>
       These Terms constitute the entire agreement between you and us regarding
       the use of the Site. Our failure to exercise or enforce any right or
@@ -384,21 +381,15 @@ const TermsOfUse = ({ name, domain }: { name: string; domain: string }) => (
       assign these Terms. The terms and conditions set forth in these Terms
       shall be binding upon assignees.
     </p>
-    <h1> Your Privacy.</h1>
+    <Title> Your Privacy.</Title>
     <p>
       Please read our{" "}
-      <a target="_blank" rel="noreferrer" href={"/privacy-policy"}>
-        Privacy Policy
-      </a>
-      .
+      <ExternalLink href={"/privacy-policy"}>Privacy Policy</ExternalLink>.
     </p>
-    <h1> Contact Information</h1>
+    <Title> Contact Information</Title>
     <p>
       Please read our{" "}
-      <a target="_blank" rel="noreferrer" href={"/contact"}>
-        Contact Page
-      </a>
-      .
+      <ExternalLink href={"/contact"}>Contact Page</ExternalLink>.
     </p>
   </div>
 );
