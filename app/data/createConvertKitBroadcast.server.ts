@@ -105,7 +105,8 @@ const createConvertKitBroadcast = ({
           );
         })
         .then((r) => {
-          const { username } = githubProvider;
+          // @ts-ignore
+          const username = githubProvider.username as string;
 
           const convertKit = u.publicMetadata.ConvertKit as {
             apiSecret: string;
