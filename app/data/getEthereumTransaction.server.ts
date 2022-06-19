@@ -1,6 +1,5 @@
 import Web3 from "web3";
 import dateFnsFormat from "date-fns/format";
-import getMysqlConnection from "~/package/backend/mysql.server";
 import addressBook from "~/enums/addressBook";
 
 const getEthereumTransaction = async ({
@@ -16,6 +15,7 @@ const getEthereumTransaction = async ({
   const hash = params["id"] || "";
   return web3.eth.getTransaction(hash).then((tx) =>
     Promise.all([
+      web3.eth.getTransactionReceipt(hash),
       web3.eth.getBlock(tx.blockNumber || 0),
       import("@clerk/clerk-sdk-node")
         .then((clerk) => clerk.users.getUser(userId))
@@ -27,9 +27,10 @@ const getEthereumTransaction = async ({
           };
           return account.address;
         }),
-    ]).then(([block, address]) => {
+    ]).then(([receipt, block, address]) => {
       const from = tx.from.toLowerCase();
       const to = (tx.to || "").toLowerCase();
+      // receipt.events - this will have log events that would be juicy
       return {
         hash,
         date: dateFnsFormat(
@@ -38,7 +39,7 @@ const getEthereumTransaction = async ({
         ),
         from: tx.from === address ? "ME" : addressBook[from] || from,
         to: tx.to === address ? "ME" : addressBook[to] || to,
-        gas: `${(Number(tx.gas) * Number(tx.gasPrice)) / Math.pow(10, 18)} ETH`,
+        gas: `${(Number(receipt.gasUsed) * Number(tx.gasPrice)) / Math.pow(10, 18)} ETH`,
         value: `${(Number(tx.value) / Math.pow(10, 18)).toFixed(6)} ETH`,
       };
     })
