@@ -19,7 +19,7 @@ const PublicPage: React.FC<{
     <div className={`flex flex-col min-h-full ${rootClassName}`}>
       <header className="static bg-transparent shadow-xl z-10">
         <div className="px-6 h-16 flex items-center">
-          <Link to={"/"} className="flex max-h-full w-16">
+          <Link to={"/"} className="flex max-h-full w-16 mr-32">
             {homeIcon}
           </Link>
           <div className="justify-center flex-grow flex">
