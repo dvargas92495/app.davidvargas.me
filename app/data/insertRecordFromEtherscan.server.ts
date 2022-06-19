@@ -22,6 +22,7 @@ const insertRecordFromEtherscan = async ({
   data: Record<string, string[]>;
   params: Record<string, string | undefined>;
 }) => {
+  console.log('start to insert');
   const data = dataSchema.parse(_data);
   const amount = data.amount[0];
   const category = data.category[0];
@@ -35,7 +36,8 @@ const insertRecordFromEtherscan = async ({
   )
     .toString()
     .padStart(2, "0")}-${date.getFullYear()}`;
-  const ethPrice = await axios
+    console.log('let get some price info', hash, code, description, );
+    const ethPrice = await axios
     .get(
       `https://api.coingecko.com/api/v3/coins/ethereum/history?date=${dateArg}`
     )
@@ -45,6 +47,7 @@ const insertRecordFromEtherscan = async ({
         `Failed to get ETH price from CoinGecko: ${e.response?.data}`
       );
     });
+    console.log('ethProce', ethPrice);
   const [tokenAmount, tokenType] = amount.split(" ");
   const tokenPrice =
     !tokenType || /^eth$/.test(tokenType)
@@ -59,10 +62,13 @@ const insertRecordFromEtherscan = async ({
               `Failed to get ETH price from CoinGecko for token type ${tokenType}: ${e.response?.data}`
             );
           });
+          console.log('tokenPrice', ethPrice);
   const total =
     Number(tokenAmount) * Number(tokenPrice) * Number(ethPrice) * 100;
+    console.log('total', total);
   return getMysqlConnection()
     .then((connection) => {
+      console.log('we cxned, lets insert a', category);
       return (
         category === "revenue"
           ? connection.execute(
