@@ -34,6 +34,6 @@ jobs:
       - name: install
         run: npm install
       - name: build
-        run: npm run build --readable
+        run: npm run build -- --readable
       - name: deploy
         run: npm run deploy
