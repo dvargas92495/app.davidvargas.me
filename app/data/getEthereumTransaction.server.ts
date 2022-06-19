@@ -22,8 +22,6 @@ const getEthereumTransaction = async ({
         .then(async (user) => {
           const account = user.publicMetadata.ethereum as {
             address: string;
-            startNumber?: number;
-            etherscan?: string;
           };
           return account.address;
         }),

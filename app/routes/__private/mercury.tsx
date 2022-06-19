@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import Dialog from "~/package/components/Dialog";
 import remixAppAction from "~/package/backend/remixAppAction.server";
-import insertRecordFromEtherscan from "~/data/insertRecordFromEtherscan.server";
+import insertRecordFromEthereum from "~/data/insertRecordFromEthereum.server";
 import TextInput from "~/package/components/TextInput";
 import Button from "~/package/components/Button";
 import listMercuryRecords from "~/data/listMercuryRecords.server";
@@ -47,7 +47,7 @@ export const loader: LoaderFunction = (args) => {
 
 export const action: ActionFunction = (args) => {
   return remixAppAction(args, ({ data, params }) =>
-    insertRecordFromEtherscan({ data, params }).catch((e) => {
+    insertRecordFromEthereum({ data, params }).catch((e) => {
       throw new Response(e.message, { status: 500 });
     })
   );

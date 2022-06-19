@@ -37,7 +37,7 @@ const UserRevenuePage = () => {
               label={"Source"}
               name={"source"}
               defaultValue={defaultSource}
-              options={["etherscan", "stripe"]}
+              options={["ethereum", "stripe"]}
             />
             <TextInput
               label={"Product"}

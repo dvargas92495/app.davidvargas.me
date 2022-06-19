@@ -4,7 +4,7 @@ import type { MigrationProps } from "fuegojs/dist/migrate";
 export const migrate = ({ connection }: MigrationProps) => {
   return getMysqlConnection(connection).then((connection) =>
     connection.execute(
-      `DELETE TABLE etherscan`
+      `DROP TABLE etherscan`
     )
   );
 };

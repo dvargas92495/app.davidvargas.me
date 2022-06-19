@@ -20,7 +20,7 @@ const editTerraformVariable = ({
       };
       if (!account) {
         throw new Response(
-          `User has not yet connected their Etherscan account`,
+          `User has not yet connected their Terraform account`,
           {
             status: 403,
           }

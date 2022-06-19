@@ -14,7 +14,7 @@ const dataSchema = z.object({
   gas: z.array(z.string()),
 });
 
-const insertRecordFromEtherscan = async ({
+const insertRecordFromEthereum = async ({
   data: _data,
   params,
 }: {
@@ -79,21 +79,21 @@ const insertRecordFromEtherscan = async ({
               `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE amount=VALUES(amount)+amount`,
-              [v4(), "etherscan", hash, date, total, originalDescription, 0]
+              [v4(), "ethereum", hash, date, total, originalDescription, 0]
             )
           : category === "expense"
           ? connection.execute(
               `INSERT INTO expenses (uuid, source, source_id, date, amount, description, code) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE amount=VALUES(amount)+amount`,
-              [v4(), "etherscan", hash, date, total, description, code]
+              [v4(), "ethereum", hash, date, total, description, code]
             )
           : category === "personal"
           ? connection.execute(
               `INSERT INTO personal_transfers (uuid, source, source_id, date, amount, description, code) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE amount=VALUES(amount)+amount`,
-              [v4(), "etherscan", hash, date, total, description, code]
+              [v4(), "ethereum", hash, date, total, description, code]
             )
           : Promise.reject(`Unsupported category ${category} for hash ${hash}`)
       ).then(() => connection.destroy());
@@ -101,4 +101,4 @@ const insertRecordFromEtherscan = async ({
     .then(() => ({ success: true }));
 };
 
-export default insertRecordFromEtherscan;
+export default insertRecordFromEthereum;

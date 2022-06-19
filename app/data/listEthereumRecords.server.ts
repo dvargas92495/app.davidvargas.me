@@ -29,15 +29,15 @@ const listEtherscanRecords = (
       const recordedTxs = await getMysqlConnection(connection).then((con) =>
         Promise.all([
           con.execute(
-            `SELECT source_id FROM revenue WHERE source = "etherscan"`,
+            `SELECT source_id FROM revenue WHERE source = "ethereum"`,
             []
           ),
           con.execute(
-            `SELECT source_id FROM expenses WHERE source = "etherscan"`,
+            `SELECT source_id FROM expenses WHERE source = "ethereum"`,
             []
           ),
           con.execute(
-            `SELECT source_id FROM personal_transfers WHERE source = "etherscan"`,
+            `SELECT source_id FROM personal_transfers WHERE source = "ethereum"`,
             []
           ),
         ]).then(([a, b, c]) => {

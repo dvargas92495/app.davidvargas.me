@@ -1,18 +1,18 @@
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import { Outlet, useActionData, useNavigate } from "@remix-run/react";
-import { ActionFunction, LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 import Table from "~/package/components/Table";
 import { useState } from "react";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
-import listEtherscanRecords from "~/data/listEtherscanRecords.server";
+import listEthereumRecords from "~/data/listEthereumRecords.server";
 import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 
-const UserEtherscan = () => {
+const UserEthereum = () => {
   const actionData = useActionData();
   const navigate = useNavigate();
   const [recordSelected, setRecordSelected] =
     useState<
-      Awaited<ReturnType<typeof listEtherscanRecords>>["data"][number]
+      Awaited<ReturnType<typeof listEthereumRecords>>["data"][number]
     >();
   return (
     <>
@@ -36,10 +36,10 @@ const UserEtherscan = () => {
 };
 
 export const loader: LoaderFunction = (args) => {
-  return remixAppLoader(args, ({ userId, searchParams }) => listEtherscanRecords(userId, !!searchParams['smart']));
+  return remixAppLoader(args, ({ userId, searchParams }) => listEthereumRecords(userId, !!searchParams['smart']));
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;
 export const CatchBoundary = DefaultCatchBoundary;
 
-export default UserEtherscan;
+export default UserEthereum;

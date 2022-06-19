@@ -7,7 +7,7 @@ const searchRevenue = ({
 }) =>
   getMysqlConnection()
     .then((con) => {
-      const keys = Object.keys(searchParams);
+      const keys = Object.keys(searchParams).filter((p) => searchParams[p]);
       return con
         .execute(
           `SELECT date, amount, product, uuid, connect, source
