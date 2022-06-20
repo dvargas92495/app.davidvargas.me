@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useMemo } from "react";
 import { useTransition } from "@remix-run/react";
 import { Combobox, Transition } from "@headlessui/react";
@@ -28,7 +28,7 @@ const AutoCompleteInput = ({
   inputClassname?: string;
   optionsClassName?: string;
   optionClassName?: string;
-  onChange?: (opt: string | number) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   defaultValue?: string | number;
 }) => {
   const transition = useTransition();
@@ -59,12 +59,16 @@ const AutoCompleteInput = ({
       <Combobox
         onChange={(e) => {
           setSelectedOption(e);
-          onChange?.(e);
         }}
         value={selectedOption}
         disabled={typeof disabled === "undefined" ? loading : disabled}
       >
-        <input name={name} type={"hidden"} value={selectedOption} />
+        <input
+          name={name}
+          type={"hidden"}
+          value={selectedOption}
+          onChange={onChange}
+        />
         <div
           className={`bg-gray-50 border border-gray-300 text-gray-900 cursor-default text-sm rounded-lg block w-full disabled:opacity-25 disabled:cursor-not-allowed shadow-md relative text-left ${inputClassname}`}
         >
