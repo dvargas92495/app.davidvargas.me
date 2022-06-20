@@ -10,7 +10,7 @@ const getFailedInvoiceData = (invoice: Stripe.Invoice, stripe: Stripe) => {
       ? stripe.subscriptions
           .retrieve(invoice.subscription as string)
           .then((sub) => sub.metadata.project)
-      : invoice.lines.data[0]?.description,
+      : invoice.lines.data[0]?.description || "No Project found",
     stripe.charges.retrieve(invoice.charge as string),
   ]).then(([c, project, charge]) => ({
     customerEmail: c.deleted
