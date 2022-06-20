@@ -1,5 +1,5 @@
 import React, { SVGAttributes } from "react";
-import { Form, Link } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import Subtitle from "./Subtitle";
 import TextInput from "./TextInput";
 import Title from "./Title";
@@ -23,6 +23,7 @@ export const Splash = ({
   primaryHref?: string;
   secondaryHref?: string;
 }) => {
+  const fetcher = useFetcher();
   return (
     <div className={"flex items-center gap-24"}>
       <div className={"w-1/2"}>
@@ -31,7 +32,7 @@ export const Splash = ({
           <i className="font-normal">{subtitle}</i>
         </Subtitle>
         {isWaitlist && (
-          <Form className="flex gap-8 items-center" method="put">
+          <fetcher.Form className="flex gap-8 items-center" method="put">
             <TextInput
               placeholder="hello@example.com"
               name={"email"}
@@ -39,7 +40,7 @@ export const Splash = ({
               className={"flex-grow"}
             />
             <Button>Get On The Waitlist</Button>
-          </Form>
+          </fetcher.Form>
         )}
         <div className="flex gap-8">
           {primaryHref && (

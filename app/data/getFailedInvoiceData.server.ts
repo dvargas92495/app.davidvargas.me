@@ -3,16 +3,22 @@ import { z } from "zod";
 import { BadRequestResponse } from "~/package/backend/responses.server";
 
 const getFailedInvoiceData = (invoice: Stripe.Invoice, stripe: Stripe) => {
-    invoice.charge
+  invoice.charge;
   return Promise.all([
     stripe.customers.retrieve(invoice.customer as string),
-    stripe.subscriptions.retrieve(invoice.subscription as string),
-    stripe.charges.retrieve(invoice.charge as string)
-  ]).then(([c, sub, charge]) => ({
-    customerEmail: c.deleted ? "dvargas92495@gmail.com" : c.email || "dvargas92495@gmail.com",
+    invoice.subscription
+      ? stripe.subscriptions
+          .retrieve(invoice.subscription as string)
+          .then((sub) => sub.metadata.project)
+      : invoice.lines.data[0]?.description,
+    stripe.charges.retrieve(invoice.charge as string),
+  ]).then(([c, project, charge]) => ({
+    customerEmail: c.deleted
+      ? "dvargas92495@gmail.com"
+      : c.email || "dvargas92495@gmail.com",
     customerName: c.deleted ? "Deleted Customer" : c.name || "Unknown Customer",
     url: "https://roamjs.com",
-    project: sub.metadata.project,
+    project,
     reason: charge.failure_message || "reasons unknown",
   }));
 };

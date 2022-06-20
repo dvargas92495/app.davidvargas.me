@@ -16,7 +16,6 @@ env:
   CLERK_FRONTEND_API: clerk.davidvargas.me
   CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
   CONVERTKIT_API_KEY: ${{ secrets.CONVERTKIT_API_KEY }}
-  CONVERTKIT_FORM_ID: 3367475
   DATABASE_URL: mysql://app:${{ secrets.MYSQL_PASSWORD }}@vargas-arts.c2sjnb5f4d57.us-east-1.rds.amazonaws.com:5432/app
   INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
   IS_PRODUCTION: 1
