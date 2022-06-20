@@ -6,7 +6,12 @@ import type { LoaderFunction } from "@remix-run/node";
 const PublicPage: React.FC<{
   homeIcon?: React.ReactNode;
   pages?: string[];
-}> = ({ pages = [], homeIcon = <img src={`/images/logo.png`} /> }) => {
+  isWaitlist?: boolean;
+}> = ({
+  pages = [],
+  homeIcon = <img src={`/images/logo.png`} />,
+  isWaitlist,
+}) => {
   const authed = useLoaderData();
   const matches = useMatches();
   const mainClassName =
@@ -43,7 +48,9 @@ const PublicPage: React.FC<{
             ))}
           </div>
           <div className="w-48 flex justify-end items-center">
-            {authed ? (
+            {isWaitlist ? (
+              <span />
+            ) : authed ? (
               <UserButton />
             ) : (
               <>

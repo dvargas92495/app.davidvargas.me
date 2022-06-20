@@ -7,7 +7,9 @@ import Button from "./Button";
 import SuccessfulActionToast from "./SuccessfulActionToast";
 
 export const Splash = ({
-  Logo = ({className}) => <img className={className} src={"/images/logo.png"}/>,
+  Logo = ({ className }) => (
+    <img className={className} src={"/images/logo.png"} />
+  ),
   title,
   subtitle,
   isWaitlist,
@@ -29,7 +31,7 @@ export const Splash = ({
           <i className="font-normal">{subtitle}</i>
         </Subtitle>
         {isWaitlist && (
-          <Form className="flex gap-8 items-center">
+          <Form className="flex gap-8 items-center" method="put">
             <TextInput
               placeholder="hello@example.com"
               name={"email"}
