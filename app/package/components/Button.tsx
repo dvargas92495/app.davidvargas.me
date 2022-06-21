@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { useTransition } from "@remix-run/react";
+import React from "react";
+import useLoading from "../utils/useLoading";
 
 const Button = ({
   children,
@@ -10,8 +10,7 @@ const Button = ({
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 >) => {
-  const transition = useTransition();
-  const loading = useMemo(() => transition.state !== "idle", [transition]);
+  const loading = useLoading();
   return (
     <button
       type="submit"

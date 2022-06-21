@@ -1,6 +1,5 @@
 import React from "react";
-import { useMemo } from "react";
-import { useTransition } from "@remix-run/react";
+import useLoading from "../utils/useLoading";
 
 export type InputProps = {
   label?: React.ReactNode;
@@ -21,8 +20,7 @@ const BaseInput = ({
   labelClassname,
   ...inputProps
 }: InputProps) => {
-  const transition = useTransition();
-  const loading = useMemo(() => transition.state !== "idle", [transition]);
+  const loading = useLoading();
   return (
     <div className={`mb-6${className ? ` ${className}` : ""}`}>
       <label

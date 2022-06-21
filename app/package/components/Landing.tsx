@@ -1,8 +1,7 @@
-import React, { SVGAttributes } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, useFetcher } from "@remix-run/react";
 import Subtitle from "./Subtitle";
 import TextInput from "./TextInput";
-import Title from "./Title";
 import Button from "./Button";
 import SuccessfulActionToast from "./SuccessfulActionToast";
 
@@ -24,6 +23,16 @@ export const Splash = ({
   secondaryHref?: string;
 }) => {
   const fetcher = useFetcher();
+  const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (
+      fetcher.data?.success &&
+      formRef.current &&
+      fetcher.type === "actionReload"
+    ) {
+      formRef.current.reset();
+    }
+  }, [formRef, fetcher]);
   return (
     <div className={"flex items-center gap-24"}>
       <div className={"w-1/2"}>
@@ -32,7 +41,11 @@ export const Splash = ({
           <i className="font-normal">{subtitle}</i>
         </Subtitle>
         {isWaitlist && (
-          <fetcher.Form className="flex gap-8 items-center" method="put">
+          <fetcher.Form
+            className="flex gap-8 items-center"
+            method="put"
+            ref={formRef}
+          >
             <TextInput
               placeholder="hello@example.com"
               name={"email"}

@@ -1,4 +1,4 @@
-import type { ActionFunction } from "@remix-run/node";
+import { ActionFunction, redirect } from "@remix-run/node";
 import axios from "axios";
 
 const action: ActionFunction = async ({ request }) => {
@@ -13,7 +13,8 @@ const action: ActionFunction = async ({ request }) => {
         email,
       }
     )
-    .then(() => ({ success: true }));
+    .then(() => ({ success: true }))
+    .catch((e) => ({ success: false, reason: e.message }));
 };
 
 export default action;
