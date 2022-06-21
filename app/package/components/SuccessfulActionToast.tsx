@@ -18,10 +18,10 @@ const SuccessfulActionToast = ({
   );
   const triggerErrorReason = useMemo(() => {
     if (fetcher) {
-      if (fetcher.data.success === false) return fetcher.data.reason;
+      if (fetcher.data?.success === false) return fetcher.data.message;
       else return "";
     } else {
-      if (data?.success === false) return data.reason;
+      if (data?.success === false) return data.message;
       else return "";
     }
   }, [data, fetcher, message]);
@@ -34,7 +34,7 @@ const SuccessfulActionToast = ({
       <Toast
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        message={(fetcher ? fetcher.data?.reason : data?.reason) || message}
+        message={(fetcher ? fetcher.data?.message : data?.message) || message}
       />
       <Toast
         isOpen={!!errReason}
