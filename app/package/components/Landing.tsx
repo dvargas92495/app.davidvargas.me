@@ -16,8 +16,8 @@ export const Splash = ({
   secondaryHref,
 }: {
   Logo?: React.FunctionComponent<{ className?: string }>;
-  title: string;
-  subtitle: string;
+  title: React.ReactNode;
+  subtitle: React.ReactNode;
   isWaitlist?: boolean;
   primaryHref?: string;
   secondaryHref?: string;
@@ -52,7 +52,7 @@ export const Splash = ({
               label={"Email"}
               className={"flex-grow"}
             />
-            <Button>Get On The Waitlist</Button>
+            <Button>Join The Waitlist</Button>
           </fetcher.Form>
         )}
         <div className="flex gap-8">
@@ -81,7 +81,10 @@ export const Splash = ({
       <div className="flex-grow text-center">
         <Logo className="h-full w-full" />
       </div>
-      <SuccessfulActionToast message="Successfully entered our waitlist!" />
+      <SuccessfulActionToast
+        message="Successfully entered our waitlist!"
+        fetcher={fetcher}
+      />
     </div>
   );
 };
@@ -101,7 +104,7 @@ export const Showcase = ({
       <div className="flex items-start justify-center gap-8">
         {showCards.map((b) => (
           <div
-            className="flex-grow bg-white shadow-xl rounded-xl p-8"
+            className="flex-1 bg-white shadow-xl rounded-xl p-8"
             key={b.title}
           >
             <div className="rounded-md text-center">
@@ -152,6 +155,42 @@ export const Stats = ({
   );
 };
 
+export const Subscribe = ({
+  title,
+  message = "Successfully entered our waitlist!",
+}: {
+  title: React.ReactNode;
+  message?: string;
+}) => {
+  const fetcher = useFetcher();
+  const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (
+      fetcher.data?.success &&
+      formRef.current &&
+      fetcher.type === "actionReload"
+    ) {
+      formRef.current.reset();
+    }
+  }, [formRef, fetcher]);
+  return (
+    <fetcher.Form
+      className="flex flex-col gap-8 items-center"
+      method="put"
+      ref={formRef}
+    >
+      {title}
+      <TextInput
+        placeholder="hello@example.com"
+        name={"email"}
+        label={"Email"}
+      />
+      <Button>Join The Waitlist</Button>
+      <SuccessfulActionToast message={message} fetcher={fetcher} />
+    </fetcher.Form>
+  );
+};
+
 const Landing = ({ children }: { children: React.ReactNode[] }) => {
   return (
     <div className={"w-full"}>
@@ -174,7 +213,7 @@ main.my-0 {
           }`}
           key={i}
         >
-          <div className="max-w-4xl w-full">{c}</div>
+          <div className="max-w-5xl w-full">{c}</div>
         </div>
       ))}
     </div>

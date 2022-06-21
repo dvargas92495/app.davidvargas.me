@@ -1,29 +1,30 @@
 import { useEffect, useMemo, useState } from "react";
-import { useActionData, useFetchers } from "@remix-run/react";
+import { Fetcher, useActionData } from "@remix-run/react";
 import Toast from "./Toast";
 
 const SuccessfulActionToast = ({
   message = "Successfully submitted action!",
+  fetcher,
 }: {
   message?: string;
+  fetcher?: Fetcher;
 }) => {
   const data = useActionData();
-  const fetchers = useFetchers();
   const [isOpen, setIsOpen] = useState(false);
   const [errReason, setErrReason] = useState("");
   const triggerSuccess = useMemo(
-    () => data?.success || fetchers.some((f) => f.data?.success),
-    [data, fetchers]
+    () => (fetcher ? fetcher.data?.success : data?.success),
+    [data, fetcher]
   );
   const triggerErrorReason = useMemo(() => {
-    if (data?.success === false) return data.reason;
-    else {
-      const reason = fetchers.find((f) => f.data?.success === false)?.data
-        ?.reason;
-      if (reason) return reason;
+    if (fetcher) {
+      if (fetcher.data.success === false) return fetcher.data.reason;
+      else return "";
+    } else {
+      if (data?.success === false) return data.reason;
       else return "";
     }
-  }, [data, fetchers]);
+  }, [data, fetcher, message]);
   useEffect(() => {
     if (triggerSuccess) setIsOpen(true);
     else setErrReason(triggerErrorReason);
@@ -33,7 +34,7 @@ const SuccessfulActionToast = ({
       <Toast
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        message={message}
+        message={(fetcher ? fetcher.data?.reason : data?.reason) || message}
       />
       <Toast
         isOpen={!!errReason}
