@@ -112,7 +112,7 @@ export const Showcase = ({
               <img
                 title={b.title}
                 src={b.image || "/images/logo.png"}
-                className={"mb-4"}
+                className={"mb-4 rounded-xl w-full"}
               />
               <p>{b.description || `Description for ${b.title}`}</p>
             </div>
@@ -184,8 +184,9 @@ export const Subscribe = ({
         placeholder="hello@example.com"
         name={"email"}
         label={"Email"}
+        className={"w-96"}
       />
-      <Button>Join The Waitlist</Button>
+      <Button className={"w-96"}>Join The Waitlist</Button>
       <SuccessfulActionToast message={message} fetcher={fetcher} />
     </fetcher.Form>
   );
