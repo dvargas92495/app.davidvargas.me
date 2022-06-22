@@ -28,7 +28,7 @@ const AutoCompleteInput = ({
   inputClassname?: string;
   optionsClassName?: string;
   optionClassName?: string;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: string | number) => void;
   defaultValue?: string | number;
 }) => {
   const transition = useTransition();
@@ -59,16 +59,12 @@ const AutoCompleteInput = ({
       <Combobox
         onChange={(e) => {
           setSelectedOption(e);
+          setTimeout(() => onChange?.(e), 1);
         }}
         value={selectedOption}
         disabled={typeof disabled === "undefined" ? loading : disabled}
       >
-        <input
-          name={name}
-          type={"hidden"}
-          value={selectedOption}
-          onChange={onChange}
-        />
+        <input name={name} type={"hidden"} value={selectedOption} />
         <div
           className={`bg-gray-50 border border-gray-300 text-gray-900 cursor-default text-sm rounded-lg block w-full disabled:opacity-25 disabled:cursor-not-allowed shadow-md relative text-left ${inputClassname}`}
         >

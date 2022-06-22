@@ -54,7 +54,7 @@ const Select = ({
       <Listbox
         onChange={(e) => {
           setSelectedOption(e);
-          onChange?.(e);
+          setTimeout(() => onChange?.(e), 1);
         }}
         value={selectedOption}
         disabled={typeof disabled === "undefined" ? loading : disabled}
