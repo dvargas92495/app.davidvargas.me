@@ -25,7 +25,7 @@ export const migrate = ({ connection }: MigrationProps) => {
             .execute(
               `INSERT INTO events(uuid, source, source_id, date, amount, description, code)
           SELECT uuid, source, source_id, date, amount, product, 4300
-          FROM revenue`
+          FROM revenue ON DUPLICATE KEY UPDATE amount = VALUES(amount)`
             )
             .then((r) =>
               console.log("migrated", (r as mysql.OkPacket).affectedRows, "revenue records")
@@ -34,7 +34,7 @@ export const migrate = ({ connection }: MigrationProps) => {
             .execute(
               `INSERT INTO events(uuid, source, source_id, date, amount, description, code)
           SELECT uuid, source, source_id, date, amount, description, code
-          FROM expenses`
+          FROM expenses ON DUPLICATE KEY UPDATE amount = VALUES(amount)`
             )
             .then((r) =>
               console.log("migrated", (r as mysql.OkPacket).affectedRows, "expense records")
@@ -43,7 +43,7 @@ export const migrate = ({ connection }: MigrationProps) => {
             .execute(
               `INSERT INTO events(uuid, source, source_id, date, amount, description, code)
           SELECT uuid, source, source_id, date, amount, description, code
-          FROM personal_transfers`
+          FROM personal_transfers ON DUPLICATE KEY UPDATE amount = VALUES(amount)`
             )
             .then((r) =>
               console.log("migrated", (r as mysql.OkPacket).affectedRows, "transfer records")
