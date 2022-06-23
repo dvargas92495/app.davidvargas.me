@@ -44,15 +44,7 @@ const insertRecordFromEthereum = async ({
         `Failed to get ETH price from CoinGecko: ${e.response?.data}`
       );
     });
-  console.log("ethProce", ethPrice);
   const [tokenAmount, tokenType] = amount.split(" ");
-  console.log(
-    "token facts",
-    tokenAmount,
-    tokenType,
-    !tokenType,
-    /^eth$/.test(tokenType)
-  );
   const tokenPrice =
     !tokenType || /^eth$/i.test(tokenType)
       ? 1

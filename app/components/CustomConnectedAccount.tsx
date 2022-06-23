@@ -32,7 +32,7 @@ const CustomConnectedAccount = ({
     username: string;
     [k: string]: string;
   };
-  const isAccountPage = hash === "#/account/connected-accounts";
+  const isAccountPage = hash === "#/account/social-accounts";
   if (!isAccountPage) return <></>;
   const container = document.querySelector(".cl-main .cl-list-card div");
   if (!container) return <></>;

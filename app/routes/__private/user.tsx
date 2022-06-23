@@ -5,16 +5,18 @@ export { default as ErrorBoundary } from "~/package/components/DefaultErrorBound
 export { default as CatchBoundary } from "~/package/components/DefaultCatchBoundary";
 
 const TABS = [
+  "Sources",
+  "Events",
+  "Rules",
+  "Emails",
+  "Mysql",
+  "Terraform",
+///DEPRECATED///
   "Expenses",
   "Revenue",
   "Transfers",
-  "Emails",
-  "Convertkit",
   "Ethereum",
-  "Mercury",
-  "Mysql",
   "Stripe",
-  "Terraform",
 ];
 
 const UserPage: React.FunctionComponent = () => {

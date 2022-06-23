@@ -1,10 +1,12 @@
 import { useLoaderData, useSearchParams } from "@remix-run/react";
+import mixClasses from "~/package/utils/mixClasses";
 
 const Table = ({
   onRowClick,
-  tableClassName = "border-2 border-sky-600 w-full mb-2",
-  thClassName = "border-b-2 border-b-orange-400 bg-sky-400 text-black font-bold cursor-pointer",
-  theadClassName = "",
+  className,
+  tableClassName,
+  thClassName,
+  theadClassName,
   getTrClassName = (index: number) =>
     `cursor-pointer ${
       index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
@@ -12,6 +14,7 @@ const Table = ({
   getTdClassName = () => `p-3 border-2 border-gray-400`,
 }: {
   onRowClick?: (row: any, index: number) => void;
+  className?: string;
   tableClassName?: string;
   thClassName?: string;
   theadClassName?: string;
@@ -37,12 +40,23 @@ const Table = ({
   };
 
   return (
-    <div className="w-full">
-      <table className={tableClassName}>
+    <div className={mixClasses("w-full", className)}>
+      <table
+        className={mixClasses(
+          "border-2 border-sky-600 w-full mb-2",
+          tableClassName
+        )}
+      >
         <thead className={theadClassName}>
           <tr>
             {columns.map((column) => (
-              <th key={column.accessor} className={thClassName}>
+              <th
+                key={column.accessor}
+                className={mixClasses(
+                  "border-b-2 border-b-orange-400 bg-sky-400 text-black font-bold cursor-pointer",
+                  thClassName
+                )}
+              >
                 {column.Header}
               </th>
             ))}
