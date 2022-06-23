@@ -144,20 +144,36 @@ const insertRevenueFromStripe = async ({
               product: mappedProducts[line.product] || line.product,
               connect: line.connect,
             }));
-            return execute(
-              `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) VALUES ${values
-                .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
-                .join(",")} ON DUPLICATE KEY UPDATE amount=amount`,
-              values.flatMap((v) => [
-                v.uuid,
-                v.source,
-                v.source_id,
-                v.date,
-                v.amount,
-                v.product,
-                v.connect,
-              ])
-            )
+            return Promise.all([
+              execute(
+                `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) VALUES ${values
+                  .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
+                  .join(",")} ON DUPLICATE KEY UPDATE amount=amount`,
+                values.flatMap((v) => [
+                  v.uuid,
+                  v.source,
+                  v.source_id,
+                  v.date,
+                  v.amount,
+                  v.product,
+                  v.connect,
+                ])
+              ),
+              execute(
+                `INSERT INTO events (uuid, source, source_id, date, amount, description, code) VALUES ${values
+                  .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
+                  .join(",")} ON DUPLICATE KEY UPDATE amount=amount`,
+                values.flatMap((v) => [
+                  v.uuid,
+                  v.source,
+                  v.source_id,
+                  v.date,
+                  v.amount,
+                  v.product,
+                  4300,
+                ])
+              ),
+            ])
               .then(() => ({
                 values,
               }))
