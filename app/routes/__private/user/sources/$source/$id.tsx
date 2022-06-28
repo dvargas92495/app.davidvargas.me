@@ -9,22 +9,7 @@ import TextInput from "~/package/components/TextInput";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import getSourceTransaction from "~/data/getSourceTransaction.server";
 import AutoCompleteInput from "~/package/components/AutoCompleteInput";
-
-const CODES = [
-  { id: 1520, label: "Computer & Office Equipment" },
-  { id: 3000, label: "Owner's Capital" },
-  { id: 3110, label: "Owner's Investment" },
-  { id: 3120, label: "Owner's Draw" },
-  { id: 4300, label: "Service" },
-  { id: 4400, label: "Markup on Reimbursable Expenses" },
-  { id: 4715, label: "Other Income" },
-  { id: 5300, label: "Subcontractors" },
-  { id: 6110, label: "Automobile Expense" },
-  { id: 6140, label: "Business License & Fees" },
-  { id: 6155, label: "Dues & Subscriptions" },
-  { id: 6320, label: "Insurance" },
-  { id: 6680, label: "Wages & Salaries" },
-];
+import CODES from "~/enums/taxCodes";
 
 const UserSourceEvent = () => {
   const recordSelected =
@@ -61,7 +46,7 @@ export const action: ActionFunction = (args) => {
   return remixAppAction(args, {
     PUT: ({ data, params }) =>
       insertEventFromSource({ data, params }).then(() =>
-        redirect("/user/sources")
+        redirect(`/user/sources/`)
       ),
   });
 };

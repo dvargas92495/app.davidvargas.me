@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 // import SuccessIcon from "~/assets/Success.svg";
 // import WarningIcon from "~/assets/Warning.svg";
 // import ErrorIcon from "~/assets/Error.svg";

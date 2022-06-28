@@ -21,7 +21,7 @@ const AutoCompleteInput = ({
 }: {
   name?: string;
   disabled?: boolean;
-  options?: Option[];
+  options?: readonly Option[];
   label?: string;
   className?: string;
   labelClassName?: string;
@@ -70,7 +70,7 @@ const AutoCompleteInput = ({
         >
           <Combobox.Input
             className={`block border-none bg-transparent py-2 pl-4 pr-10 w-full relative text-left focus:ring-0 ${inputClassname}`}
-            displayValue={(id) => labelById[id as string]}
+            displayValue={(id) => labelById[id as string] || ""}
             onChange={(e) => {
               setQuery(e.target.value);
               e.stopPropagation();

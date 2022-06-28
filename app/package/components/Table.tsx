@@ -10,7 +10,7 @@ const Table = ({
   getTrClassName = (index: number) =>
     `cursor-pointer ${
       index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
-    } hover:bg-gray-300`,
+    } hover:bg-gray-300 whitespace-pre-wrap`,
   getTdClassName = () => `p-3 border-2 border-gray-400`,
 }: {
   onRowClick?: (row: any, index: number) => void;
@@ -73,7 +73,6 @@ const Table = ({
                 {columns.map((cell, jndex) => {
                   return (
                     <td
-                      {...cell}
                       key={cell.accessor}
                       className={getTdClassName(jndex)}
                     >

@@ -3,8 +3,31 @@ import dateFnsFormat from "date-fns/format";
 import { z } from "zod";
 import { NotFoundResponse } from "~/package/backend/responses.server";
 import axios from "axios";
+import { taxCodeByLabel } from "~/enums/taxCodes";
 
-const rules = [];
+const rules: {
+  conditions: {
+    key: string;
+    value: string;
+    operation: "equals" | "contains";
+  }[];
+  transform: {
+    amount?: { operation: "mutliply"; operand: string };
+    code?: number;
+    description?: string;
+  };
+}[] = [
+  {
+    conditions: [
+      { key: "counterpartyName", value: "UNIT", operation: "equals" },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "-100" },
+      code: taxCodeByLabel["Owner's Draw"],
+      description: "Setting Aside for Taxes and IRA",
+    },
+  },
+];
 
 const dataSchema = z.object({
   source: z.string(),
@@ -82,30 +105,49 @@ const getSourceTransaction = async ({
         });
       const tx = await axios
         .get<{
-          data: {
-            id: string;
-            amount: number;
-            createdAt: string;
-            status: "sent";
-            note: string | null; // TODO add to list description
-            bankDescription: string;
-            externalMemo: string;
-            counterpartyName: string;
-            counterpartyNickname: string | null;
-          };
+          id: string;
+          amount: number;
+          createdAt: string;
+          status: "sent";
+          note: string | null; // TODO add to list description
+          bankDescription: string;
+          externalMemo: string;
+          counterpartyName: string;
+          counterpartyNickname: string | null;
         }>(
           `https://backend.mercury.com/api/v1/account/${accountId}/transaction/${id}`,
           opts
         )
+        .then((tx) => tx.data)
         .catch(() => {
           throw new Error("Failed to find transaction");
         });
+      const rule = rules.find((r) =>
+        r.conditions.some(({ key, operation, value }) => {
+          if (!(key in tx)) return false;
+          const actual = tx[key as keyof typeof tx];
+          if (actual === null) return false;
+          if (operation === "equals") {
+            return actual === value;
+          } else if (operation === "contains") {
+            return `${actual}`.includes(operation);
+          } else {
+            return false;
+          }
+        })
+      );
+      const code = rule?.transform?.code || 0;
+      const description = rule?.transform?.description || "";
+      const amount =
+        rule?.transform?.amount?.operation === "mutliply"
+          ? Math.round(tx.amount * Number(rule.transform.amount.operand))
+          : 0;
       return {
         id,
-        date: dateFnsFormat(new Date(0), "yyyy-MM-dd hh:mm a"),
-        description: "",
-        amount: 0,
-        code: 0,
+        date: dateFnsFormat(new Date(tx.createdAt), "yyyy-MM-dd hh:mm a"),
+        description,
+        amount,
+        code,
         log: [],
         url: `https://mercury.com/transactions/${id}`,
       };

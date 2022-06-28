@@ -1,10 +1,11 @@
 import axios from "axios";
 import getMysqlConnection from "~/package/backend/mysql.server";
+import dateFnsFormat from "date-fns/format";
 
 const listSourceTransactions = ({
   userId,
-  // searchParams,
-}: {
+}: // searchParams,
+{
   userId: string;
   // searchParams: Record<string, string>;
 }) =>
@@ -58,6 +59,7 @@ const listSourceTransactions = ({
               counterpartyName: string;
               amount: number;
               id: string;
+              note: string;
             }[];
           }>(
             `https://backend.mercury.com/api/v1/account/${id}/transactions`,
@@ -77,10 +79,10 @@ const listSourceTransactions = ({
               { Header: "Amount", accessor: "amount" },
             ],
             data: txs.map((t) => ({
-              date: t.createdAt,
+              date: dateFnsFormat(new Date(t.createdAt), "yyyy-MM-dd hh:mm a"),
               from: t.amount < 0 ? "ME" : t.counterpartyName,
               to: t.amount > 0 ? "ME" : t.counterpartyName,
-              description: `${t.bankDescription}: ${t.externalMemo}`,
+              description: `Bank Description: ${t.bankDescription}\nExternal Memo: ${t.externalMemo}\nNote: ${t.note}`,
               amount: Math.abs(t.amount),
               source: "mercury",
               id: t.id,
