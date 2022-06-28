@@ -59,9 +59,9 @@ const getSourceTransaction = async ({
               };
               return account.address;
             }),
-        ]).then(([receipt, block, address]) => {
-          const from = tx.from.toLowerCase();
-          const to = (tx.to || "").toLowerCase();
+        ]).then(([_, block, __]) => {
+          // const from = tx.from.toLowerCase();
+          // const to = (tx.to || "").toLowerCase();
           // receipt.events - this will have log events that would be juicy
           return {
             id,
