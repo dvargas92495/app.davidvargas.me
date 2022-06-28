@@ -21,7 +21,7 @@ const Select = ({
 }: {
   name?: string;
   disabled?: boolean;
-  options?: readonly (Option[] | string[]);
+  options?: readonly Option[] | readonly string[];
   label?: string;
   className?: string;
   labelClassName?: string;
