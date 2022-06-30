@@ -1,5 +1,5 @@
 import { useLoaderData, useSearchParams } from "@remix-run/react";
-import mixClasses from "~/package/utils/mixClasses";
+import mixClasses from "../utils/mixClasses";
 
 const Table = ({
   onRowClick,
