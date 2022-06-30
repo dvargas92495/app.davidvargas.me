@@ -1,7 +1,7 @@
 {
   "name": "@dvargas92495/app",
   "description": "Package doubling as an npm package and a webapp to view said components on app.davidvargas.me",
-  "version": "0.8.13",
+  "version": "0.8.14",
   "license": "MIT",
   "repository": "dvargas92495/app",
   "sideEffects": false,
