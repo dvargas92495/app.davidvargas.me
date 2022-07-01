@@ -67,7 +67,7 @@ const RevenuePage = () => {
     })
   );
   const barChartOptions = useMemo<
-    Omit<ChartOptions<typeof areaChartData[number]["data"][number]>, "data">
+    Omit<ChartOptions<typeof barChartData[number]["data"][number]>, "data">
   >(
     () => ({
       primaryAxis: { getValue: (data) => data.month },

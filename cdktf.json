@@ -1,0 +1,23 @@
+{
+  "language": "typescript",
+  "app": "npx ts-node data/main.ts",
+  "projectId": "e96d69ea-66d2-4d01-a57e-91bc0db70874",
+  "sendCrashReports": "false",
+  "terraformProviders": ["aws", "github"],
+  "terraformModules": [
+    {
+      "name": "aws-serverless-backend",
+      "source": "dvargas92495/serverless-backend/aws",
+      "version": "2.5.2"
+    },
+    {
+      "name": "aws-clerk",
+      "source": "dvargas92495/clerk/aws",
+      "version": "1.0.4"
+    }
+  ],
+  "context": {
+    "excludeStackIdFromLogicalIds": "true",
+    "allowSepCharsInLogicalIds": "true"
+  }
+}
