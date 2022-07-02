@@ -3,9 +3,11 @@ build
 dist
 out
 .env
-.gen
-cdktf.out
 _fuego
 .cache
 /app/tailwind.css
 meta.json
+
+.gen
+cdktf.out
+.terraform

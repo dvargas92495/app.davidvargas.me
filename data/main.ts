@@ -1,5 +1,11 @@
 import { Construct } from "constructs";
-import { App, TerraformStack, RemoteBackend, TerraformHclModule } from "cdktf";
+import {
+  App,
+  TerraformStack,
+  RemoteBackend,
+  TerraformHclModule,
+  TerraformVariable,
+} from "cdktf";
 import { AwsProvider } from "@cdktf/provider-aws";
 import { GithubProvider, ActionsSecret } from "@cdktf/provider-github";
 import { AwsServerlessBackend } from "../.gen/modules/aws-serverless-backend";
@@ -11,15 +17,35 @@ class MyStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
     super(scope, name);
 
+    const aws_access_token = new TerraformVariable(this, "aws_access_token", {
+      type: "string",
+    });
+
+    const aws_secret_token = new TerraformVariable(this, "aws_secret_token", {
+      type: "string",
+    });
+
+    const github_token = new TerraformVariable(this, "github_token", {
+      type: "string",
+    });
+
+    const secret = new TerraformVariable(this, "secret", {
+      type: "string",
+    });
+
+    const clerk_api_key = new TerraformVariable(this, "clerk_api_key", {
+      type: "string",
+    });
+
     const aws = new AwsProvider(this, "AWS", {
       region: "us-east-1",
-      accessKey: process.env.AWS_ACCESS_TOKEN,
-      secretKey: process.env.AWS_SECRET_TOKEN,
+      accessKey: aws_access_token.value,
+      secretKey: aws_secret_token.value,
     });
 
     new GithubProvider(this, "GITHUB", {
       owner: "dvargas92495",
-      token: process.env.GITHUB_TOKEN,
+      token: github_token.value,
     });
 
     // TODO: figure out how to move this to json for type bindings
@@ -37,7 +63,7 @@ class MyStack extends TerraformStack {
         origin_memory_size: 5120,
         origin_timeout: 20,
         domain: "app.davidvargas.me",
-        secret: process.env.CLOUDFRONT_SECRET,
+        secret: secret.value,
         tags: {
           Application: "app",
         },
@@ -85,10 +111,10 @@ class MyStack extends TerraformStack {
       secretName: "MYSQL_PASSWORD",
       plaintextValue: process.env.DATABASE_URL, // parse pass
     });
-    new ActionsSecret(this, "clerk_api_key", {
+    new ActionsSecret(this, "clerk_api_key_secret", {
       repository: "app",
       secretName: "CLERK_API_KEY",
-      plaintextValue: process.env.CLERK_API_KEY,
+      plaintextValue: clerk_api_key.value,
     });
     new ActionsSecret(this, "notion_api_key", {
       repository: "app",

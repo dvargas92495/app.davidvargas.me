@@ -136,19 +136,19 @@ resource "github_actions_secret" "lambda_aws_access_secret" {
   plaintext_value  = module.aws-serverless-backend.secret_key
 }
 
-resource "github_actions_secret" "mysql_password" {
+resource "github_actions_secret" "mysql_password_secret" {
   repository       = "app"
   secret_name      = "MYSQL_PASSWORD"
   plaintext_value  = var.mysql_password
 }
 
-resource "github_actions_secret" "clerk_api_key" {
+resource "github_actions_secret" "clerk_api_key_secret" {
   repository       = "app"
   secret_name      = "CLERK_API_KEY"
   plaintext_value  = var.clerk_api_key
 }
 
-resource "github_actions_secret" "notion_api_key" {
+resource "github_actions_secret" "notion_api_key_secret" {
   repository       = "app"
   secret_name      = "NOTION_API_KEY"
   plaintext_value  = var.notion_api_key
@@ -160,37 +160,37 @@ resource "github_actions_secret" "cloudfront_distribution_id" {
   plaintext_value  = module.aws_static_site.cloudfront_distribution_id
 }
 
-resource "github_actions_secret" "stripe_public" {
+resource "github_actions_secret" "stripe_public_secret" {
   repository       = "app"
   secret_name      = "STRIPE_PUBLIC_KEY"
   plaintext_value  = var.stripe_public
 }
 
-resource "github_actions_secret" "stripe_secret" {
+resource "github_actions_secret" "stripe_secret_secret" {
   repository       = "app"
   secret_name      = "STRIPE_SECRET_KEY"
   plaintext_value  = var.stripe_secret
 }
 
-resource "github_actions_secret" "stripe_webhook_secret" {
+resource "github_actions_secret" "stripe_webhook_secret_secret" {
   repository       = "app"
   secret_name      = "STRIPE_WEBHOOK_SECRET"
   plaintext_value  = var.stripe_webhook_secret
 }
 
-resource "github_actions_secret" "npm_token" {
+resource "github_actions_secret" "npm_token_secret" {
   repository      = "app"
   secret_name     = "NPM_TOKEN"
   plaintext_value = var.npm_token
 }
 
-resource "github_actions_secret" "infura_project_id" {
+resource "github_actions_secret" "infura_project_id_secret" {
   repository      = "app"
   secret_name     = "INFURA_PROJECT_ID"
   plaintext_value = var.infura_project_id
 }
 
-resource "github_actions_secret" "convertkit_api_key" {
+resource "github_actions_secret" "convertkit_api_key_secret" {
   repository      = "app"
   secret_name     = "CONVERTKIT_API_KEY"
   plaintext_value = var.convertkit_api_key
