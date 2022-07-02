@@ -172,7 +172,9 @@ const insertRevenueFromStripe = async ({
                   v.product,
                   4300,
                 ])
-              ),
+              ).catch(() => {
+                // swallow error bc of old migrations
+              }),
             ])
               .then(() => ({
                 values,

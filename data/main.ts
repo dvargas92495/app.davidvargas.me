@@ -4,6 +4,7 @@ import {
   TerraformStack,
   RemoteBackend,
   TerraformHclModule,
+  TerraformOutput,
   TerraformVariable,
 } from "cdktf";
 import { AwsProvider } from "@cdktf/provider-aws";
@@ -11,6 +12,7 @@ import { GithubProvider, ActionsSecret } from "@cdktf/provider-github";
 import { AwsServerlessBackend } from "../.gen/modules/aws-serverless-backend";
 import { AwsClerk } from "../.gen/modules/aws-clerk";
 import dotenv from "dotenv";
+import fs from "fs";
 dotenv.config();
 
 class MyStack extends TerraformStack {
@@ -36,6 +38,46 @@ class MyStack extends TerraformStack {
     const clerk_api_key = new TerraformVariable(this, "clerk_api_key", {
       type: "string",
     });
+
+    const mysql_password = new TerraformVariable(this, "mysql_password", {
+      type: "string",
+    });
+
+    const notion_api_key = new TerraformVariable(this, "notion_api_key", {
+      type: "string",
+    });
+
+    const stripe_public = new TerraformVariable(this, "stripe_public", {
+      type: "string",
+    });
+
+    const stripe_secret = new TerraformVariable(this, "stripe_secret", {
+      type: "string",
+    });
+
+    const stripe_webhook_secret = new TerraformVariable(
+      this,
+      "stripe_webhook_secret",
+      {
+        type: "string",
+      }
+    );
+
+    const npm_token = new TerraformVariable(this, "npm_token", {
+      type: "string",
+    });
+
+    const infura_project_id = new TerraformVariable(this, "infura_project_id", {
+      type: "string",
+    });
+
+    const convertkit_api_key = new TerraformVariable(
+      this,
+      "convertkit_api_key",
+      {
+        type: "string",
+      }
+    );
 
     const aws = new AwsProvider(this, "AWS", {
       region: "us-east-1",
@@ -70,10 +112,18 @@ class MyStack extends TerraformStack {
       },
     });
 
+    const paths = fs
+      .readdirSync("api", { withFileTypes: true })
+      .flatMap((f) =>
+        f.isDirectory()
+          ? fs.readdirSync(`api/${f.name}`).map((ff) => `${f.name}/${ff}`)
+          : [f.name]
+      )
+      .map((f) => f.replace(/\.ts$/, ""));
     const backend = new AwsServerlessBackend(this, "aws-serverless-backend", {
       apiName: "app",
       domain: "app.davidvargas.me",
-      directory: "api",
+      paths,
     });
 
     new AwsClerk(this, "aws-clerk", {
@@ -106,20 +156,20 @@ class MyStack extends TerraformStack {
       plaintextValue: backend.secretKeyOutput,
     });
 
-    new ActionsSecret(this, "mysql_password", {
+    new ActionsSecret(this, "mysql_password_secret", {
       repository: "app",
       secretName: "MYSQL_PASSWORD",
-      plaintextValue: process.env.DATABASE_URL, // parse pass
+      plaintextValue: mysql_password.value,
     });
     new ActionsSecret(this, "clerk_api_key_secret", {
       repository: "app",
       secretName: "CLERK_API_KEY",
       plaintextValue: clerk_api_key.value,
     });
-    new ActionsSecret(this, "notion_api_key", {
+    new ActionsSecret(this, "notion_api_key_secret", {
       repository: "app",
       secretName: "NOTION_API_KEY",
-      plaintextValue: process.env.NOTION_API_KEY,
+      plaintextValue: notion_api_key.value,
     });
     new ActionsSecret(this, "cloudfront_distribution_id", {
       repository: "app",
@@ -127,37 +177,37 @@ class MyStack extends TerraformStack {
       plaintextValue: staticSite.get("cloudfront_distribution_id"),
     });
 
-    new ActionsSecret(this, "stripe_public", {
+    new ActionsSecret(this, "stripe_public_secret", {
       repository: "app",
       secretName: "STRIPE_PUBLIC_KEY",
-      plaintextValue: process.env.STRIPE_PUBLIC_KEY,
+      plaintextValue: stripe_public.value,
     });
-    new ActionsSecret(this, "stripe_secret", {
+    new ActionsSecret(this, "stripe_secret_secret", {
       repository: "app",
       secretName: "STRIPE_SECRET_KEY",
-      plaintextValue: process.env.STRIPE_SECRET_KEY,
+      plaintextValue: stripe_secret.value,
     });
-    new ActionsSecret(this, "stripe_webhook_secret", {
+    new ActionsSecret(this, "stripe_webhook_secret_secret", {
       repository: "app",
       secretName: "STRIPE_WEBHOOK_SECRET",
-      plaintextValue: process.env.STRIPE_WEBHOOK_SECRET,
+      plaintextValue: stripe_webhook_secret.value,
     });
-    new ActionsSecret(this, "npm_token", {
+    new ActionsSecret(this, "npm_token_secret", {
       repository: "app",
       secretName: "NPM_TOKEN",
-      plaintextValue: process.env.NPM_TOKEN,
+      plaintextValue: npm_token.value,
     });
 
-    new ActionsSecret(this, "infura_project_id", {
+    new ActionsSecret(this, "infura_project_id_secret", {
       repository: "app",
       secretName: "INFURA_PROJECT_ID",
-      plaintextValue: process.env.INFURA_PROJECT_ID,
+      plaintextValue: infura_project_id.value,
     });
 
-    new ActionsSecret(this, "convertkit_api_key", {
+    new ActionsSecret(this, "convertkit_api_key_secret", {
       repository: "app",
       secretName: "CONVERTKIT_API_KEY",
-      plaintextValue: process.env.CONVERTKIT_API_KEY,
+      plaintextValue: convertkit_api_key.value,
     });
   }
 }

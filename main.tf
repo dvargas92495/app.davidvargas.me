@@ -79,7 +79,7 @@ provider "github" {
 
 module "aws_static_site" {
   source  = "dvargas92495/static-site/aws"
-  version = "3.6.3"
+  version = "3.6.5"
 
   origin_memory_size = 5120
   origin_timeout = 20
