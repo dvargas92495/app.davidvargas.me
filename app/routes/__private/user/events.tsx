@@ -30,7 +30,7 @@ const UserEventPage = () => {
   }, [searchParams]);
   return (
     <div className="flex gap-8">
-      <div className="max-w-3xl w-full">
+      <div className="max-w-5xl w-full">
         <div className="mb-2 flex gap-4 items-center">
           <Form className="flex gap-4 items-center">
             <Select

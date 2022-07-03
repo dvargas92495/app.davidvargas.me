@@ -21,7 +21,11 @@ const Table = ({
   getTrClassName?: (index: number) => string;
   getTdClassName?: (index: number) => string;
 }) => {
-  const { data = [], columns = [], count } = useLoaderData<{
+  const {
+    data = [],
+    columns = [],
+    count,
+  } = useLoaderData<{
     columns: { Header: string; accessor: string }[];
     data: Record<string, string | number>[];
     count: number;
@@ -40,7 +44,9 @@ const Table = ({
     },
   };
 
-  return (
+  return !data.length ? (
+    <div className={mixClasses("w-full text-align-center", className)}>No Results Found</div>
+  ) : (
     <div className={mixClasses("w-full", className)}>
       <table
         className={mixClasses(
@@ -73,10 +79,7 @@ const Table = ({
               >
                 {columns.map((cell, jndex) => {
                   return (
-                    <td
-                      key={cell.accessor}
-                      className={getTdClassName(jndex)}
-                    >
+                    <td key={cell.accessor} className={getTdClassName(jndex)}>
                       {row[cell.accessor]}
                     </td>
                   );
