@@ -99,7 +99,7 @@ const listSourceTransactions = ({
               from: t.amount < 0 ? "ME" : t.counterpartyName,
               to: t.amount > 0 ? "ME" : t.counterpartyName,
               description: `Bank Description: ${t.bankDescription}\nExternal Memo: ${t.externalMemo}\nNote: ${t.note}`,
-              amount: Math.abs(t.amount),
+              amount: t.amount,
               source: "mercury",
               id: t.id,
             })),

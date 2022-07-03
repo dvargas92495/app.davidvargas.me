@@ -37,7 +37,14 @@ const UserSourceEvent = () => {
         name={"amount"}
         defaultValue={recordSelected.amount}
       />
-      <Button>Save</Button>
+      <div className="flex gap-8 items-center">
+        <Button>Save</Button>
+        {!recordSelected.found && (
+          <span className="inline-block rounded-xl bg-orange-300 px-4 py-2 font-bold">
+            WARNING: No Rule Found
+          </span>
+        )}
+      </div>
     </Form>
   );
 };

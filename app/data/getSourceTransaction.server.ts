@@ -9,7 +9,7 @@ const rules: {
   conditions: {
     key: string;
     value: string;
-    operation: "equals" | "contains";
+    operation: "equals" | "contains" | "startsWith";
   }[];
   transform: {
     amount?: { operation: "mutliply"; operand: string };
@@ -22,7 +22,7 @@ const rules: {
       { key: "counterpartyName", value: "UNIT", operation: "equals" },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "-100" },
+      amount: { operation: "mutliply", operand: "100" },
       code: taxCodeByLabel["Owner's Draw"],
       description: "Setting Aside for Taxes and IRA",
     },
@@ -36,9 +36,23 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "-100" },
+      amount: { operation: "mutliply", operand: "100" },
       code: taxCodeByLabel["Insurance"],
       description: "Health Insurance",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "GUARDIAN DENTAL",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Insurance"],
+      description: "Dental Insurance",
     },
   },
   {
@@ -50,7 +64,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "-100" },
+      amount: { operation: "mutliply", operand: "100" },
       code: taxCodeByLabel["Wages & Salaries"],
       description: "Mentorship on an Income Sharing Agreement",
     },
@@ -67,6 +81,90 @@ const rules: {
       amount: { operation: "mutliply", operand: "100" },
       code: taxCodeByLabel["Owner's Capital"],
       description: "Payout from Stripe",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "Citi - Checking",
+        operation: "startsWith",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Owner's Capital"],
+      description: "Transfer with personal checking account",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "FISSION Internet",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Service"],
+      description: "Fission Freelancing",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "CONVERTKIT EMAIL",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Dues & Subscriptions"],
+      description: "Email Marketing Software",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "GitHub Sponsors",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Service"],
+      description: "RoamJS Sponsors",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "Amazon Web Services",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Dues & Subscriptions"],
+      description: "App Hosting",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "GITHUB",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Dues & Subscriptions"],
+      description: "Sponsoring Software",
     },
   },
 ];
@@ -123,6 +221,7 @@ const getSourceTransaction = async ({
             code: 0,
             log: [],
             url: "",
+            found: false,
           };
         })
       );
@@ -173,6 +272,8 @@ const getSourceTransaction = async ({
             return actual === value;
           } else if (operation === "contains") {
             return `${actual}`.includes(operation);
+          } else if (operation === "startsWith") {
+            return `${actual}`.startsWith(operation);
           } else {
             return false;
           }
@@ -192,6 +293,7 @@ const getSourceTransaction = async ({
         code,
         log: [],
         url: `https://mercury.com/transactions/${id}`,
+        found: !!rule,
       };
     }
     case "stripe": {
@@ -203,6 +305,7 @@ const getSourceTransaction = async ({
         code: 0,
         log: [],
         url: "",
+        found: false,
       };
     }
     case "splitwise": {
@@ -214,6 +317,7 @@ const getSourceTransaction = async ({
         code: 0,
         log: [],
         url: "",
+        found: false,
       };
     }
     case "chase": {
@@ -225,6 +329,7 @@ const getSourceTransaction = async ({
         code: 0,
         log: [],
         url: "",
+        found: false,
       };
     }
     case "venmo": {
@@ -236,6 +341,7 @@ const getSourceTransaction = async ({
         code: 0,
         log: [],
         url: "",
+        found: false,
       };
     }
     case "citibank": {
@@ -247,6 +353,7 @@ const getSourceTransaction = async ({
         code: 0,
         log: [],
         url: "",
+        found: false,
       };
     }
     default:
