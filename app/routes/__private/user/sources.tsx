@@ -85,39 +85,40 @@ export const loader: LoaderFunction = (args) => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ searchParams, userId }) => ({
-    PUT: listSourceTransactions({ userId, searchParams })
-      .then(({ data }) =>
-        Promise.all(
-          data.map((d) =>
-            getSourceTransaction({
-              userId,
-              params: { id: d.id, source: d.source },
-            }).then((tx) =>
-              tx.found
-                ? insertEventFromSource({
-                    params: { id: d.id, source: d.source },
-                    data: {
-                      amount: [tx.amount.toString()],
-                      description: [tx.description],
-                      date: [tx.date],
-                      code: [tx.code.toString()],
-                    },
-                  }).then(() => 1)
-                : 0
+  return remixAppAction(args, {
+    PUT: ({ searchParams, userId }) =>
+      listSourceTransactions({ userId, searchParams })
+        .then(({ data }) =>
+          Promise.all(
+            data.map((d) =>
+              getSourceTransaction({
+                userId,
+                params: { id: d.id, source: d.source },
+              }).then((tx) =>
+                tx.found
+                  ? insertEventFromSource({
+                      params: { id: d.id, source: d.source },
+                      data: {
+                        amount: [tx.amount.toString()],
+                        description: [tx.description],
+                        date: [tx.date],
+                        code: [tx.code.toString()],
+                      },
+                    }).then(() => 1)
+                  : 0
+              )
             )
           )
         )
-      )
-      .then((results) => ({
-        total: results.length,
-        saved: results.reduce((p, c) => p + c, 0),
-      }))
-      .then((result) => ({
-        success: true,
-        message: `Successfully saved ${result.saved} defined events from ${result.total} sources.`,
-      })),
-  }));
+        .then((results) => ({
+          total: results.length,
+          saved: results.reduce((p, c) => p + c, 0),
+        }))
+        .then((result) => ({
+          success: true,
+          message: `Successfully saved ${result.saved} defined events from ${result.total} sources.`,
+        })),
+  });
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;

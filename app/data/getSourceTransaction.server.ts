@@ -29,6 +29,16 @@ const rules: {
   },
   {
     conditions: [
+      { key: "counterpartyName", value: "CATCH FINANCIAL", operation: "equals" },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Owner's Draw"],
+      description: "Setting Aside for Taxes and IRA",
+    },
+  },
+  {
+    conditions: [
       {
         key: "counterpartyName",
         value: "OscarInsuranceCo",
@@ -249,6 +259,48 @@ const rules: {
       amount: { operation: "mutliply", operand: "100" },
       code: taxCodeByLabel["Service"],
       description: "RoamJS SmartBlocks",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "CHASE CREDIT CRD",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Owner's Capital"],
+      description: "Personal Paycheck",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "Xero Inc",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Dues & Subscriptions"],
+      description: "Accounting Software",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "ALEXANDRU GLV",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Subcontractors"],
+      description: "Design Contractor",
     },
   },
 ];
