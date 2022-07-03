@@ -228,13 +228,27 @@ const rules: {
       {
         key: "counterpartyName",
         value: "GEICO",
-        operation: "startsWith",
+        operation: "equals",
       },
     ],
     transform: {
       amount: { operation: "mutliply", operand: "100" },
       code: taxCodeByLabel["Automobile Expense"],
       description: "Insurance for Car for Commuting",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "Vargas Arts, LLC",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Service"],
+      description: "RoamJS SmartBlocks",
     },
   },
 ];

@@ -55,7 +55,9 @@ export const action: ActionFunction = (args) => {
       insertEventFromSource({ data, params }).then(() =>
         redirect(
           `/user/sources${
-            searchParams.toString() && `?${searchParams.toString()}`
+            Object.keys(searchParams).length > 0
+              ? `?${new URLSearchParams(searchParams).toString()}`
+              : ""
           }`
         )
       ),
