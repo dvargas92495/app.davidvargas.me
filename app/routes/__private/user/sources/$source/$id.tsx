@@ -1,4 +1,9 @@
-import { Form, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useParams,
+  useSearchParams,
+} from "@remix-run/react";
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import insertEventFromSource from "~/data/insertEventFromSource.server";
 import remixAppAction from "~/package/backend/remixAppAction.server";
@@ -14,8 +19,11 @@ import CODES from "~/enums/taxCodes";
 const UserSourceEvent = () => {
   const recordSelected =
     useLoaderData<Awaited<ReturnType<typeof getSourceTransaction>>>();
+  const [searchParams] = useSearchParams();
+  const { id } = useParams();
+  const search = `${searchParams.toString() && `?${searchParams.toString()}`}`;
   return (
-    <Form method="put" key={recordSelected.id}>
+    <Form method="put" key={recordSelected.id} action={`/user/sources/${id}${search}`}>
       <TextInput
         label={"Date"}
         name={"date"}

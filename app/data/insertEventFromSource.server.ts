@@ -29,20 +29,22 @@ const insertEventFromSource = async ({
   } = data;
   return getMysqlConnection()
     .then((connection) => {
-      return connection.execute(
-        `INSERT INTO events (uuid, source, source_id, date, amount, description, code) 
+      return connection
+        .execute(
+          `INSERT INTO events (uuid, source, source_id, date, amount, description, code) 
      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE amount=VALUES(amount)+amount`,
-        [
-          v4(),
-          source,
-          sourceId,
-          new Date(date),
-          Number(amount),
-          description,
-          Number(code),
-        ]
-      );
+          [
+            v4(),
+            source,
+            sourceId,
+            new Date(date),
+            Number(amount),
+            description,
+            Number(code),
+          ]
+        )
+        .then(() => connection.destroy());
     })
     .then(() => ({ success: true }));
 };

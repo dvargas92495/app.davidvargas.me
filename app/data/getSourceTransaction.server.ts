@@ -279,6 +279,20 @@ const rules: {
     conditions: [
       {
         key: "counterpartyName",
+        value: "VENMO",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Owner's Capital"],
+      description: "Personal Paycheck",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
         value: "Xero Inc",
         operation: "equals",
       },
@@ -315,6 +329,20 @@ const rules: {
       amount: { operation: "mutliply", operand: "100" },
       code: taxCodeByLabel["Dues & Subscriptions"],
       description: "Scheduling Software",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "United States Postal Service",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Dues & Subscriptions"],
+      description: "Mailing Taxes",
     },
   },
 ];

@@ -84,31 +84,39 @@ export const action: ActionFunction = (args) => {
     PUT: ({ searchParams, userId }) =>
       listSourceTransactions({ userId, searchParams })
         .then(({ data }) =>
-          Promise.all(
-            data.map((d) =>
+          data.map(
+            (d) => () =>
               getSourceTransaction({
                 userId,
                 params: { id: d.id, source: d.source },
-              }).then((tx) =>
-                tx.found
-                  ? insertEventFromSource({
-                      params: { id: d.id, source: d.source },
-                      data: {
-                        amount: [tx.amount.toString()],
-                        description: [tx.description],
-                        date: [tx.date],
-                        code: [tx.code.toString()],
-                      },
-                    }).then(() => 1)
-                  : 0
-              )
-            )
+              })
+                .then((tx) =>
+                  tx.found
+                    ? insertEventFromSource({
+                        params: { id: d.id, source: d.source },
+                        data: {
+                          amount: [tx.amount.toString()],
+                          description: [tx.description],
+                          date: [tx.date],
+                          code: [tx.code.toString()],
+                        },
+                      }).then(() => 1)
+                    : 0
+                )
+                .catch(() => 0)
           )
         )
-        .then((results) => ({
-          total: results.length,
-          saved: results.reduce((p, c) => p + c, 0),
-        }))
+        .then((promises) =>
+          promises
+            .reduce(
+              (p, c) => p.then((t) => c().then((r) => r + t)),
+              Promise.resolve(0)
+            )
+            .then((saved) => ({
+              total: promises.length,
+              saved,
+            }))
+        )
         .then((result) => ({
           success: true,
           message: `Successfully saved ${result.saved} defined events from ${result.total} sources.`,
