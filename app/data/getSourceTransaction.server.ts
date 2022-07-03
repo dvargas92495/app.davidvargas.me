@@ -32,7 +32,7 @@ const rules: {
       {
         key: "counterpartyName",
         value: "CATCH FINANCIAL",
-        operation: "equals",
+        operation: "startsWith",
       },
     ],
     transform: {

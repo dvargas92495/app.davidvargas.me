@@ -18,12 +18,21 @@ const insertRevenueFromStripe = async ({
 }: {
   id: string;
   connection?: Awaited<ReturnType<typeof getMysqlConnection>>;
-}) => {
+}): Promise<{
+  values: {
+    uuid: string;
+    source: string;
+    source_id: string;
+    date: Date;
+    amount: number;
+    description: string;
+  }[];
+}> => {
   const execute = connection
     ? connection.execute
     : await getMysqlConnection().then((m) => m.execute);
   return execute(
-    `SELECT * FROM revenue WHERE source = "stripe" AND source_id = ?`,
+    `SELECT * FROM events WHERE source = "stripe" AND source_id = ?`,
     [id]
   ).then((a) => {
     const records = a as {
@@ -32,8 +41,7 @@ const insertRevenueFromStripe = async ({
       source_id: string;
       date: Date;
       amount: number;
-      product: string;
-      connect: number;
+      description: string;
     }[];
     if (records.length) {
       return { values: records };
@@ -81,7 +89,6 @@ const insertRevenueFromStripe = async ({
                       .then((product) => ({
                         product: product.name,
                         amount: l.amount - (p.fee * l.amount) / p.amount,
-                        connect: 0,
                         id: l.id,
                       }))
                   )
@@ -99,7 +106,6 @@ const insertRevenueFromStripe = async ({
                             amount:
                               l.amount_subtotal -
                               (p.fee * l.amount_subtotal) / p.amount,
-                            connect: 0,
                             id: l.id,
                           }))
                       )
@@ -110,8 +116,8 @@ const insertRevenueFromStripe = async ({
                   {
                     product: "RoamJS Smartblocks",
                     amount: (charge.application_fee_amount || 0) - p.fee,
-                    connect:
-                      charge.amount - (charge.application_fee_amount || 0),
+                    // connect:
+                    //   charge.amount - (charge.application_fee_amount || 0),
                     id: p.id,
                   },
                 ]
@@ -120,7 +126,6 @@ const insertRevenueFromStripe = async ({
                   {
                     product: p.metadata.source,
                     amount: charge.amount,
-                    connect: 0,
                     id: p.id,
                   },
                 ]
@@ -128,7 +133,6 @@ const insertRevenueFromStripe = async ({
                   {
                     product: "Unknown",
                     amount: charge.amount,
-                    connect: 0,
                     id: p.id,
                   },
                 ],
@@ -141,48 +145,32 @@ const insertRevenueFromStripe = async ({
               source_id: line.id,
               date: new Date(r.date),
               amount: line.amount,
-              product: mappedProducts[line.product] || line.product,
-              connect: line.connect,
+              description: mappedProducts[line.product] || line.product,
             }));
-            return Promise.all([
-              execute(
-                `INSERT INTO revenue (uuid, source, source_id, date, amount, product, connect) VALUES ${values
-                  .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
-                  .join(",")} ON DUPLICATE KEY UPDATE amount=amount`,
-                values.flatMap((v) => [
-                  v.uuid,
-                  v.source,
-                  v.source_id,
-                  v.date,
-                  v.amount,
-                  v.product,
-                  v.connect,
-                ])
-              ),
-              execute(
-                `INSERT INTO events (uuid, source, source_id, date, amount, description, code) VALUES ${values
-                  .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
-                  .join(",")} ON DUPLICATE KEY UPDATE amount=amount`,
-                values.flatMap((v) => [
-                  v.uuid,
-                  v.source,
-                  v.source_id,
-                  v.date,
-                  v.amount,
-                  v.product,
-                  4300,
-                ])
-              ).catch(() => {
-                // swallow error bc of old migrations
-              }),
-            ])
+            return execute(
+              `INSERT INTO events (uuid, source, source_id, date, amount, description, code) VALUES ${values
+                .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
+                .join(",")} ON DUPLICATE KEY UPDATE amount=amount`,
+              values.flatMap((v) => [
+                v.uuid,
+                v.source,
+                v.source_id,
+                v.date,
+                v.amount,
+                v.description,
+                4300,
+              ])
+            )
               .then(() => ({
                 values,
               }))
-              .catch((e) => {
+              .catch(() => {
                 console.error("Failed to insert revenue records for id:", id);
                 console.error(JSON.stringify(values, null, 4));
-                return Promise.reject(e);
+                // swallow error bc of old migrations
+                return {
+                  values: [],
+                };
               });
           });
       });
