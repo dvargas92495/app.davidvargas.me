@@ -20,10 +20,10 @@ const UserSourceEvent = () => {
   const recordSelected =
     useLoaderData<Awaited<ReturnType<typeof getSourceTransaction>>>();
   const [searchParams] = useSearchParams();
-  const { id } = useParams();
+  const { id, source } = useParams();
   const search = `${searchParams.toString() && `?${searchParams.toString()}`}`;
   return (
-    <Form method="put" key={recordSelected.id} action={`/user/sources/${id}${search}`}>
+    <Form method="put" key={recordSelected.id} action={`/user/sources/${source}/${id}${search}`}>
       <TextInput
         label={"Date"}
         name={"date"}
