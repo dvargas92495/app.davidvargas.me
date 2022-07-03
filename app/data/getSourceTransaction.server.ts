@@ -167,6 +167,48 @@ const rules: {
       description: "Sponsoring Software",
     },
   },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "HMF",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Automobile Expense"],
+      description: "Car for Commuting",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "ROBINHOOD",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Owner's Investment"],
+      description: "Personal Investments",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "FUNDRISE REAL ES",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Owner's Investment"],
+      description: "Personal Investments",
+    },
+  },
 ];
 
 const dataSchema = z.object({
@@ -264,16 +306,16 @@ const getSourceTransaction = async ({
           throw new Error("Failed to find transaction");
         });
       const rule = rules.find((r) =>
-        r.conditions.some(({ key, operation, value }) => {
+        r.conditions.every(({ key, operation, value }) => {
           if (!(key in tx)) return false;
           const actual = tx[key as keyof typeof tx];
           if (actual === null) return false;
           if (operation === "equals") {
             return actual === value;
           } else if (operation === "contains") {
-            return `${actual}`.includes(operation);
+            return `${actual}`.includes(value);
           } else if (operation === "startsWith") {
-            return `${actual}`.startsWith(operation);
+            return `${actual}`.startsWith(value);
           } else {
             return false;
           }

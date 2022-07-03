@@ -51,9 +51,13 @@ const UserSourceEvent = () => {
 
 export const action: ActionFunction = (args) => {
   return remixAppAction(args, {
-    PUT: ({ data, params }) =>
+    PUT: ({ data, params, searchParams }) =>
       insertEventFromSource({ data, params }).then(() =>
-        redirect(`/user/sources/`)
+        redirect(
+          `/user/sources${
+            searchParams.toString() && `?${searchParams.toString()}`
+          }`
+        )
       ),
   });
 };

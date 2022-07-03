@@ -2,23 +2,25 @@ import { useLoaderData, useSearchParams } from "@remix-run/react";
 import mixClasses from "../utils/mixClasses";
 
 const Table = ({
+  activeRow,
   onRowClick,
   className,
   tableClassName,
   thClassName,
   theadClassName,
-  getTrClassName = (index: number) =>
+  getTrClassName = (index: number, isActive: boolean) =>
     `cursor-pointer ${
-      index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
-    } hover:bg-gray-300 whitespace-pre-wrap`,
+      isActive ? "bg-gray-500" : index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
+    } hover:bg-gray-300 whitespace-pre-wrap active:bg-gray-500`,
   getTdClassName = () => `p-3 border-2 border-gray-400`,
 }: {
+  activeRow?: string;
   onRowClick?: (row: any, index: number) => void;
   className?: string;
   tableClassName?: string;
   thClassName?: string;
   theadClassName?: string;
-  getTrClassName?: (index: number) => string;
+  getTrClassName?: (index: number, isActive: boolean) => string;
   getTdClassName?: (index: number) => string;
 }) => {
   const {
@@ -45,7 +47,9 @@ const Table = ({
   };
 
   return !data.length ? (
-    <div className={mixClasses("w-full text-align-center", className)}>No Results Found</div>
+    <div className={mixClasses("w-full text-align-center", className)}>
+      No Results Found
+    </div>
   ) : (
     <div className={mixClasses("w-full", className)}>
       <table
@@ -74,7 +78,7 @@ const Table = ({
             return (
               <tr
                 key={row.uuid || row.id || index}
-                className={getTrClassName(index)}
+                className={getTrClassName(index, activeRow === row.uuid)}
                 onClick={() => onRowClick?.(data[index], index)}
               >
                 {columns.map((cell, jndex) => {
