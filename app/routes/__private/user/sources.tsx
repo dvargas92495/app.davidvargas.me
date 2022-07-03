@@ -21,7 +21,7 @@ const UserMercury = () => {
   const dateParam = searchParams.get("date");
   const date = dateParam ? new Date(dateParam) : new Date();
   const matches = useMatches();
-  const leaf = matches[matches.length - 1].;
+  const leaf = matches[matches.length - 1].params?.id;
   return (
     <div className="flex gap-8">
       <Table
@@ -33,7 +33,7 @@ const UserMercury = () => {
           )
         }
         className={"max-w-4xl"}
-        activeRow={}
+        activeRow={leaf}
       />
       <div className={"flex-grow"}>
         <div className="flex items-center gap-4 mb-4">

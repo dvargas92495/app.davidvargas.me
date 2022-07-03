@@ -209,6 +209,34 @@ const rules: {
       description: "Personal Investments",
     },
   },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "Roam Research",
+        operation: "startsWith",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Service"],
+      description: "RoamJS Freelancing",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "GEICO",
+        operation: "startsWith",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Automobile Expense"],
+      description: "Insurance for Car for Commuting",
+    },
+  },
 ];
 
 const dataSchema = z.object({
