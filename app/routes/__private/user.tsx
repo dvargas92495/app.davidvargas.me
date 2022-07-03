@@ -12,9 +12,6 @@ const TABS = [
   "Mysql",
   "Terraform",
 ///DEPRECATED///
-  "Expenses",
-  "Revenue",
-  "Transfers",
   "Ethereum",
   "Stripe",
 ];

@@ -8,12 +8,12 @@ const searchRevenue = ({
   getMysqlConnection()
     .then((con) => {
       const keys = Object.keys(searchParams).filter(
-        (p) => searchParams[p] && !["size", "offset"].includes(p)
+        (p) => searchParams[p] && !["size", "index"].includes(p)
       );
       const size = searchParams["size"] || "10";
-      const offset = searchParams["offset"] || "0";
-      return con
-        .execute(
+      const index = searchParams["index"] || "0";
+      return Promise.all([
+        con.execute(
           `SELECT date, amount, description, uuid, code, source
           FROM events 
           ${!keys.length ? "" : "WHERE "}${keys
@@ -23,15 +23,16 @@ const searchRevenue = ({
           keys
             .map((k) => searchParams[k])
             .concat(
-              [Number(offset) * Number(size), size].map((n) => n.toString())
+              [Number(index) * Number(size), size].map((n) => n.toString())
             )
-        )
-        .then((a) => {
-          con.destroy();
-          return a;
-        });
+        ),
+        con.execute(`SELECT COUNT(uuid) as count FROM events`),
+      ]).then((a) => {
+        con.destroy();
+        return a;
+      });
     })
-    .then((a) => {
+    .then(([a, l]) => {
       const values = a as {
         date: Date;
         amount: number;
@@ -40,6 +41,7 @@ const searchRevenue = ({
         code: number;
         source: string;
       }[];
+      const [{ count }] = l as { count: number }[];
       return {
         data: values.map((v) => ({
           ...v,
@@ -53,7 +55,7 @@ const searchRevenue = ({
           { Header: "Amount", accessor: "amount" },
           { Header: "Code", accessor: "code" },
         ],
-        // count: (c as { count: number }[])[0]?.count,
+        count,
       };
     });
 

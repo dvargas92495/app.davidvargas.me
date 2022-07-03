@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Table from "~/package/components/Table";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
@@ -37,7 +37,7 @@ const UserEventPage = () => {
               label={"Source"}
               name={"source"}
               defaultValue={defaultSource}
-              options={["ethereum", "stripe"]}
+              options={["ethereum", "stripe", "mercury"]}
             />
             <TextInput
               label={"Description"}

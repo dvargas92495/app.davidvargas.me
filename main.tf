@@ -96,7 +96,7 @@ module "aws_static_site" {
 
 module "aws-serverless-backend" {
     source  = "dvargas92495/serverless-backend/aws"
-    version = "2.5.2"
+    version = "2.5.3"
 
     api_name  = "app"
     domain    = "app.davidvargas.me"

@@ -22,31 +22,24 @@ const listSourceTransactions = ({
         });
       }
       const recordedTxs = await getMysqlConnection().then((con) =>
-        Promise.all([
-          con.execute(
-            `SELECT source_id FROM revenue WHERE source = "mercury"`,
-            []
-          ),
-          con.execute(
-            `SELECT source_id FROM expenses WHERE source = "mercury"`,
-            []
-          ),
-          con.execute(
-            `SELECT source_id FROM personal_transfers WHERE source = "mercury"`,
-            []
-          ),
-        ]).then(([a, b, c]) => {
+        con.execute(`SELECT source_id, source FROM events`, []).then((a) => {
           con.destroy();
-          const txs = (a as { source_id: string }[])
-            .concat(b as { source_id: string }[])
-            .concat(c as { source_id: string }[]);
-          return new Set(txs.map((r) => r.source_id));
+          const txs = a as { source_id: string; source: string }[];
+          return txs.reduce((p, c) => {
+            if (p[c.source]) {
+              p[c.source].add(c.source_id);
+            } else {
+              p[c.source] = new Set([c.source_id]);
+            }
+            return p;
+          }, {} as Record<string, Set<string>>);
         })
       );
       const apikey = account.apiToken;
       const opts = {
         headers: { Authorization: `Bearer ${apikey}` },
       };
+      const { mercury } = recordedTxs;
       return axios
         .get("https://backend.mercury.com/api/v1/accounts", opts)
         .then((r) => r.data.accounts[0]?.id)
@@ -67,7 +60,7 @@ const listSourceTransactions = ({
           )
         )
         .then((r) => {
-          return r.data.transactions.filter((t) => !recordedTxs.has(t.id));
+          return r.data.transactions.filter((t) => !mercury.has(t.id));
         })
         .then((txs) => {
           return {

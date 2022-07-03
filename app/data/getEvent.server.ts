@@ -1,7 +1,7 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
 import { NotFoundError } from "aws-sdk-plus/dist/errors";
 
-const getRevenue = (uuid: string) =>
+const getEvent = (uuid: string) =>
   getMysqlConnection()
     .then((con) =>
       con.execute(`SELECT * FROM events WHERE uuid = ?`, [uuid]).then((a) => {
@@ -22,7 +22,7 @@ const getRevenue = (uuid: string) =>
         }[]
       )[0];
       if (!record)
-        throw new NotFoundError(`Could not find Revenue record: ${uuid}`);
+        throw new NotFoundError(`Could not find event record: ${uuid}`);
       return {
         source: record.source,
         source_id: record.source_id,
@@ -31,4 +31,4 @@ const getRevenue = (uuid: string) =>
       };
     });
 
-export default getRevenue;
+export default getEvent;

@@ -21,21 +21,22 @@ const Table = ({
   getTrClassName?: (index: number) => string;
   getTdClassName?: (index: number) => string;
 }) => {
-  const { data = [], columns = [] } = useLoaderData<{
+  const { data = [], columns = [], count } = useLoaderData<{
     columns: { Header: string; accessor: string }[];
     data: Record<string, string | number>[];
+    count: number;
   }>();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const index = Number(searchParams.get("index")) || 1;
-  const size = Number(searchParams.get("size")) || 10;
+  const size = Math.max(Number(searchParams.get("size")) || 10, data.length);
   const {
     pagination: { pageIndex, pageSize, pageCount },
   } = {
     pagination: {
       pageIndex: index - 1,
       pageSize: size,
-      pageCount: Math.ceil(data.length / size),
+      pageCount: Math.ceil(count / size),
     },
   };
 

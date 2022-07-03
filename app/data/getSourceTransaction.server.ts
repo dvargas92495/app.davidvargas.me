@@ -27,6 +27,48 @@ const rules: {
       description: "Setting Aside for Taxes and IRA",
     },
   },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "OscarInsuranceCo",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "-100" },
+      code: taxCodeByLabel["Insurance"],
+      description: "Health Insurance",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpatryName",
+        value: "Jonathan Hillis",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "-100" },
+      code: taxCodeByLabel["Wages & Salaries"],
+      description: "Mentorship on an Income Sharing Agreement",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpatryName",
+        value: "STRIPE",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Owner's Capital"],
+      description: "Payout from Stripe",
+    },
+  },
 ];
 
 const dataSchema = z.object({
