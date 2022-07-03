@@ -1,5 +1,6 @@
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import {
+  Form,
   Outlet,
   useMatches,
   useNavigate,
@@ -9,9 +10,12 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import Table from "~/package/components/Table";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import remixAppAction from "~/package/backend/remixAppAction.server";
-import insertRecordFromEthereum from "~/data/insertRecordFromEthereum.server";
+import insertEventFromSource from "~/data/insertEventFromSource.server";
 import listSourceTransactions from "~/data/listSourceTransactions.server";
 import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
+import Button from "~/package/components/Button";
+import getSourceTransaction from "~/data/getSourceTransaction.server";
+import SuccessfulActionToast from "~/package/components/SuccessfulActionToast";
 
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
@@ -65,9 +69,13 @@ const UserMercury = () => {
           >
             {">"}
           </button>
+          <Form method="put">
+            <Button>Sync All With Rules</Button>
+          </Form>
         </div>
         <Outlet />
       </div>
+      <SuccessfulActionToast />
     </div>
   );
 };
@@ -77,11 +85,39 @@ export const loader: LoaderFunction = (args) => {
 };
 
 export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ data, params }) =>
-    insertRecordFromEthereum({ data, params }).catch((e) => {
-      throw new Response(e.message, { status: 500 });
-    })
-  );
+  return remixAppAction(args, ({ searchParams, userId }) => ({
+    PUT: listSourceTransactions({ userId, searchParams })
+      .then(({ data }) =>
+        Promise.all(
+          data.map((d) =>
+            getSourceTransaction({
+              userId,
+              params: { id: d.id, source: d.source },
+            }).then((tx) =>
+              tx.found
+                ? insertEventFromSource({
+                    params: { id: d.id, source: d.source },
+                    data: {
+                      amount: [tx.amount.toString()],
+                      description: [tx.description],
+                      date: [tx.date],
+                      code: [tx.code.toString()],
+                    },
+                  }).then(() => 1)
+                : 0
+            )
+          )
+        )
+      )
+      .then((results) => ({
+        total: results.length,
+        saved: results.reduce((p, c) => p + c, 0),
+      }))
+      .then((result) => ({
+        success: true,
+        message: `Successfully saved ${result.saved} defined events from ${result.total} sources.`,
+      })),
+  }));
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;
