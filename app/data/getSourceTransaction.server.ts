@@ -209,8 +209,8 @@ const rules: {
     conditions: [
       {
         key: "counterpartyName",
-        value: "FUNDRISE REAL ES",
-        operation: "equals",
+        value: "FUNDRISE",
+        operation: "startsWith",
       },
     ],
     transform: {
@@ -301,6 +301,20 @@ const rules: {
       amount: { operation: "mutliply", operand: "100" },
       code: taxCodeByLabel["Subcontractors"],
       description: "Design Contractor",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "Calendly",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "mutliply", operand: "100" },
+      code: taxCodeByLabel["Dues & Subscriptions"],
+      description: "Scheduling Software",
     },
   },
 ];

@@ -23,19 +23,14 @@ const UserMercury = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const dateParam = searchParams.get("date");
+  const search = `${searchParams.toString() && `?${searchParams.toString()}`}`;
   const date = dateParam ? new Date(dateParam) : new Date();
   const matches = useMatches();
   const leaf = matches[matches.length - 1].params?.id;
   return (
     <div className="flex gap-8">
       <Table
-        onRowClick={(row) =>
-          navigate(
-            `${row.source}/${row.id}${
-              searchParams.toString() && `?${searchParams.toString()}`
-            }`
-          )
-        }
+        onRowClick={(row) => navigate(`${row.source}/${row.id}${search}`)}
         className={"max-w-4xl"}
         activeRow={leaf}
       />
@@ -69,7 +64,7 @@ const UserMercury = () => {
           >
             {">"}
           </button>
-          <Form method="put">
+          <Form method="put" action={`/user/sources${search}`}>
             <Button>Bulk Save</Button>
           </Form>
         </div>
