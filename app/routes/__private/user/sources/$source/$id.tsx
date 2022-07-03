@@ -15,7 +15,7 @@ const UserSourceEvent = () => {
   const recordSelected =
     useLoaderData<Awaited<ReturnType<typeof getSourceTransaction>>>();
   return (
-    <Form method="put">
+    <Form method="put" key={recordSelected.id}>
       <TextInput
         label={"Date"}
         name={"date"}

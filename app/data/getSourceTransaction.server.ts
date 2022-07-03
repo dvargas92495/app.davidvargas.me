@@ -44,7 +44,7 @@ const rules: {
   {
     conditions: [
       {
-        key: "counterpatryName",
+        key: "counterpartyName",
         value: "Jonathan Hillis",
         operation: "equals",
       },
@@ -58,7 +58,7 @@ const rules: {
   {
     conditions: [
       {
-        key: "counterpatryName",
+        key: "counterpartyName",
         value: "STRIPE",
         operation: "equals",
       },

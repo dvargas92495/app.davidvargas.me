@@ -28,7 +28,7 @@ const UserMercury = () => {
         className={"max-w-4xl"}
       />
       <div className={"flex-grow"}>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 mb-4">
           <button
             className="bg-orange-500 font-bold cursor-pointer rounded-full h-8 w-8"
             onClick={() =>
