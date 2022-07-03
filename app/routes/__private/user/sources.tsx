@@ -1,5 +1,10 @@
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
-import { Outlet, useNavigate, useSearchParams } from "@remix-run/react";
+import {
+  Outlet,
+  useMatches,
+  useNavigate,
+  useSearchParams,
+} from "@remix-run/react";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import Table from "~/package/components/Table";
 import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
@@ -15,6 +20,8 @@ const UserMercury = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dateParam = searchParams.get("date");
   const date = dateParam ? new Date(dateParam) : new Date();
+  const matches = useMatches();
+  const leaf = matches[matches.length - 1].;
   return (
     <div className="flex gap-8">
       <Table
@@ -26,6 +33,7 @@ const UserMercury = () => {
           )
         }
         className={"max-w-4xl"}
+        activeRow={}
       />
       <div className={"flex-grow"}>
         <div className="flex items-center gap-4 mb-4">
