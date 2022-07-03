@@ -10,8 +10,8 @@ const Table = ({
   theadClassName,
   getTrClassName = (index: number, isActive: boolean) =>
     `cursor-pointer ${
-      isActive ? "bg-gray-500" : index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
-    } hover:bg-gray-300 whitespace-pre-wrap active:bg-gray-500`,
+      isActive ? "bg-gray-500 hover:bg-gray-500" : index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
+    } hover:bg-gray-300 whitespace-pre-wrap`,
   getTdClassName = () => `p-3 border-2 border-gray-400`,
 }: {
   activeRow?: string;
@@ -78,7 +78,10 @@ const Table = ({
             return (
               <tr
                 key={row.uuid || row.id || index}
-                className={getTrClassName(index, activeRow === row.uuid)}
+                className={getTrClassName(
+                  index,
+                  activeRow === (row.uuid || row.id || index)
+                )}
                 onClick={() => onRowClick?.(data[index], index)}
               >
                 {columns.map((cell, jndex) => {

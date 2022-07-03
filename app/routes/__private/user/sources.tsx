@@ -70,7 +70,7 @@ const UserMercury = () => {
             {">"}
           </button>
           <Form method="put">
-            <Button>Sync All With Rules</Button>
+            <Button>Bulk Save</Button>
           </Form>
         </div>
         <Outlet />
