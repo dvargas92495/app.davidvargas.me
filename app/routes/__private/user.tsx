@@ -13,7 +13,6 @@ const TABS = [
   "Terraform",
 ///DEPRECATED///
   "Ethereum",
-  "Stripe",
 ];
 
 const UserPage: React.FunctionComponent = () => {

@@ -4,7 +4,9 @@ const listRevenue = () =>
   getMysqlConnection()
     .then((con) =>
       con
-        .execute(`SELECT date, amount, product FROM revenue ORDER BY date`)
+        .execute(
+          `SELECT date, amount, description FROM events WHERE code >= 4000 AND code < 5000 ORDER BY date`
+        )
         .then((a) => {
           con.destroy();
           return a;
@@ -14,9 +16,15 @@ const listRevenue = () =>
       const values = a as {
         date: Date;
         amount: number;
-        product: string;
+        description: string;
       }[];
-      return { values: values.map((v) => ({ ...v, date: v.date.valueOf() })) };
+      return {
+        values: values.map((v) => ({
+          date: v.date.valueOf(),
+          amount: v.amount,
+          product: v.description,
+        })),
+      };
     });
 
 export default listRevenue;

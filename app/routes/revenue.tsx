@@ -9,7 +9,6 @@ const dateToMonth = (d: Date) =>
 
 const VIEWS = ["Total", "This Month"] as const;
 
-// TODO split out "this month" into its own bar graph
 const RevenuePage = () => {
   const data = useLoaderData<Awaited<ReturnType<typeof listRevenue>>>();
   const thisMonth = useMemo(() => dateToMonth(new Date()), []);
