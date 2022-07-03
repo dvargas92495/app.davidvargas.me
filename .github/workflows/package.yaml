@@ -19,6 +19,8 @@ jobs:
         run: npm install
       - name: patch
         run: node patch.js
+      - name: cdktf # I would rather exclude data/ in tsc
+        run: npx cdktf get
       - name: build
         run: npx tsc -p tsconfig.json --noEmit false
       - name: prepare
