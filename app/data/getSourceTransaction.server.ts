@@ -9,10 +9,10 @@ const rules: {
   conditions: {
     key: string;
     value: string;
-    operation: "equals" | "contains" | "startsWith";
+    operation: "equals" | "contains" | "startsWith" | "lessThan";
   }[];
   transform: {
-    amount?: { operation: "mutliply"; operand: string };
+    amount?: { operation: "multiply"; operand: string };
     code?: number;
     description?: string;
   };
@@ -22,17 +22,46 @@ const rules: {
       { key: "counterpartyName", value: "UNIT", operation: "equals" },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Owner's Draw"],
       description: "Setting Aside for Taxes and IRA",
     },
   },
   {
     conditions: [
-      { key: "counterpartyName", value: "CATCH FINANCIAL", operation: "equals" },
+      {
+        key: "counterpartyName",
+        value: "CATCH FINANCIAL",
+        operation: "equals",
+      },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
+      code: taxCodeByLabel["Owner's Draw"],
+      description: "Setting Aside for Taxes and IRA",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "Bond Financial T",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "multiply", operand: "100" },
+      code: taxCodeByLabel["Owner's Draw"],
+      description: "Setting Aside for Taxes and IRA",
+    },
+  },
+  {
+    conditions: [
+      { key: "counterpartyName", value: "DAVID VARGAS", operation: "equals" },
+      { key: "createdAt", value: "2022-02-28", operation: "lessThan" },
+    ],
+    transform: {
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Owner's Draw"],
       description: "Setting Aside for Taxes and IRA",
     },
@@ -46,7 +75,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Insurance"],
       description: "Health Insurance",
     },
@@ -60,7 +89,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Insurance"],
       description: "Dental Insurance",
     },
@@ -74,7 +103,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Wages & Salaries"],
       description: "Mentorship on an Income Sharing Agreement",
     },
@@ -88,7 +117,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Owner's Capital"],
       description: "Payout from Stripe",
     },
@@ -102,7 +131,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Owner's Capital"],
       description: "Transfer with personal checking account",
     },
@@ -116,7 +145,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Service"],
       description: "Fission Freelancing",
     },
@@ -130,7 +159,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Dues & Subscriptions"],
       description: "Email Marketing Software",
     },
@@ -144,7 +173,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Service"],
       description: "RoamJS Sponsors",
     },
@@ -158,7 +187,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Dues & Subscriptions"],
       description: "App Hosting",
     },
@@ -172,7 +201,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Dues & Subscriptions"],
       description: "Sponsoring Software",
     },
@@ -186,7 +215,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Automobile Expense"],
       description: "Car for Commuting",
     },
@@ -200,7 +229,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Owner's Investment"],
       description: "Personal Investments",
     },
@@ -214,7 +243,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Owner's Investment"],
       description: "Personal Investments",
     },
@@ -228,7 +257,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Service"],
       description: "RoamJS Freelancing",
     },
@@ -242,7 +271,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Automobile Expense"],
       description: "Insurance for Car for Commuting",
     },
@@ -256,7 +285,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Service"],
       description: "RoamJS SmartBlocks",
     },
@@ -270,7 +299,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Owner's Capital"],
       description: "Personal Paycheck",
     },
@@ -284,7 +313,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Owner's Capital"],
       description: "Personal Paycheck",
     },
@@ -298,7 +327,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Dues & Subscriptions"],
       description: "Accounting Software",
     },
@@ -312,7 +341,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Subcontractors"],
       description: "Design Contractor",
     },
@@ -326,7 +355,7 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Dues & Subscriptions"],
       description: "Scheduling Software",
     },
@@ -340,9 +369,65 @@ const rules: {
       },
     ],
     transform: {
-      amount: { operation: "mutliply", operand: "100" },
+      amount: { operation: "multiply", operand: "100" },
       code: taxCodeByLabel["Dues & Subscriptions"],
       description: "Mailing Taxes",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "LogMeIn",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "multiply", operand: "100" },
+      code: taxCodeByLabel["Dues & Subscriptions"],
+      description: "Password Management Software",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "LOOM SUBSCRIPTION",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "multiply", operand: "100" },
+      code: taxCodeByLabel["Dues & Subscriptions"],
+      description: "Video Recording Software",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "Givebutter",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "multiply", operand: "100" },
+      code: taxCodeByLabel["Service"],
+      description: "RoamJS Sponsors",
+    },
+  },
+  {
+    conditions: [
+      {
+        key: "counterpartyName",
+        value: "AME*GOGOAIRCR",
+        operation: "equals",
+      },
+    ],
+    transform: {
+      amount: { operation: "multiply", operand: "100" },
+      code: taxCodeByLabel["Dues & Subscriptions"],
+      description: "Wifi for Work",
     },
   },
 ];
@@ -452,6 +537,11 @@ const getSourceTransaction = async ({
             return `${actual}`.includes(value);
           } else if (operation === "startsWith") {
             return `${actual}`.startsWith(value);
+          } else if (operation === "lessThan") {
+            const asDate = new Date(value).valueOf();
+            return asDate
+              ? new Date(actual).valueOf() < asDate
+              : Number(actual) < Number(asDate);
           } else {
             return false;
           }
@@ -460,7 +550,7 @@ const getSourceTransaction = async ({
       const code = rule?.transform?.code || 0;
       const description = rule?.transform?.description || "";
       const amount =
-        rule?.transform?.amount?.operation === "mutliply"
+        rule?.transform?.amount?.operation === "multiply"
           ? Math.round(tx.amount * Number(rule.transform.amount.operand))
           : 0;
       return {
