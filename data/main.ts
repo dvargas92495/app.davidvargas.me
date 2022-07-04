@@ -8,11 +8,9 @@ import {
 } from "cdktf";
 import { AwsProvider } from "@cdktf/provider-aws";
 import { GithubProvider, ActionsSecret } from "@cdktf/provider-github";
-import { AwsServerlessBackend } from "../.gen/modules/aws-serverless-backend";
-import { AwsClerk } from "../.gen/modules/aws-clerk";
-import dotenv from "dotenv";
+import { AwsServerlessBackend } from ".gen/modules/aws-serverless-backend";
+import { AwsClerk } from ".gen/modules/aws-clerk";
 import fs from "fs";
-dotenv.config();
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, name: string) {

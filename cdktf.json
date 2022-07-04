@@ -1,7 +1,7 @@
 {
   "language": "typescript",
-  "app": "npx ts-node data/main.ts",
-  "projectId": "e96d69ea-66d2-4d01-a57e-91bc0db70874",
+  "app": "npx esbuild ./node_modules/.gen/modules/aws-serverless-backend.ts ./node_modules/.gen/modules/aws-email.ts ./node_modules/.gen/modules/aws-clerk.ts --platform=node --format=cjs --outdir=./node_modules/.gen/modules && npx ts-node-esm data/main.ts",
+  "projectId": "app",
   "sendCrashReports": "false",
   "terraformProviders": ["aws", "github"],
   "terraformModules": [
@@ -14,10 +14,17 @@
       "name": "aws-clerk",
       "source": "dvargas92495/clerk/aws",
       "version": "1.0.4"
+    },
+    {
+      "name": "aws-email",
+      "source": "dvargas92495/email/aws",
+      "version": "2.0.12"
     }
   ],
   "context": {
     "excludeStackIdFromLogicalIds": "true",
     "allowSepCharsInLogicalIds": "true"
-  }
+  },
+  "codeMakerOutput": "node_modules/.gen",
+  "output": "node_modules/cdktf.out"
 }
