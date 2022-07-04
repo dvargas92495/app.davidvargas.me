@@ -25,4 +25,4 @@ jobs:
       - name: plan
         run: npx cdktf plan
       - name: apply
-        run: npx fuego migrate --overwrite 2022-04-08-11-42-fix-revenue-table
+        run: npx fuego migrate

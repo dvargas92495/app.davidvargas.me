@@ -1,5 +1,10 @@
 import React from "react";
 
+const firstName = (s: string) => {
+  const first = s.split(" ")[0];
+  return `${first.slice(0, 1).toUpperCase()}${first.slice(1).toLowerCase()}`;
+};
+
 const FailedInvoice = ({
   id,
   customerName,
@@ -58,11 +63,13 @@ const FailedInvoice = ({
             Click here for more info.
           </a>
         </p>
-        <p style={{ marginBottom: 16 }}>Here's what I would send to {customerEmail}:</p>
+        <p style={{ marginBottom: 16 }}>
+          Here's what I would send to {customerEmail}:
+        </p>
         <h1 style={{ fontSize: 32, fontWeight: 600, marginBottom: 32 }}>
           Failed to pay latest invoice
         </h1>
-        <p style={{ marginBottom: 32 }}>Hey {customerName},</p>
+        <p style={{ marginBottom: 32 }}>Hey {firstName(customerName)}!</p>
         <p style={{ marginBottom: 16 }}>
           The latest payment for your subscription to {project} failed because
           of the following error: "{reason}". Are you still interested in
