@@ -1,4 +1,4 @@
-name: Publish Data
+name: Publish Data Infrastructure
 on:
   workflow_dispatch:
   push:
@@ -11,6 +11,7 @@ env:
   CLERK_API_KEY: ${{ secrets.CLERK_API_KEY }}
   DATABASE_URL: mysql://app:${{ secrets.MYSQL_PASSWORD }}@vargas-arts.c2sjnb5f4d57.us-east-1.rds.amazonaws.com:5432/app
   STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+  TERRAFORM_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
 
 jobs:
   deploy:
