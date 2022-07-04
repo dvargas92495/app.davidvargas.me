@@ -1,78 +1,37 @@
-import remixAppAction from "~/package/backend/remixAppAction.server";
-import remixAppLoader from "~/package/backend/remixAppLoader.server";
-import React, { useState } from "react";
-import { Form, useLoaderData } from "@remix-run/react";
-import { ActionFunction, LoaderFunction } from "@remix-run/node";
-import Button from "~/package/components/Button";
-import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
-import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
-import SuccessfulActionToast from "~/package/components/SuccessfulActionToast";
-import TextInput from "~/package/components/TextInput";
-import editTerraformVariable from "~/data/editTerraformVariable.server";
-import listTerraformWorkspaces from "~/data/listTerraformWorkspaces.server";
+export { default as CatchBoundary } from "~/package/components/DefaultCatchBoundary";
+export { default as ErrorBoundary } from "~/package/components/DefaultErrorBoundary";
+import { Link, Outlet, useMatches } from "@remix-run/react";
+import React from "react";
 
-const UserTerraform = () => {
-  const loaderData =
-    useLoaderData<Awaited<ReturnType<typeof listTerraformWorkspaces>>>();
-  const [key, setKey] = useState("");
+const Tab = ({ children, to }: React.PropsWithChildren<{ to: string }>) => {
+  const matches = useMatches();
+  const current = matches[4]?.pathname || '';
+  const root = matches[3].pathname;
+  const active = `${root}/${to}` === current;
   return (
-    <div style={{ marginBottom: 64 }}>
-      <Form className="w-96" method="post">
-        <TextInput
-          label={"Key"}
-          name={"key"}
-          onChange={(e) => setKey(e.target.value)}
-        />
-        <TextInput label={"Value"} name={"value"} />
-        <Button>Update</Button>
-      </Form>
-      <h3>Workspaces:</h3>
-      <ul className="list-disc">
-        {loaderData.workspaces
-          .map((w) => ({
-            ...w,
-            vars: w.vars.filter((v) => new RegExp(key).test(v.name)),
-          }))
-          .filter((w) => w.vars.length)
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map((w) => (
-            <li key={w.id}>
-              {w.name}
-              {!!w.vars.length && (
-                <ul className="ml-4 list-disc">
-                  {w.vars
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((v) => (
-                      <li key={v.id}>{v.name}</li>
-                    ))}
-                </ul>
-              )}
-            </li>
-          ))}
-      </ul>
-      <SuccessfulActionToast />
+    <Link
+      to={to}
+      className={`rounded-lg border border-sky-600 text-sky-600 hover:bg-sky-100 cursor-pointer active:bg-sky-200 py-2 px-4 ${
+        active ? "bg-sky-200" : "bg-none"
+      }`}
+    >
+      {children}
+    </Link>
+  );
+};
+
+const TerraformPage = () => {
+  return (
+    <div className="h-full flex flex-col pb-16">
+      <div className="flex gap-4 items-center mb-4">
+        <Tab to={""}>Home</Tab>
+        <Tab to={"variables"}>Variables</Tab>
+      </div>
+      <div className="rounded-3xl shadow-lg p-8 flex-grow h-full max-w-xl bg-gray-100 flex flex-col">
+        <Outlet />
+      </div>
     </div>
   );
 };
 
-export const loader: LoaderFunction = (args) => {
-  return remixAppLoader(args, ({ userId }) => {
-    return listTerraformWorkspaces({ userId });
-  });
-};
-
-export const action: ActionFunction = (args) => {
-  return remixAppAction(args, ({ data, userId }) => {
-    return editTerraformVariable({
-      userId,
-      key: data.key?.[0],
-      value: data.value?.[0],
-    });
-  });
-};
-
-export const ErrorBoundary = DefaultErrorBoundary;
-
-export const CatchBoundary = DefaultCatchBoundary;
-
-export default UserTerraform;
+export default TerraformPage;

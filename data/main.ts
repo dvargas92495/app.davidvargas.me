@@ -4,7 +4,6 @@ import {
   TerraformStack,
   RemoteBackend,
   TerraformHclModule,
-  TerraformOutput,
   TerraformVariable,
 } from "cdktf";
 import { AwsProvider } from "@cdktf/provider-aws";

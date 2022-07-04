@@ -28,7 +28,10 @@ const editTerraformVariable = ({
       }
       const opts = {
         headers: {
-          Authorization: `Bearer ${account.organizationApiToken}`,
+          Authorization: `Bearer ${
+            account.organizationApiToken ||
+            process.env.TERRAFORM_ORGANIZATION_TOKEN
+          }`,
           "Content-Type": "application/vnd.api+json",
         },
       };
@@ -63,7 +66,10 @@ const editTerraformVariable = ({
               )
           )
         )
-        .then(() => ({ success: true }));
+        .then((l) => ({
+          success: true,
+          message: `Successfully updated ${l.length} workspaces!`,
+        }));
     });
 };
 
