@@ -82,7 +82,7 @@ export const migrate = ({ connection }: MigrationProps) => {
                       values
                         .filter(
                           (v) =>
-                            v.product === "Unknown" &&
+                            v.description === "Unknown" &&
                             v.source_id.startsWith("pi_")
                         )
                         .map((v) =>

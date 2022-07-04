@@ -1,4 +1,4 @@
-name: Migrate DB
+name: Publish Data
 on:
   workflow_dispatch:
   push:
@@ -19,11 +19,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: install
         run: npm install
-      - name: plan
+      - name: get
         run: npx cdktf get
       - name: plan
         run: npx cdktf plan
-      - name: migrate
-        run: npx fuego migrate --revert
-      - name: migrate
-        run: npx fuego migrate
+      - name: apply
+        run: npx fuego migrate --overwrite 2022-04-08-11-42-fix-revenue-table
