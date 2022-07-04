@@ -93,7 +93,7 @@ class MyStack extends TerraformStack {
     // fails on: The child module requires an additional configuration for provider
     const staticSite = new TerraformHclModule(this, "aws_static_site", {
       source: "dvargas92495/static-site/aws",
-      version: "3.6.3",
+      version: "3.6.7",
       providers: [
         {
           moduleAlias: "us-east-1",
@@ -125,7 +125,7 @@ class MyStack extends TerraformStack {
       paths,
     });
 
-    new AwsClerk(this, "aws-clerk", {
+    new AwsClerk(this, "aws_clerk", {
       zoneId: staticSite.get("route53_zone_id"),
       clerkId: "iecxnb2omjxr",
       subdomain: "app",
