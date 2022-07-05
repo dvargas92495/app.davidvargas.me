@@ -15,4 +15,4 @@ fs.writeFileSync(
   "dist/scripts/postinstall.js",
   fs.readFileSync("scripts/postinstall.js").toString()
 );
-content.files.append("/scripts");
+content.files.push("/scripts");
