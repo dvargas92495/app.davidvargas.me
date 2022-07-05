@@ -9,5 +9,6 @@ content.files = fs.readdirSync("dist/app/package").map((d) => {
 });
 
 fs.writeFileSync(`dist/package.json`, JSON.stringify(content, null, 2));
-
 fs.writeFileSync("dist/README.md", fs.readFileSync("README.md").toString());
+fs.mkdirSync("dist/scripts");
+fs.writeFileSync("dist/scripts/postinstall.js", fs.readFileSync("scripts/postinstall.js").toString());
