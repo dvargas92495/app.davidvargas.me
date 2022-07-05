@@ -33,7 +33,7 @@ jobs:
       - name: mods 1
         run: npm ls @clerk/backend-core
       - name: mods
-        run: ls node_modules/@clerk/backend-core/dist/mjs/api
+        run: ls -al node_modules/@clerk/backend-core/dist/mjs/api
       - name: build
         run: npm run build -- --readable
       - name: deploy
