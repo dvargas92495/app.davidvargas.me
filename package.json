@@ -20,13 +20,13 @@
     "migrate": "fuego migrate",
     "publish": "fuego publish",
     "start": "concurrently \"npm:api\" \"npm:dev\" \"npm:tailwind\"",
-    "postinstall": "fuego postinstall",
+    "postinstall": "fuego postinstall && node scripts/postinstall.js",
     "comments": "TODO: remove clerk/backend-core when they fix the dependency issue"
   },
   "peerDependencies": {
     "@aws-sdk/client-lambda": "3.54.1",
     "@aws-sdk/client-s3": "3.100.0",
-    "@clerk/backend-core": "1.10.0",
+    "@clerk/backend-core": "1.11.0",
     "@clerk/clerk-sdk-node": "^3.8.2",
     "@clerk/remix": "0.3.9",
     "@dvargas92495/codemirror": "^5.65.11",

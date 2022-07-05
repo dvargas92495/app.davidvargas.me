@@ -5,7 +5,7 @@ on:
     branches: main
     paths:
       - "app/package/**"
-      - "prepare.js"
+      - "scripts/**"
       - ".github/workflows/package.yaml"
 env:
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -18,13 +18,13 @@ jobs:
       - name: install
         run: npm install
       - name: patch
-        run: node patch.js
+        run: node scripts/patch.js
       - name: cdktf # I would rather exclude data/ in tsc
         run: npx cdktf get
       - name: build
         run: npx tsc -p tsconfig.json --noEmit false
       - name: prepare
-        run: node prepare.js
+        run: node scripts/prepare.js
       - name: write
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
       - name: publish

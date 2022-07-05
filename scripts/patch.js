@@ -5,4 +5,6 @@ const brokenFile =
 if (fs.existsSync(brokenFile)) {
   const content = fs.readFileSync(brokenFile).toString();
   fs.writeFileSync(brokenFile, content.replace("let body;", "let body: any;"));
+} else {
+  console.log("no more file, remove script");
 }
