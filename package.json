@@ -25,7 +25,7 @@
   "peerDependencies": {
     "@aws-sdk/client-lambda": "3.54.1",
     "@aws-sdk/client-s3": "3.100.0",
-    "@clerk/clerk-sdk-node": "^3.8.2",
+    "@clerk/clerk-sdk-node": "^3.3.4",
     "@clerk/remix": "0.3.9",
     "@dvargas92495/codemirror": "^5.65.11",
     "@dvargas92495/react-codemirror2": "7.2.9",
