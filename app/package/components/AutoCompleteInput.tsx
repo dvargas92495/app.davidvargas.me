@@ -1,5 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTransition } from "@remix-run/react";
 import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
@@ -9,7 +8,7 @@ type Option = { id: string | number; label: string };
 const AutoCompleteInput = ({
   name,
   disabled,
-  options = [],
+  options: _options = [],
   label,
   className = "",
   labelClassName = "",
@@ -17,11 +16,11 @@ const AutoCompleteInput = ({
   optionsClassName = "",
   optionClassName = "",
   onChange,
-  defaultValue = options[0]?.id,
+  defaultValue,
 }: {
   name?: string;
   disabled?: boolean;
-  options?: readonly Option[];
+  options?: readonly Option[] | readonly string[];
   label?: string;
   className?: string;
   labelClassName?: string;
@@ -31,9 +30,16 @@ const AutoCompleteInput = ({
   onChange?: (e: string | number) => void;
   defaultValue?: string | number;
 }) => {
+  const options = useMemo(
+    () =>
+      _options.map((id) => (typeof id === "string" ? { id, label: id } : id)),
+    [_options]
+  );
   const transition = useTransition();
   const loading = useMemo(() => transition.state !== "idle", [transition]);
-  const [selectedOption, setSelectedOption] = useState(defaultValue);
+  const [selectedOption, setSelectedOption] = useState(() =>
+    typeof defaultValue !== "undefined" ? defaultValue : options[0]?.id
+  );
   const labelById = useMemo(
     () => Object.fromEntries(options.map((o) => [o.id, o.label])),
     []

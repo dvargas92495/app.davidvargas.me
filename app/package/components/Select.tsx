@@ -31,13 +31,15 @@ const Select = ({
   onChange?: (opt: string | number) => void;
   defaultValue?: string | number;
 }) => {
-  const options = _options.map((id) =>
-    typeof id === "string" ? { id, label: id } : id
+  const options = useMemo(
+    () =>
+      _options.map((id) => (typeof id === "string" ? { id, label: id } : id)),
+    [_options]
   );
   const transition = useTransition();
   const loading = useMemo(() => transition.state !== "idle", [transition]);
   const [selectedOption, setSelectedOption] = useState(
-    typeof defaultValue !== "undefined" ? defaultValue : options[0]?.id
+    () => typeof defaultValue !== "undefined" ? defaultValue : options[0]?.id
   );
   const labelById = useMemo(
     () => Object.fromEntries(options.map((o) => [o.id, o.label])),
