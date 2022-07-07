@@ -3,7 +3,10 @@ import type { LoaderFunction } from "@remix-run/node";
 import type { Context } from "aws-lambda";
 
 const remixRootLoader = (
-  args: Parameters<LoaderFunction>[0] & { env: Record<string, string> }
+  args: Parameters<LoaderFunction>[0] & {
+    env: Record<string, string>;
+    data: Record<string, unknown>;
+  }
 ): ReturnType<LoaderFunction> =>
   rootAuthLoader(
     args,
@@ -31,6 +34,7 @@ const remixRootLoader = (
         logUrl: `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/${encodeURIComponent(
           lambdaContext.logGroupName
         )}/log-events/${encodeURIComponent(lambdaContext.logStreamName)}`,
+        ...args.data,
       };
     },
     { loadUser: true }

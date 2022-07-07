@@ -13,6 +13,7 @@ import {
 } from "@remix-run/react";
 import { ClerkApp, ClerkCatchBoundary } from "@clerk/remix";
 import Loading from "./Loading";
+import type remixRootLoader from "../backend/remixRootLoader.server"
 // primary: "sky-400",
 // secondary: "orange-400",
 
@@ -71,8 +72,10 @@ const PageTransition = () => {
   ) : null;
 };
 
+type LoaderData = Awaited<ReturnType<typeof remixRootLoader>>
+
 const App = () => {
-  const data = useLoaderData<{ ENV: Record<string, string> }>();
+  const data = useLoaderData<LoaderData>();
   return (
     <html lang="en" className="h-full">
       <head>
@@ -91,16 +94,12 @@ const App = () => {
           }}
         />
         <Scripts />
-        <LiveReload />
+        {!data.hideLiveReload && <LiveReload />}
       </body>
     </html>
   );
 };
 
-const RemixRoot = () =>
-  ClerkApp(App, {
-    // @ts-ignore - Remove Clerk Hot loading
-    // Clerk,
-  })();
+const RemixRoot = () => ClerkApp(App, {})();
 
 export default RemixRoot;
