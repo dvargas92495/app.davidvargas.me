@@ -4,8 +4,8 @@ import type { Context } from "aws-lambda";
 
 const remixRootLoader = (
   args: Parameters<LoaderFunction>[0] & {
-    env: Record<string, string>;
-    data: Record<string, unknown>;
+    env?: Record<string, string>;
+    data?: Record<string, unknown>;
   }
 ): ReturnType<LoaderFunction> =>
   rootAuthLoader(
