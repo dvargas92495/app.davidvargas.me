@@ -1,8 +1,31 @@
 import { TerraformVariable } from "cdktf";
 import { ActionsSecret } from "@cdktf/provider-github";
 import base from "fuegojs/dist/base";
+import { z } from "zod";
 
 const projectName = "app.davidvargas.me";
+
+const events = z.object({
+  uuid: z.string(),
+  source: z.string(),
+  sourceId: z.string(),
+  date: z.date(),
+  amount: z.number(),
+  description: z.string(),
+  code: z.number(),
+});
+
+const rules = z.object({
+  uuid: z.string(),
+  userId: z.string(),
+  label: z.string(),
+  transformAmountOperation: z.number(),
+  transformAmountOperand: z.number(),
+  transformCode: z.number(),
+  transformDescription: z.string(),
+});
+
+[events, rules].slice(0);
 
 base({
   projectName,
