@@ -5,7 +5,7 @@ import remixAppAction from "~/package/backend/remixAppAction.server";
 import { Form, Link } from "@remix-run/react";
 import Button from "~/package/components/Button";
 import createRule from "~/data/createRule.server";
-import TextInput from "dist/app/package/components/TextInput";
+import TextInput from "~/package/components/TextInput";
 import { useState } from "react";
 import { v4 } from "uuid";
 import Select from "~/package/components/Select";
