@@ -16,7 +16,9 @@ const remixAppLoader = (
       return redirect("/login");
     }
     const searchParams = Object.fromEntries(new URL(request.url).searchParams);
-    const response = callback ? callback({ userId, params, searchParams }) : {};
+    const response = callback
+      ? callback({ userId, params, searchParams })
+      : {};
     return handleAsResponse(response, "Unknown Application Loader Error");
   });
 };

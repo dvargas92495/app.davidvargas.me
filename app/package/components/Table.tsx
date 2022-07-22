@@ -10,12 +10,16 @@ const Table = ({
   theadClassName,
   getTrClassName = (index: number, isActive: boolean) =>
     `cursor-pointer ${
-      isActive ? "bg-gray-500 hover:bg-gray-500" : index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
+      isActive
+        ? "bg-gray-500 hover:bg-gray-500"
+        : index % 2 === 0
+        ? "bg-gray-100"
+        : "bg-gray-200"
     } hover:bg-gray-300 whitespace-pre-wrap`,
   getTdClassName = () => `p-3 border-2 border-gray-400`,
 }: {
   activeRow?: string;
-  onRowClick?: (row: any, index: number) => void;
+  onRowClick?: (row: Record<string, unknown>, index: number) => void;
   className?: string;
   tableClassName?: string;
   thClassName?: string;
@@ -36,15 +40,7 @@ const Table = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const index = Number(searchParams.get("index")) || 1;
   const size = Math.max(Number(searchParams.get("size")) || 10, data.length);
-  const {
-    pagination: { pageIndex, pageSize, pageCount },
-  } = {
-    pagination: {
-      pageIndex: index - 1,
-      pageSize: size,
-      pageCount: Math.ceil(count / size),
-    },
-  };
+  const pageCount = Math.ceil(count / size);
 
   return !data.length ? (
     <div className={mixClasses("w-full text-align-center", className)}>
@@ -100,7 +96,7 @@ const Table = ({
         <div className="w-full flex justify-between items-center">
           <div>
             <select
-              value={pageSize}
+              value={size}
               onChange={(e) => {
                 setSearchParams({
                   ...Object.fromEntries(searchParams),
@@ -124,7 +120,7 @@ const Table = ({
                   index: "1",
                 })
               }
-              disabled={pageIndex === 0}
+              disabled={index <= 1}
               className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
             >
               {"<<"}
@@ -133,10 +129,10 @@ const Table = ({
               onClick={() =>
                 setSearchParams({
                   ...Object.fromEntries(searchParams),
-                  index: pageIndex.toString(),
+                  index: (index - 1).toString(),
                 })
               }
-              disabled={pageIndex === 0}
+              disabled={index <= 1}
               className={"rounded-full hover:bg-gray-100 cursor-pointer p-1"}
             >
               {"<"}
@@ -145,7 +141,7 @@ const Table = ({
               onClick={() =>
                 setSearchParams({
                   ...Object.fromEntries(searchParams),
-                  index: (pageIndex + 2).toString(),
+                  index: (index + 1).toString(),
                 })
               }
               disabled={false}
@@ -168,7 +164,7 @@ const Table = ({
             <span>
               Page{" "}
               <strong>
-                {pageIndex + 1} of {pageCount}
+                {index} of {pageCount}
               </strong>
             </span>
           </div>

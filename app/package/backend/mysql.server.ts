@@ -19,6 +19,7 @@ const createConnection = () => {
 const getMysqlConnection = (mysql?: mysql.Connection) => {
   const promise = mysql ? Promise.resolve(mysql) : createConnection();
   return promise.then((connection) => ({
+    connection,
     execute: <
       T extends
         | mysql.RowDataPacket[][]

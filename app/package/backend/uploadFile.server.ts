@@ -20,7 +20,7 @@ const uploadFile = ({
     else if (Body instanceof Readable) Body.pipe(fs.createWriteStream(path));
     else if (Body instanceof Blob) Body.stream().pipe(fs.createWriteStream(path));
     // else if (Body instanceof ReadableStream) Body.pipeTo(fs.createWriteStream(path));
-    return true;
+    return Promise.resolve(true);
   } else {
     const s3 = new S3({ region: "us-east-1" });
     return s3

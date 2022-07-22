@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 import Table from "~/package/components/Table";
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
-import searchEvents from "~/data/searchEvents.server";
+import searchRules from "~/data/searchRules.server";
 import {
   Form,
+  Link,
   Outlet,
   useNavigate,
   useSearchParams,
@@ -14,11 +15,9 @@ import TextInput from "~/package/components/TextInput";
 import Button from "~/package/components/Button";
 export { default as ErrorBoundary } from "~/package/components/DefaultErrorBoundary";
 export { default as CatchBoundary } from "~/package/components/DefaultCatchBoundary";
-import remixAppAction from "~/package/backend/remixAppAction.server";
-import updateEventDescriptions from "~/data/updateEventDescriptions.server";
 import SuccessfulActionToast from "~/package/components/SuccessfulActionToast";
 
-const UserEventPage = () => {
+const UserRulesPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const defaultDescription = (searchParams.get("description") as string) || "";
@@ -46,14 +45,11 @@ const UserEventPage = () => {
             />
             <Button>Search</Button>
           </Form>
-          <Form method="put" className="flex gap-4 items-center">
-            <TextInput label={"Description"} name={"newDescription"} />
-            <Button>Migrate</Button>
-          </Form>
+          <Link to={"/user/rules/new"}>New</Link>
         </div>
         <Table
           onRowClick={(row) =>
-            navigate(`/user/events/${row.uuid}${paramString}`)
+            navigate(`/user/rules/${row.uuid}${paramString}`)
           }
         />
       </div>
@@ -66,11 +62,7 @@ const UserEventPage = () => {
 };
 
 export const loader: LoaderFunction = (args) => {
-  return remixAppLoader(args, searchEvents);
+  return remixAppLoader(args, searchRules);
 };
 
-export const action: ActionFunction = (args) => {
-  return remixAppAction(args, { PUT: updateEventDescriptions });
-};
-
-export default UserEventPage;
+export default UserRulesPage;

@@ -1,10 +1,9 @@
-import React from "react";
-import { SignIn } from "@clerk/remix";
-import remixAuthedLoader from "~/package/backend/remixAuthedLoader.server";
-import getMeta from "~/package/utils/getMeta";
+export {
+  default,
+  loader,
+  action,
+  meta,
+  CatchBoundary,
+  ErrorBoundary,
+} from "~/package/routes/login";
 
-const LoginPage: React.FC = () => <SignIn path="/login" />;
-
-export const loader = remixAuthedLoader;
-export const meta = getMeta({ title: "Log in" });
-export default LoginPage;

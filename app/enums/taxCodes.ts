@@ -18,4 +18,6 @@ export const taxCodeByLabel = Object.fromEntries(
   CODES.map((c) => [c.label, c.id])
 ) as Record<typeof CODES[number]["label"], typeof CODES[number]["id"]>;
 
+export const taxCodeSet = new Set<number>(CODES.map((c) => c.id));
+
 export default CODES;

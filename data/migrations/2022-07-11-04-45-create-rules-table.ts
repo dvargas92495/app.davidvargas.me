@@ -1,10 +1,13 @@
-import Web3 from "web3";
-import dateFnsFormat from "date-fns/format";
-import { z } from "zod";
-import { NotFoundResponse } from "~/package/backend/responses.server";
-import axios from "axios";
+import getMysqlConnection from "~/package/backend/mysql.server";
+import type { MigrationProps } from "fuegojs/dist/migrate";
 import { taxCodeByLabel } from "~/enums/taxCodes";
-import type { Rule } from "~/enums/rules";
+import { v4 } from "uuid";
+import { users } from "@clerk/clerk-sdk-node";
+import {
+  Rule,
+  RULE_CONDITION_OPERATIONS,
+  TRANSFORM_AMOUNT_OPERATION,
+} from "~/enums/rules";
 
 const rules: Rule[] = [
   {
@@ -422,201 +425,89 @@ const rules: Rule[] = [
   },
 ];
 
-const dataSchema = z.object({
-  source: z.string(),
-  id: z.string(),
-});
-
-const getSourceTransaction = async ({
-  userId,
-  params,
-}: {
-  userId: string;
-  params: Record<string, string | undefined>;
-}) => {
-  const { source, id } = dataSchema.parse(params);
-  switch (source) {
-    case "ethereum": {
-      const web3 = new Web3(
-        `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
-      );
-      return web3.eth.getTransaction(id).then((tx) =>
-        Promise.all([
-          web3.eth.getTransactionReceipt(id),
-          web3.eth.getBlock(tx.blockNumber || 0),
-          import("@clerk/clerk-sdk-node")
-            .then((clerk) => clerk.users.getUser(userId))
-            .then(async (user) => {
-              const account = user.publicMetadata.ethereum as {
-                address: string;
-              };
-              return account.address;
-            }),
-        ]).then(([_, block, __]) => {
-          // const from = tx.from.toLowerCase();
-          // const to = (tx.to || "").toLowerCase();
-          // receipt.events - this will have log events that would be juicy
-          return {
-            id,
-            date: dateFnsFormat(
-              new Date(Number(block.timestamp) * 1000),
-              "yyyy-MM-dd hh:mm a"
+export const migrate = ({ connection }: MigrationProps) => {
+  return getMysqlConnection(connection).then((connection) =>
+    connection
+      .execute(
+        `CREATE TABLE IF NOT EXISTS rules (
+          uuid                         VARCHAR(36)  NOT NULL,
+          user_id                      VARCHAR(191) NOT NULL,
+          label                        VARCHAR(128) NOT NULL,
+          transform_amount_operation   TINYINT(4)   NOT NULL,
+          transform_amount_operand     VARCHAR(255) NOT NULL,
+          transform_code               INT          NOT NULL,
+          transform_description        VARCHAR(256) NOT NULL,
+  
+          PRIMARY KEY (uuid),
+          CONSTRAINT UC_source UNIQUE (user_id,label)
+        )`
+      )
+      .then(() =>
+        connection.execute(`CREATE TABLE IF NOT EXISTS rule_conditions (
+        uuid                         VARCHAR(36)  NOT NULL,
+        rule_uuid                    VARCHAR(36)  NOT NULL,
+        position                     TINYINT(4)   NOT NULL,
+        condition_key                VARCHAR(128) NOT NULL,
+        value                        VARCHAR(128) NOT NULL,
+        operation                    TINYINT(4)   NOT NULL,
+        
+        PRIMARY KEY (uuid),
+        CONSTRAINT UC_rule_id_position UNIQUE (rule_uuid,position),
+        FOREIGN KEY (rule_uuid) REFERENCES \`rules\`(\`uuid\`)
+      )`)
+      )
+      .then(async () => {
+        const userId = await users
+          .getUserList({ emailAddress: ["dvargas92495@gmail.com"] })
+          .then((u) => u[0].id)
+          .catch(() => "user_foo");
+        const ruleRecords = rules.map((r) => ({
+          ...r.transform,
+          uuid: v4(),
+          conditions: r.conditions.map((rc) => ({
+            ...rc,
+            uuid: v4(),
+          })),
+        }));
+        await connection.execute(
+          `INSERT INTO rules (uuid, user_id, label, transform_amount_operation, transform_amount_operand, transform_code, transform_description)
+          VALUES ${ruleRecords.map(() => `(?,?,?,?,?,?,?)`).join(",")}`,
+          ruleRecords.flatMap((r) => [
+            r.uuid,
+            userId,
+            r.conditions[0].value,
+            TRANSFORM_AMOUNT_OPERATION.indexOf(
+              r.amount?.operation || "multiply"
             ),
-            // from: tx.from === address ? "ME" : addressBook[from] || from,
-            // to: tx.to === address ? "ME" : addressBook[to] || to,
-            // gas: `${
-            //   (Number(receipt.gasUsed) * Number(tx.gasPrice)) / Math.pow(10, 18)
-            // } ETH`,
-            // value: `${(Number(tx.value) / Math.pow(10, 18)).toFixed(6)} ETH`,
-            // TODO: FILL
-            description: "",
-            amount: 0,
-            code: 0,
-            log: [],
-            url: "",
-            found: false,
-          };
-        })
-      );
-    }
-    case "mercury": {
-      const user = await import("@clerk/clerk-sdk-node").then((clerk) =>
-        clerk.users.getUser(userId)
-      );
-      const account = user.publicMetadata.Mercury as {
-        username: string;
-        apiToken: string;
-      };
-      const apikey = account.apiToken;
-      const opts = {
-        headers: { Authorization: `Bearer ${apikey}` },
-      };
-      const accountId = await axios
-        .get("https://backend.mercury.com/api/v1/accounts", opts)
-        .then((r) => r.data.accounts[0]?.id)
-        .catch(() => {
-          throw new Error("Failed to find account");
-        });
-      const tx = await axios
-        .get<{
-          id: string;
-          amount: number;
-          createdAt: string;
-          status: "sent";
-          note: string | null; // TODO add to list description
-          bankDescription: string;
-          externalMemo: string;
-          counterpartyName: string;
-          counterpartyNickname: string | null;
-        }>(
-          `https://backend.mercury.com/api/v1/account/${accountId}/transaction/${id}`,
-          opts
-        )
-        .then((tx) => tx.data)
-        .catch(() => {
-          throw new Error("Failed to find transaction");
-        });
-      const rule = rules.find((r) =>
-        r.conditions.every(({ key, operation, value }) => {
-          if (!(key in tx)) return false;
-          const actual = tx[key as keyof typeof tx];
-          if (actual === null) return false;
-          if (operation === "equals") {
-            return actual === value;
-          } else if (operation === "contains") {
-            return `${actual}`.includes(value);
-          } else if (operation === "startsWith") {
-            return `${actual}`.startsWith(value);
-          } else if (operation === "lessThan") {
-            const asDate = new Date(value).valueOf();
-            return asDate
-              ? new Date(actual).valueOf() < asDate
-              : Number(actual) < Number(asDate);
-          } else {
-            return false;
-          }
-        })
-      );
-      const code = rule?.transform?.code || 0;
-      const description = rule?.transform?.description || "";
-      const amount =
-        rule?.transform?.amount?.operation === "multiply"
-          ? Math.round(tx.amount * Number(rule.transform.amount.operand))
-          : 0;
-      return {
-        id,
-        date: dateFnsFormat(new Date(tx.createdAt), "yyyy-MM-dd hh:mm a"),
-        description,
-        amount,
-        code,
-        log: [],
-        url: `https://mercury.com/transactions/${id}`,
-        found: !!rule,
-      };
-    }
-    case "stripe": {
-      return {
-        id,
-        date: dateFnsFormat(new Date(0), "yyyy-MM-dd hh:mm a"),
-        description: "",
-        amount: 0,
-        code: 0,
-        log: [],
-        url: "",
-        found: false,
-      };
-    }
-    case "splitwise": {
-      return {
-        id,
-        date: dateFnsFormat(new Date(0), "yyyy-MM-dd hh:mm a"),
-        description: "",
-        amount: 0,
-        code: 0,
-        log: [],
-        url: "",
-        found: false,
-      };
-    }
-    case "chase": {
-      return {
-        id,
-        date: dateFnsFormat(new Date(0), "yyyy-MM-dd hh:mm a"),
-        description: "",
-        amount: 0,
-        code: 0,
-        log: [],
-        url: "",
-        found: false,
-      };
-    }
-    case "venmo": {
-      return {
-        id,
-        date: dateFnsFormat(new Date(0), "yyyy-MM-dd hh:mm a"),
-        description: "",
-        amount: 0,
-        code: 0,
-        log: [],
-        url: "",
-        found: false,
-      };
-    }
-    case "citibank": {
-      return {
-        id,
-        date: dateFnsFormat(new Date(0), "yyyy-MM-dd hh:mm a"),
-        description: "",
-        amount: 0,
-        code: 0,
-        log: [],
-        url: "",
-        found: false,
-      };
-    }
-    default:
-      throw new NotFoundResponse(`Unknown source ${source}`);
-  }
+            r.amount?.operand || "100",
+            r.code || 0,
+            r.description || "Misisng description",
+          ])
+        );
+        return connection.execute(
+          `INSERT INTO rule_conditions (uuid, rule_uuid, condition_key, operation, value, position)
+          VALUES ${ruleRecords
+            .flatMap((r) => r.conditions.map(() => `(?,?,?,?,?,?)`))
+            .join(",")}`,
+          ruleRecords.flatMap((r) =>
+            r.conditions.flatMap((rc, position) => [
+              rc.uuid,
+              r.uuid,
+              rc.key,
+              RULE_CONDITION_OPERATIONS.indexOf(rc.operation),
+              rc.value,
+              position + 1,
+            ])
+          )
+        );
+      })
+  );
 };
 
-export default getSourceTransaction;
+export const revert = ({ connection }: MigrationProps) => {
+  return getMysqlConnection(connection).then((connection) =>
+    connection
+      .execute(`DROP TABLE rule_conditions`)
+      .then(() => connection.execute(`DROP TABLE rules`))
+  );
+};

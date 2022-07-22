@@ -2,6 +2,7 @@ import { ActionFunction } from "@remix-run/node";
 import type { Params } from "react-router";
 import getUserId from "./getUserId.server";
 import handleAsResponse from "./handleAsResponse.server";
+import { NotFoundResponse } from "./responses.server";
 
 type ActionMethod = "POST" | "PUT" | "DELETE";
 
@@ -66,7 +67,7 @@ const remixAppAction = (
       });
       return handleAsResponse(response, `Unknown Application ${method} Error`);
     } else {
-      throw new Response(`Unsupported method ${method}`, { status: 404 });
+      throw new NotFoundResponse(`Unsupported method ${method}`);
     }
   });
   return handleAsResponse(

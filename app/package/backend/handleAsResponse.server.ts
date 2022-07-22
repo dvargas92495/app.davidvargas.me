@@ -3,7 +3,7 @@ const handleAsResponse = <T>(output: T, prefix?: string) =>
     console.error(e);
     if (e instanceof Response) throw e;
     throw new Response(prefix ? `${prefix}:\n${e.message}` : e.message, {
-      status: e.status || e.code || 500,
+      status: Number(e.status) || Number(e.code) || 500,
     });
   });
 

@@ -2,6 +2,7 @@ import { UserButton } from "@clerk/remix";
 import React from "react";
 import { Link, Outlet, useLoaderData, useMatches } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/node";
+import getUserId from "../backend/getUserId.server";
 
 const PublicPage: React.FC<{
   homeIcon?: React.ReactNode;
@@ -105,9 +106,7 @@ const PublicPage: React.FC<{
 };
 
 export const loader: LoaderFunction = ({ request }) => {
-  return import("@clerk/remix/ssr.server.js")
-    .then((clerk) => clerk.getAuth(request))
-    .then((authData) => !!authData.userId);
+  return getUserId(request).then((id) => !!id);
 };
 
 export default PublicPage;
