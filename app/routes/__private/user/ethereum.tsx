@@ -7,18 +7,17 @@ import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
 import listEthereumRecords from "~/data/listEthereumRecords.server";
 import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
 
+type Row = Awaited<ReturnType<typeof listEthereumRecords>>["data"][number];
+
 const UserEthereum = () => {
   const actionData = useActionData();
   const navigate = useNavigate();
-  const [recordSelected, setRecordSelected] =
-    useState<
-      Awaited<ReturnType<typeof listEthereumRecords>>["data"][number]
-    >();
+  const [recordSelected, setRecordSelected] = useState<Row>();
   return (
     <>
       <Table
         onRowClick={(row) => {
-          setRecordSelected(row);
+          setRecordSelected(row as Row);
           navigate(`/user/ethereum/${row.hash}`);
         }}
       />
@@ -36,7 +35,9 @@ const UserEthereum = () => {
 };
 
 export const loader: LoaderFunction = (args) => {
-  return remixAppLoader(args, ({ userId, searchParams }) => listEthereumRecords(userId, !!searchParams['smart']));
+  return remixAppLoader(args, ({ userId, searchParams }) =>
+    listEthereumRecords(userId, !!searchParams["smart"])
+  );
 };
 
 export const ErrorBoundary = DefaultErrorBoundary;
