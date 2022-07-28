@@ -6,7 +6,8 @@ import { Readable } from "stream";
 const uploadFile = ({
   Key = "",
   Body = "",
-}: Partial<Pick<PutObjectCommandInput, "Body" | "Key">>) => {
+  Metadata,
+}: Partial<Pick<PutObjectCommandInput, "Body" | "Key" | "Metadata">>) => {
   if (process.env.NODE_ENV === "development") {
     const path = `public/${Key}`;
     const dir = nodepath.dirname(path);
@@ -28,6 +29,7 @@ const uploadFile = ({
         Bucket: (process.env.ORIGIN || "").replace(/^https:\/\//, ""),
         Key,
         Body,
+        Metadata,
       })
       .then(() => true);
   }
