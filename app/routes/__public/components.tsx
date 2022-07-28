@@ -58,6 +58,7 @@ export const loader: LoaderFunction = () => {
     "DefaultCatchBoundary",
     "DefaultErrorBoundary",
     "Dialog",
+    "DownloadFile",
     "Landing",
     "Loading",
     "NumberInput",
@@ -68,6 +69,7 @@ export const loader: LoaderFunction = () => {
     "Textarea",
     "TextInput",
     "Toast",
+    "UploadFile"
   ];
 };
 
