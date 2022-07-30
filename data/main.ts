@@ -42,22 +42,9 @@ base({
   clerkDnsId: "iecxnb2omjxr",
   schema,
   variables: [
-    "notion_api_key","npm_token","infura_project_id",
+    "notion_api_key",
+    "npm_token",
+    "infura_project_id",
+    "convertkit_api_key",
   ],
-  callback() {
-
-    const convertkit_api_key = new TerraformVariable(
-      this,
-      "convertkit_api_key",
-      {
-        type: "string",
-      }
-    );
-
-    new ActionsSecret(this, "convertkit_api_key_secret", {
-      repository: projectName,
-      secretName: "CONVERTKIT_API_KEY",
-      plaintextValue: convertkit_api_key.value,
-    });
-  },
 });
