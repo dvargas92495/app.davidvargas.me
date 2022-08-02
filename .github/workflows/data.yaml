@@ -23,5 +23,5 @@ jobs:
         run: npm install
       - name: plan
         run: npx fuego plan
-      # - name: apply
-      #   run: npx fuego apply
+      - name: apply
+        run: npx fuego apply
