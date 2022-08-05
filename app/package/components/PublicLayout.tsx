@@ -26,24 +26,19 @@ const PublicPage: React.FC<{
           <Link to={"/"} className="flex max-h-full w-16 mr-32">
             {homeIcon}
           </Link>
-          <div className="justify-center flex-grow flex">
-            {pages.map((p, i) => (
-              <React.Fragment key={i}>
-                {i > 0 && (
-                  <div className="border-l border-l-black border-opacity-50" />
-                )}
-                <h6 className="mx-2 text-xl">
-                  <a
-                    href={`/${p}`}
-                    color="inherit"
-                    className={
-                      "hover:text-sky-400 hover:underline cursor-pointer"
-                    }
-                  >
-                    {p}
-                  </a>
-                </h6>
-              </React.Fragment>
+          <div className="justify-start flex-grow flex gap-6 capitalize text-lg items-center h-full">
+            {pages.map((p) => (
+              <h6 className="mx-2 text-xl">
+                <a
+                  href={`/${p}`}
+                  color="inherit"
+                  className={
+                    "text-gray-400 hover:text-gray-700 active:text-gray-800 hover:no-underline active:no-underline cursor-pointer"
+                  }
+                >
+                  {p}
+                </a>
+              </h6>
             ))}
           </div>
           <div className="w-48 flex justify-end items-center">
