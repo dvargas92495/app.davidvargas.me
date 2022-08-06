@@ -1,5 +1,5 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
-import { NotFoundError } from "~/package/errors";
+import { NotFoundError } from "~/package/backend/errors.server";
 
 const getEvent = (uuid: string) =>
   getMysqlConnection()

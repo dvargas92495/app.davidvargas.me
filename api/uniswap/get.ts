@@ -1,4 +1,4 @@
-import createAPIGatewayProxyHandler from "~/package/createAPIGatewayProxyHandler";
+import createAPIGatewayProxyHandler from "~/package/backend/createAPIGatewayProxyHandler.server";
 import axios from "axios";
 
 const tokens = {
