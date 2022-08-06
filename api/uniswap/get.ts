@@ -1,4 +1,4 @@
-import createAPIGatewayProxyHandler from "aws-sdk-plus/dist/createAPIGatewayProxyHandler";
+import createAPIGatewayProxyHandler from "~/package/createAPIGatewayProxyHandler";
 import axios from "axios";
 
 const tokens = {

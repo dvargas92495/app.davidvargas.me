@@ -3,7 +3,7 @@ import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from "aws-lambda";
 import axios, { AxiosError, AxiosRequestHeaders } from "axios";
 import Stripe from "stripe";
-import sendEmail from "aws-sdk-plus/dist/sendEmail";
+import sendEmail from "~/package/sendEmail";
 import React from "react";
 import FailedInvoice from "~/emails/FailedInvoice";
 import getFailedInvoiceData from "~/data/getFailedInvoiceData.server";

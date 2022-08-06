@@ -1,5 +1,5 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
-import { NotFoundError } from "aws-sdk-plus/dist/errors";
+import { NotFoundError } from "~/package/errors";
 
 const getEvent = (uuid: string) =>
   getMysqlConnection()
