@@ -5,7 +5,7 @@ on:
     branches: main
     paths:
       - "app/**"
-      - ".github/workflows/main.yaml"
+      - ".github/workflows/app.yaml"
 
 env:
   API_URL: https://api.app.davidvargas.me
