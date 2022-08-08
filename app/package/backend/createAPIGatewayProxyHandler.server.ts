@@ -1,21 +1,30 @@
 import type { APIGatewayProxyHandler } from "aws-lambda";
 import emailError from "./emailError.server";
 
-const excludeCors = (headers: Record<string, unknown>) =>
-  Object.fromEntries(
-    Object.entries(headers).filter(
-      ([h]) => h.toLowerCase() !== "access-control-allow-origin"
-    )
-  );
-
 type Logic<T, U> = (e: T) => string | U | Promise<U | string>;
 
 const createAPIGatewayProxyHandler =
   <T extends Record<string, unknown>, U extends Record<string, unknown>>(
     args: Logic<T, U> | { logic: Logic<T, U>; allowedOrigins?: string[] }
   ): APIGatewayProxyHandler =>
-  (event) =>
-    new Promise<U | string>((resolve, reject) => {
+  (event) => {
+    const allowedOrigins =
+      typeof args === "function" ? [] : args.allowedOrigins || [];
+    const requestOrigin = event.headers.origin || event.headers.Origin || "";
+    const cors = allowedOrigins.includes(requestOrigin)
+      ? requestOrigin
+      : process.env.ORIGIN || "*";
+    const getHeaders = (responseHeaders: unknown) => ({
+      "Access-Control-Allow-Origin": cors,
+      ...(typeof responseHeaders === "object" && responseHeaders
+        ? Object.fromEntries(
+            Object.entries(responseHeaders).filter(
+              ([h]) => !/access-control-allow-origin/i.test(h)
+            )
+          )
+        : {}),
+    });
+    return new Promise<U | string>((resolve, reject) => {
       try {
         const logic = typeof args === "function" ? args : args.logic;
         resolve(
@@ -30,14 +39,6 @@ const createAPIGatewayProxyHandler =
       }
     })
       .then((response) => {
-        const allowedOrigins =
-          typeof args === "function" ? [] : args.allowedOrigins || [];
-        const requestOrigin =
-          event.headers.origin || event.headers.Origin || "";
-        const cors = allowedOrigins.includes(requestOrigin)
-          ? requestOrigin
-          : process.env.ORIGIN || "*";
-
         if (typeof response === "object") {
           const { headers, code, ...res } = response;
 
@@ -46,12 +47,7 @@ const createAPIGatewayProxyHandler =
           return {
             statusCode,
             body: JSON.stringify(res),
-            headers: {
-              "Access-Control-Allow-Origin": cors,
-              ...(typeof headers === "object" && headers
-                ? excludeCors(headers as Record<string, unknown>)
-                : {}),
-            },
+            headers: getHeaders(headers),
           };
         } else {
           return {
@@ -69,10 +65,7 @@ const createAPIGatewayProxyHandler =
           typeof e.code === "number" && e.code >= 400 && e.code < 600
             ? e.code
             : 500;
-        const headers = {
-          "Access-Control-Allow-Origin": process.env.ORIGIN || "*",
-          ...(typeof e.headers === "object" ? excludeCors(e.headers) : {}),
-        };
+        const headers = getHeaders(e.headers);
         const userResponse = {
           statusCode,
           body: e.message,
@@ -89,5 +82,6 @@ const createAPIGatewayProxyHandler =
             }))
           : userResponse;
       });
+  };
 
 export default createAPIGatewayProxyHandler;
