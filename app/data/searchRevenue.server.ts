@@ -23,7 +23,7 @@ const searchRevenue = ({
           return a;
         });
     })
-    .then((a) => {
+    .then(([a]) => {
       const values = a as {
         date: Date;
         amount: number;

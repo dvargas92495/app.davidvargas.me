@@ -44,7 +44,7 @@ const listSourceTransactions = ({
             `SELECT source_id, source FROM events WHERE date >= ? AND date <= ?`,
             [startDate, date]
           )
-          .then((a) => {
+          .then(([a]) => {
             con.destroy();
             const txs = a as { source_id: string; source: string }[];
             return txs.reduce((p, c) => {

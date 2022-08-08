@@ -9,7 +9,7 @@ const getEvent = (uuid: string) =>
         return a;
       })
     )
-    .then((a) => {
+    .then(([a]) => {
       const record = (
         a as {
           uuid: string;

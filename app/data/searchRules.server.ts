@@ -36,7 +36,7 @@ const searchRevenue = ({
         return a;
       });
     })
-    .then(([a, l]) => {
+    .then(([[a], [l]]) => {
       const values = a as {
         label: string;
       }[];

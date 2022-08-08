@@ -34,7 +34,7 @@ const insertRevenueFromStripe = async ({
   return execute(
     `SELECT * FROM events WHERE source = "stripe" AND source_id = ?`,
     [id]
-  ).then((a) => {
+  ).then(([a]) => {
     const records = a as {
       uuid: string;
       source: string;

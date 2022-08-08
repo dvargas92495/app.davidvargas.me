@@ -8,7 +8,7 @@ const listRevenueFromStripe = () =>
         return a;
       })
     )
-    .then((a) => ({
+    .then(([a]) => ({
       values: (
         a as {
           uuid: string;

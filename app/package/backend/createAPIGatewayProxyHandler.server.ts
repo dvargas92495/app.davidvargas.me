@@ -7,7 +7,7 @@ const createAPIGatewayProxyHandler =
   <T extends Record<string, unknown>, U extends Record<string, unknown>>(
     args: Logic<T, U> | { logic: Logic<T, U>; allowedOrigins?: string[] }
   ): APIGatewayProxyHandler =>
-  (event) => {
+  (event, context) => {
     const allowedOrigins =
       typeof args === "function" ? [] : args.allowedOrigins || [];
     const requestOrigin = event.headers.origin || event.headers.Origin || "";
@@ -29,9 +29,10 @@ const createAPIGatewayProxyHandler =
         const logic = typeof args === "function" ? args : args.logic;
         resolve(
           logic({
-            ...JSON.parse(event.body || "{}"),
-            ...(event.queryStringParameters || {}),
             ...(event.requestContext.authorizer || {}),
+            requestId: context.awsRequestId,
+            ...(event.queryStringParameters || {}),
+            ...JSON.parse(event.body || "{}"),
           })
         );
       } catch (e) {

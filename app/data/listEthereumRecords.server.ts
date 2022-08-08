@@ -1,7 +1,7 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
 import axios from "axios";
 import dateFnsFormat from "date-fns/format";
-import type mysql from "mysql2";
+import type mysql from "mysql2/promise";
 import Web3 from "web3";
 import addressBook from "~/enums/addressBook";
 
@@ -40,7 +40,7 @@ const listEtherscanRecords = (
             `SELECT source_id FROM personal_transfers WHERE source = "ethereum"`,
             []
           ),
-        ]).then(([a, b, c]) => {
+        ]).then(([[a], [b], [c]]) => {
           con.destroy();
           const txs = (a as { source_id: string }[])
             .concat(b as { source_id: string }[])

@@ -18,7 +18,7 @@ const getRule = (uuid: string) =>
         return res;
       })
     )
-    .then(([a, b]) => {
+    .then(([[a], [b]]) => {
       const record = (
         a as {
           uuid: string;
