@@ -1,6 +1,7 @@
 import { S3, GetObjectCommandInput } from "@aws-sdk/client-s3";
 import fs from "fs";
 import { Readable } from "stream";
+import { domain } from "./constants.server";
 
 const downloadFile = ({
   Key = "",
@@ -11,7 +12,7 @@ const downloadFile = ({
     return Promise.resolve(fs.createReadStream(path));
   } else {
     const s3 = new S3({ region: "us-east-1" });
-    const Bucket = (process.env.ORIGIN || "").replace(/^https:\/\//, "");
+    const Bucket = domain;
     return s3.listObjectsV2({ Bucket, Prefix: Key }).then((r) => {
       if (r.KeyCount === 0) return new Readable();
       return s3

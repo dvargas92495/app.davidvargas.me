@@ -1,13 +1,10 @@
 import AWS from "aws-sdk";
 import type React from "react";
 import ReactDOMServer from "react-dom/server";
+import { domain } from "./constants.server";
 
 const ses = new AWS.SES();
-export const supportEmail =
-  process.env.SUPPORT_EMAIL ||
-  (process.env.ORIGIN
-    ? `support@${process.env.ORIGIN.replace(/^https?:\/\//, "")}`
-    : "");
+export const supportEmail = process.env.SUPPORT_EMAIL || `support@${domain}`;
 
 const sendEmail = ({
   to = supportEmail,

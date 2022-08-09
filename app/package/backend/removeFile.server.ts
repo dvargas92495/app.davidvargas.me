@@ -1,5 +1,6 @@
 import { S3, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import fs from "fs";
+import { domain } from "./constants.server";
 
 const removeFile = ({
   Key = "",
@@ -12,7 +13,7 @@ const removeFile = ({
     const s3 = new S3({ region: "us-east-1" });
     return s3
       .deleteObject({
-        Bucket: (process.env.ORIGIN || "").replace(/^https:\/\//, ""),
+        Bucket: domain,
         Key,
       })
       .then(() => true);

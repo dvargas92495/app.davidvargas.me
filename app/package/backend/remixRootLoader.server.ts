@@ -1,6 +1,7 @@
 import { rootAuthLoader } from "@clerk/remix/ssr.server";
 import type { LoaderFunction } from "@remix-run/node";
 import type { Context } from "aws-lambda";
+import { v4 } from "uuid";
 
 const remixRootLoader = (
   args: Parameters<LoaderFunction>[0] & {
@@ -16,6 +17,7 @@ const remixRootLoader = (
           lambdaContext: {
             invokedFunctionArn: "",
             logGroupName: "",
+            awsRequestId: v4(),
           },
         }
       ).lambdaContext as Context;
