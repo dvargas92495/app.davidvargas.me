@@ -8,11 +8,11 @@ import {
 } from "@remix-run/react";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import Table from "~/package/components/Table";
-import DefaultErrorBoundary from "~/package/components/DefaultErrorBoundary";
+export { default as ErrorBoundary } from "~/package/components/DefaultErrorBoundary";
 import remixAppAction from "~/package/backend/remixAppAction.server";
 import insertEventFromSource from "~/data/insertEventFromSource.server";
 import listSourceTransactions from "~/data/listSourceTransactions.server";
-import DefaultCatchBoundary from "~/package/components/DefaultCatchBoundary";
+export { default as CatchBoundary } from "~/package/components/DefaultCatchBoundary";
 import Button from "~/package/components/Button";
 import getSourceTransaction from "~/data/getSourceTransaction.server";
 import SuccessfulActionToast from "~/package/components/SuccessfulActionToast";
@@ -123,8 +123,5 @@ export const action: ActionFunction = (args) => {
         })),
   });
 };
-
-export const ErrorBoundary = DefaultErrorBoundary;
-export const CatchBoundary = DefaultCatchBoundary;
 
 export default UserMercury;

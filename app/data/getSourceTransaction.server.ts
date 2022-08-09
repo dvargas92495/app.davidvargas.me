@@ -4,423 +4,8 @@ import { z } from "zod";
 import { NotFoundResponse } from "~/package/backend/responses.server";
 import axios from "axios";
 import { taxCodeByLabel } from "~/enums/taxCodes";
-import type { Rule } from "~/enums/rules";
-
-const rules: Rule[] = [
-  {
-    conditions: [
-      { key: "counterpartyName", value: "UNIT", operation: "equals" },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Draw"],
-      description: "Setting Aside for Taxes and IRA",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "CATCH FINANCIAL",
-        operation: "startsWith",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Draw"],
-      description: "Setting Aside for Taxes and IRA",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "Bond Financial T",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Draw"],
-      description: "Setting Aside for Taxes and IRA",
-    },
-  },
-  {
-    conditions: [
-      { key: "counterpartyName", value: "DAVID VARGAS", operation: "equals" },
-      { key: "createdAt", value: "2022-02-28", operation: "lessThan" },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Draw"],
-      description: "Setting Aside for Taxes and IRA",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "OscarInsuranceCo",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Insurance"],
-      description: "Health Insurance",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "GUARDIAN DENTAL",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Insurance"],
-      description: "Dental Insurance",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "Jonathan Hillis",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Wages & Salaries"],
-      description: "Mentorship on an Income Sharing Agreement",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "STRIPE",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Capital"],
-      description: "Payout from Stripe",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "Citi - Checking",
-        operation: "startsWith",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Capital"],
-      description: "Transfer with personal checking account",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "FISSION Internet",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Service"],
-      description: "Fission Freelancing",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "CONVERTKIT EMAIL",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Dues & Subscriptions"],
-      description: "Email Marketing Software",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "GitHub Sponsors",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Service"],
-      description: "RoamJS Sponsors",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "Amazon Web Services",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Dues & Subscriptions"],
-      description: "App Hosting",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "GITHUB",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Dues & Subscriptions"],
-      description: "Sponsoring Software",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "HMF",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Automobile Expense"],
-      description: "Car for Commuting",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "ROBINHOOD",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Investment"],
-      description: "Personal Investments",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "FUNDRISE",
-        operation: "startsWith",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Investment"],
-      description: "Personal Investments",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "Roam Research",
-        operation: "startsWith",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Service"],
-      description: "RoamJS Freelancing",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "GEICO",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Automobile Expense"],
-      description: "Insurance for Car for Commuting",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "Vargas Arts, LLC",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Service"],
-      description: "RoamJS SmartBlocks",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "CHASE CREDIT CRD",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Capital"],
-      description: "Personal Paycheck",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "VENMO",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Owner's Capital"],
-      description: "Personal Paycheck",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "Xero Inc",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Dues & Subscriptions"],
-      description: "Accounting Software",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "ALEXANDRU GLV",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Subcontractors"],
-      description: "Design Contractor",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "Calendly",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Dues & Subscriptions"],
-      description: "Scheduling Software",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "United States Postal Service",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Dues & Subscriptions"],
-      description: "Mailing Taxes",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "LogMeIn",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Dues & Subscriptions"],
-      description: "Password Management Software",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "LOOM SUBSCRIPTION",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Dues & Subscriptions"],
-      description: "Video Recording Software",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "Givebutter",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Service"],
-      description: "RoamJS Sponsors",
-    },
-  },
-  {
-    conditions: [
-      {
-        key: "counterpartyName",
-        value: "AME*GOGOAIRCR",
-        operation: "equals",
-      },
-    ],
-    transform: {
-      amount: { operation: "multiply", operand: "100" },
-      code: taxCodeByLabel["Dues & Subscriptions"],
-      description: "Wifi for Work",
-    },
-  },
-];
+import { Rule, TRANSFORM_AMOUNT_OPERATION } from "~/enums/rules";
+import getMysqlConnection from "~/package/backend/mysql.server";
 
 const dataSchema = z.object({
   source: z.string(),
@@ -515,6 +100,86 @@ const getSourceTransaction = async ({
         .then((tx) => tx.data)
         .catch(() => {
           throw new Error("Failed to find transaction");
+        });
+      const rules = await getMysqlConnection()
+        .then((cxn) =>
+          cxn.execute(
+            `SELECT c.*, r.transform_amount_operation, r.transform_amount_operand, r.transform_code, r.transform_description 
+            FROM rules r INNER JOIN rule_conditions c ON c.rule_uuid = r.uuid`
+          )
+        )
+        .then(([res]) => {
+          const rows = res as {
+            transform_amount_operation: number;
+            transform_amount_operand: number;
+            transform_code: number;
+            transform_description: string;
+            rule_uuid: string;
+            position: number;
+            uuid: string;
+            condition_key: string;
+            value: string;
+            operation: string;
+          }[];
+          const rules = rows.reduce(
+            (p, c) => {
+              if (p[c.rule_uuid]) {
+                p[c.rule_uuid].conditions.push({
+                  key: c.condition_key,
+                  operation: c.operation,
+                  value: c.value,
+                  position: c.position,
+                });
+              } else {
+                p[c.rule_uuid] = {
+                  transform: {
+                    description: c.transform_description,
+                    code: c.transform_code,
+                    amount: {
+                      operation:
+                        TRANSFORM_AMOUNT_OPERATION[
+                          c.transform_amount_operation
+                        ],
+                      operand: c.transform_amount_operand,
+                    },
+                  },
+                  conditions: [
+                    {
+                      key: c.condition_key,
+                      value: c.value,
+                      operation: c.operation,
+                      position: c.position,
+                    },
+                  ],
+                };
+              }
+              return p;
+            },
+            {} as Record<
+              string,
+              {
+                conditions: {
+                  key: string;
+                  operation: string;
+                  value: string;
+                  position: number;
+                }[];
+                transform: {
+                  description: string;
+                  code: number;
+                  amount: {
+                    operation: string;
+                    operand: number;
+                  };
+                };
+              }
+            >
+          );
+          return Object.entries(rules).map(([uuid, obj]) => ({
+            ...obj,
+            uuid,
+            conditions: obj.conditions.sort((a, b) => a.position - b.position),
+          }));
         });
       const rule = rules.find((r) =>
         r.conditions.every(({ key, operation, value }) => {

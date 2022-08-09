@@ -14,7 +14,7 @@ const schema = z.object({
     .transform((s) => {
       return new Date(s);
     }),
-  range: z.string().optional().default("30").transform(Number),
+  range: z.string().optional().default("7").transform(Number),
 });
 
 const listSourceTransactions = ({

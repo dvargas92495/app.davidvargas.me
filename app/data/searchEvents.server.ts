@@ -1,6 +1,6 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
 
-const searchRevenue = ({
+const searchEvents = ({
   searchParams,
 }: {
   searchParams: Record<string, string>;
@@ -19,7 +19,7 @@ const searchRevenue = ({
           ${!keys.length ? "" : "WHERE "}${keys
             .map((k) => `${k} = ?`)
             .join(" AND ")}
-          ORDER BY date LIMIT ?, ?`,
+          ORDER BY date DESC LIMIT ?, ?`,
           keys
             .map((k) => searchParams[k])
             .concat(
@@ -59,4 +59,4 @@ const searchRevenue = ({
       };
     });
 
-export default searchRevenue;
+export default searchEvents;
