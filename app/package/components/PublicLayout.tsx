@@ -28,7 +28,7 @@ const PublicPage: React.FC<{
           </Link>
           <div className="justify-start flex-grow flex gap-6 capitalize text-lg items-center h-full">
             {pages.map((p) => (
-              <h6 className="mx-2 text-xl">
+              <h6 className="mx-2 text-xl" key={p}>
                 <a
                   href={`/${p}`}
                   color="inherit"
