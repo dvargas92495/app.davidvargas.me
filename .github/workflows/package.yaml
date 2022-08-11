@@ -6,6 +6,7 @@ on:
     paths:
       - "app/package/**"
       - "scripts/**"
+      - "package.json"
       - ".github/workflows/package.yaml"
 env:
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
