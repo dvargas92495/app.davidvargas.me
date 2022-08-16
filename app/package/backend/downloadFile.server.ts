@@ -3,18 +3,24 @@ import fs from "fs";
 import { Readable } from "stream";
 import { domain } from "./constants.server";
 
+const getDefault = () => {
+  const r = new Readable();
+  r.push(null);
+  return r;
+};
+
 const downloadFile = ({
   Key = "",
 }: Partial<Pick<GetObjectCommandInput, "Key">>) => {
   if (process.env.NODE_ENV === "development") {
     const path = `public/${Key}`;
-    if (!fs.existsSync(path)) return Promise.resolve(new Readable());
+    if (!fs.existsSync(path)) return Promise.resolve(getDefault());
     return Promise.resolve(fs.createReadStream(path));
   } else {
     const s3 = new S3({ region: "us-east-1" });
     const Bucket = domain;
     return s3.listObjectsV2({ Bucket, Prefix: Key }).then((r) => {
-      if (r.KeyCount === 0) return new Readable();
+      if (r.KeyCount === 0) return getDefault();
       return s3
         .getObject({
           Bucket,
