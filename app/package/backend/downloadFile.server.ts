@@ -31,16 +31,21 @@ const downloadFile = ({
   }
 };
 
+export const downloadFileBuffer = (
+  args: Parameters<typeof downloadFile>[0]
+): Promise<Buffer> =>
+  downloadFile(args).then((fil) => {
+    const chunks: Buffer[] = [];
+    return new Promise<Buffer>((resolve, reject) => {
+      fil.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+      fil.on("error", (err) => reject(err));
+      fil.on("end", () => resolve(Buffer.concat(chunks)));
+    });
+  });
+
 export const downloadFileContent = (
   args: Parameters<typeof downloadFile>[0]
 ): Promise<string> =>
-  downloadFile(args).then((fil) => {
-    const chunks: Buffer[] = [];
-    return new Promise<string>((resolve, reject) => {
-      fil.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-      fil.on("error", (err) => reject(err));
-      fil.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-    });
-  });
+  downloadFileBuffer(args).then((fil) => fil.toString("utf8"));
 
 export default downloadFile;
