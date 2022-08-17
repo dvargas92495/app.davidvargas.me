@@ -3,8 +3,10 @@ import dateFnsFormat from "date-fns/format";
 import { z } from "zod";
 import { NotFoundResponse } from "~/package/backend/responses.server";
 import axios from "axios";
-import { taxCodeByLabel } from "~/enums/taxCodes";
-import { Rule, TRANSFORM_AMOUNT_OPERATION, RULE_CONDITION_OPERATIONS } from "~/enums/rules";
+import {
+  TRANSFORM_AMOUNT_OPERATION,
+  RULE_CONDITION_OPERATIONS,
+} from "~/enums/rules";
 import getMysqlConnection from "~/package/backend/mysql.server";
 
 const dataSchema = z.object({
@@ -101,12 +103,11 @@ const getSourceTransaction = async ({
         .catch(() => {
           throw new Error("Failed to find transaction");
         });
-      const rules = await getMysqlConnection()
-        .then((cxn) =>
-          cxn.execute(
-            `SELECT c.*, r.transform_amount_operation, r.transform_amount_operand, r.transform_code, r.transform_description 
+      const cxn = await getMysqlConnection();
+      const rules = await cxn
+        .execute(
+          `SELECT c.*, r.transform_amount_operation, r.transform_amount_operand, r.transform_code, r.transform_description 
             FROM rules r INNER JOIN rule_conditions c ON c.rule_uuid = r.uuid`
-          )
         )
         .then(([res]) => {
           const rows = res as {
@@ -182,6 +183,7 @@ const getSourceTransaction = async ({
             conditions: obj.conditions.sort((a, b) => a.position - b.position),
           }));
         });
+      cxn.destroy();
       const rule = rules.find((r) =>
         r.conditions.every(({ key, operation, value }) => {
           if (!(key in tx)) return false;
