@@ -75,9 +75,7 @@ const createRule = ({
         .then(() =>
           cxn.execute(
             `INSERT INTO rule_conditions (uuid, rule_uuid, condition_key, operation, value, position)
-        VALUES ${rule.conditionKeys
-          .map(() => `(UUID(),?,?,?,?,?)`)
-          .join(",")}`,
+        VALUES ${rule.conditionKeys.map(() => `(UUID(),?,?,?,?,?)`).join(",")}`,
             rule.conditionKeys.flatMap((key, position) => [
               ruleUuid,
               key,
@@ -90,6 +88,7 @@ const createRule = ({
         .then(() => cxn.destroy())
     )
     .then(() => ({
+      uuid: ruleUuid,
       success: true,
       message: `Successfully created rule ${rule.label}`,
     }));

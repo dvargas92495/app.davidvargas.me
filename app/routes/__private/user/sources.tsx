@@ -18,6 +18,7 @@ import getSourceTransaction from "~/data/getSourceTransaction.server";
 import SuccessfulActionToast from "~/package/components/SuccessfulActionToast";
 
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+const INTERVAL = 7;
 
 const UserMercury = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const UserMercury = () => {
             onClick={() =>
               setSearchParams({
                 date: new Date(
-                  date.valueOf() - 30 * MILLISECONDS_IN_DAY
+                  date.valueOf() - INTERVAL * MILLISECONDS_IN_DAY
                 ).toJSON(),
               })
             }
@@ -52,12 +53,13 @@ const UserMercury = () => {
           <button
             className="bg-orange-500 font-bold cursor-pointer rounded-full h-8 w-8 disabled:bg-opacity-50 disabled:cursor-not-allowed"
             disabled={
-              new Date().valueOf() - date.valueOf() < 30 * MILLISECONDS_IN_DAY
+              new Date().valueOf() - date.valueOf() <
+              INTERVAL * MILLISECONDS_IN_DAY
             }
             onClick={() =>
               setSearchParams({
                 date: new Date(
-                  date.valueOf() + 30 * MILLISECONDS_IN_DAY
+                  date.valueOf() + INTERVAL * MILLISECONDS_IN_DAY
                 ).toJSON(),
               })
             }
