@@ -14,7 +14,7 @@ const searchRevenue = ({
       const index = searchParams["index"] || "1";
       return Promise.all([
         con.execute(
-          `SELECT label
+          `SELECT label, uuid
           FROM rules 
           ${!keys.length ? "" : "WHERE "}${keys
             .map((k) => `${k} = ?`)
@@ -39,6 +39,7 @@ const searchRevenue = ({
     .then(([[a], [l]]) => {
       const values = a as {
         label: string;
+        uuid: string;
       }[];
       const [{ count }] = l as { count: number }[];
       return {
