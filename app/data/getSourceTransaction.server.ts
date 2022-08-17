@@ -4,7 +4,7 @@ import { z } from "zod";
 import { NotFoundResponse } from "~/package/backend/responses.server";
 import axios from "axios";
 import { taxCodeByLabel } from "~/enums/taxCodes";
-import { Rule, TRANSFORM_AMOUNT_OPERATION } from "~/enums/rules";
+import { Rule, TRANSFORM_AMOUNT_OPERATION, RULE_CONDITION_OPERATIONS } from "~/enums/rules";
 import getMysqlConnection from "~/package/backend/mysql.server";
 
 const dataSchema = z.object({
@@ -119,14 +119,15 @@ const getSourceTransaction = async ({
             uuid: string;
             condition_key: string;
             value: string;
-            operation: string;
+            operation: number;
           }[];
+          console.log(rows.length);
           const rules = rows.reduce(
             (p, c) => {
               if (p[c.rule_uuid]) {
                 p[c.rule_uuid].conditions.push({
                   key: c.condition_key,
-                  operation: c.operation,
+                  operation: RULE_CONDITION_OPERATIONS[c.operation],
                   value: c.value,
                   position: c.position,
                 });
@@ -147,7 +148,7 @@ const getSourceTransaction = async ({
                     {
                       key: c.condition_key,
                       value: c.value,
-                      operation: c.operation,
+                      operation: RULE_CONDITION_OPERATIONS[c.operation],
                       position: c.position,
                     },
                   ],
