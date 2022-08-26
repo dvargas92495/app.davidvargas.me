@@ -40,7 +40,7 @@
     "@types/uuid": "8.3.4",
     "axios": "0.24.0",
     "date-fns": "2.28.0",
-    "fuegojs": "^0.35.12",
+    "fuegojs": "^0.35.14",
     "mysql2": "2.3.2",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
@@ -52,6 +52,7 @@
     "zod": "^3.16.0"
   },
   "dependencies": {
+    "@clerk/clerk-js": "^4.1.1",
     "markdown-to-jsx": "^7.1.7",
     "react-charts": "^3.0.0-beta.36",
     "web3": "1.6.0"

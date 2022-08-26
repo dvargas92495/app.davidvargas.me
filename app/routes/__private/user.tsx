@@ -9,9 +9,9 @@ const TABS = [
   "Events",
   "Rules",
   "Emails",
+  ///DEPRECATED///
   "Mysql",
   "Terraform",
-///DEPRECATED///
   "Ethereum",
 ];
 

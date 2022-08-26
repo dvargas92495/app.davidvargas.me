@@ -13,7 +13,7 @@ import {
 } from "@remix-run/react";
 import { ClerkApp, ClerkCatchBoundary } from "@clerk/remix";
 import Loading from "./Loading";
-import type remixRootLoader from "../backend/remixRootLoader.server"
+import type remixRootLoader from "../backend/remixRootLoader.server";
 // primary: "sky-400",
 // secondary: "orange-400",
 
@@ -72,7 +72,7 @@ const PageTransition = () => {
   ) : null;
 };
 
-type LoaderData = Awaited<ReturnType<typeof remixRootLoader>>
+type LoaderData = Awaited<ReturnType<typeof remixRootLoader>>;
 
 const App = () => {
   const data = useLoaderData<LoaderData>();

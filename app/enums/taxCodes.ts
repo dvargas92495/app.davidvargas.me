@@ -1,3 +1,5 @@
+// we learned that these are actually just specific to Xero and are not at all standardized -.-
+
 const CODES = [
   { id: 1520, label: "Computer & Office Equipment" },
   { id: 3000, label: "Owner's Capital" },
