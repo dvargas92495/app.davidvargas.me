@@ -2,6 +2,7 @@ import { ActionFunction } from "@remix-run/node";
 import type { Params } from "react-router";
 import getUserId from "./getUserId.server";
 import handleAsResponse from "./handleAsResponse.server";
+import parseRemixContext from "./parseRemixContext.server";
 import { NotFoundResponse } from "./responses.server";
 
 type ActionMethod = "POST" | "PUT" | "DELETE";
@@ -48,8 +49,7 @@ const remixAppAction = (
       )
       .catch(() => ({}));
     const context = {
-      requestId: (remixContext.lambdaContext as Record<string, string>)
-        .requestId,
+      requestId: parseRemixContext(remixContext).lambdaContext.awsRequestId,
     };
     const method = request.method as ActionMethod;
     if (typeof callback === "function") {

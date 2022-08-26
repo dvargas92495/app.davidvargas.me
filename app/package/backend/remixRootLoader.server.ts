@@ -1,7 +1,6 @@
 import { rootAuthLoader } from "@clerk/remix/ssr.server";
 import type { LoaderFunction } from "@remix-run/node";
-import { v4 } from "uuid";
-import { z } from "zod";
+import parseRemixContext from "./parseRemixContext.server";
 
 const remixRootLoader = (
   args: Parameters<LoaderFunction>[0] & {
@@ -12,14 +11,7 @@ const remixRootLoader = (
   rootAuthLoader(
     args,
     () => {
-      const lambdaContext = z
-        .object({
-          invokedFunctionArn: z.string().default(""),
-          logGroupName: z.string().default(""),
-          logStreamName: z.string().default(""),
-          awsRequestId: z.string().default(v4()),
-        })
-        .parse(args.context.lambdaContext);
+      const { lambdaContext } = parseRemixContext(args.context);
       const region = lambdaContext.invokedFunctionArn.match(
         /^arn:aws:lambda:([a-z0-9-]+):/
       )?.[1];

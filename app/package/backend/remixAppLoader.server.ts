@@ -2,6 +2,7 @@ import { LoaderFunction, redirect } from "@remix-run/node";
 import type { Params } from "react-router";
 import handleAsResponse from "./handleAsResponse.server";
 import getUserId from "./getUserId.server";
+import parseRemixContext from "./parseRemixContext.server";
 
 const remixAppLoader = (
   { request, params, context: remixContext }: Parameters<LoaderFunction>[0],
@@ -18,8 +19,7 @@ const remixAppLoader = (
     }
     const searchParams = Object.fromEntries(new URL(request.url).searchParams);
     const context = {
-      requestId: (remixContext.lambdaContext as Record<string, string>)
-        .requestId,
+      requestId: parseRemixContext(remixContext).lambdaContext.awsRequestId,
     };
     const response = callback
       ? callback({ userId, params, searchParams, context })
