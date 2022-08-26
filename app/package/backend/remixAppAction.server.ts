@@ -15,19 +15,19 @@ type CallbackArgs = {
   context: { requestId: string };
 };
 
+export type RemixAppActionCallback =
+  | ((
+      args: CallbackArgs & {
+        method: ActionMethod;
+      }
+    ) => ReturnType<ActionFunction>)
+  | {
+      [k in ActionMethod]?: (args: CallbackArgs) => ReturnType<ActionFunction>;
+    };
+
 const remixAppAction = (
   { request, params, context: remixContext }: Parameters<ActionFunction>[0],
-  callback?:
-    | ((
-        args: CallbackArgs & {
-          method: ActionMethod;
-        }
-      ) => ReturnType<ActionFunction>)
-    | {
-        [k in ActionMethod]?: (
-          args: CallbackArgs
-        ) => ReturnType<ActionFunction>;
-      }
+  callback?: RemixAppActionCallback
 ) => {
   const output = getUserId(request).then(async (userId) => {
     if (!userId) {

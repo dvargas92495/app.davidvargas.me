@@ -2,7 +2,9 @@ import { users } from "@clerk/clerk-sdk-node";
 import { LoaderFunction } from "@remix-run/node";
 import { domain } from "./constants.server";
 import { UnauthorizedError } from "./errors.server";
-import remixAppAction from "./remixAppAction.server";
+import remixAppAction, {
+  RemixAppActionCallback,
+} from "./remixAppAction.server";
 
 const verifyUser = (userId: string) =>
   users.getUser(userId).then((user) => {
@@ -19,7 +21,7 @@ const verifyUser = (userId: string) =>
 
 const remixAdminAction = (
   args: Parameters<LoaderFunction>[0],
-  callback?: Parameters<typeof remixAppAction>[1]
+  callback?: RemixAppActionCallback
 ) => {
   return remixAppAction(
     args,

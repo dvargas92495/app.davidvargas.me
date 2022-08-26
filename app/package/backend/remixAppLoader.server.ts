@@ -4,14 +4,16 @@ import handleAsResponse from "./handleAsResponse.server";
 import getUserId from "./getUserId.server";
 import parseRemixContext from "./parseRemixContext.server";
 
+export type RemixAppLoaderCallback = (args: {
+  userId: string;
+  params: Params<string>;
+  searchParams: Record<string, string>;
+  context: { requestId: string };
+}) => ReturnType<LoaderFunction>;
+
 const remixAppLoader = (
   { request, params, context: remixContext }: Parameters<LoaderFunction>[0],
-  callback?: (args: {
-    userId: string;
-    params: Params<string>;
-    searchParams: Record<string, string>;
-    context: { requestId: string };
-  }) => ReturnType<LoaderFunction>
+  callback?: RemixAppLoaderCallback
 ) => {
   return getUserId(request).then((userId) => {
     if (!userId) {
