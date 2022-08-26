@@ -52,7 +52,6 @@
     "zod": "^3.16.0"
   },
   "dependencies": {
-    "@clerk/clerk-js": "^4.1.1",
     "markdown-to-jsx": "^7.1.7",
     "react-charts": "^3.0.0-beta.36",
     "web3": "1.6.0"

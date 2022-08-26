@@ -11,10 +11,11 @@ type CallbackArgs = {
   data: Record<string, string[]>;
   params: Params<string>;
   searchParams: Record<string, string>;
+  context: { requestId: string };
 };
 
 const remixAppAction = (
-  { request, params }: Parameters<ActionFunction>[0],
+  { request, params, context: remixContext }: Parameters<ActionFunction>[0],
   callback?:
     | ((
         args: CallbackArgs & {
@@ -46,6 +47,10 @@ const remixAppAction = (
         )
       )
       .catch(() => ({}));
+    const context = {
+      requestId: (remixContext.lambdaContext as Record<string, string>)
+        .requestId,
+    };
     const method = request.method as ActionMethod;
     if (typeof callback === "function") {
       const response = callback({
@@ -54,6 +59,7 @@ const remixAppAction = (
         method: request.method as ActionMethod,
         searchParams,
         params,
+        context,
       });
       return handleAsResponse(response, "Unknown Application Action Error");
     }
@@ -64,6 +70,7 @@ const remixAppAction = (
         data,
         searchParams,
         params,
+        context,
       });
       return handleAsResponse(response, `Unknown Application ${method} Error`);
     } else {

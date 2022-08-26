@@ -1,5 +1,5 @@
 import { useUser, UserButton } from "@clerk/remix";
-import React from "react";
+import { Link, useLoaderData } from "@remix-run/react";
 import Dashboard from "./Dashboard";
 
 const UserFooter = () => {
@@ -8,7 +8,7 @@ const UserFooter = () => {
     <>
       <UserButton />
       <div className="ml-4">
-        {user.user?.firstName} {user.user?.lastName}
+        {user.user?.firstName || "Anonymous"} {user.user?.lastName}
       </div>
     </>
   );
@@ -21,9 +21,15 @@ const UserDashboard = ({
   title?: string;
   tabs: Parameters<typeof Dashboard>[0]["tabs"];
 }) => {
+  const { isAdmin } = useLoaderData<{ isAdmin: boolean }>();
   return (
     <Dashboard
-      footer={<UserFooter />}
+      footer={
+        <>
+          <UserFooter />
+          {isAdmin && <Link to={"/admin"} />}
+        </>
+      }
       root={"user"}
       tabs={tabs}
       title={title}
