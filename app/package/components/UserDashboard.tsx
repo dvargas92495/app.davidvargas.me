@@ -21,7 +21,7 @@ const UserDashboard = ({
   title?: string;
   tabs: Parameters<typeof Dashboard>[0]["tabs"];
 }) => {
-  const { isAdmin } = useLoaderData<{ isAdmin: boolean }>();
+  const { isAdmin } = useLoaderData<{ isAdmin: boolean }>() || {};
   return (
     <Dashboard
       footer={
