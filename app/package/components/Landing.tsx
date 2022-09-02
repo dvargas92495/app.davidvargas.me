@@ -82,7 +82,7 @@ export const Splash = ({
         <Logo className="h-full w-full" />
       </div>
       <SuccessfulActionToast
-        message="Successfully entered our waitlist!"
+        message="Click the confirmation link in your email to confirm!"
         fetcher={fetcher}
       />
     </div>
@@ -157,7 +157,7 @@ export const Stats = ({
 
 export const Subscribe = ({
   title,
-  message = "Successfully entered our waitlist!",
+  message = "Click the confirmation link in your email to confirm!",
 }: {
   title: React.ReactNode;
   message?: string;
