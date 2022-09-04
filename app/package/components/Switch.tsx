@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Switch as HeadlessSwitch } from "@headlessui/react";
-import mixClasses from "dist/app/package/utils/mixClasses";
+import mixClasses from "../utils/mixClasses";
 
 const Switch = ({
   defaultChecked = false,
