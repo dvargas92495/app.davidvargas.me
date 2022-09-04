@@ -23,7 +23,7 @@ const getMysqlConnection = (mysql?: mysql.Connection | string) => {
   return typeof mysql === "undefined"
     ? createConnection()
     : typeof mysql === "string"
-    ? Promise.resolve(connectionMap[mysql] || createConnection())
+    ? Promise.resolve(connectionMap[mysql] || createConnection(mysql))
     : Promise.resolve(mysql);
 };
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Switch as HeadlessSwitch } from "@headlessui/react";
+import mixClasses from "dist/app/package/utils/mixClasses";
 
 const Switch = ({
   defaultChecked = false,
@@ -7,17 +8,19 @@ const Switch = ({
   label,
   name,
   labelClassname,
+  className,
 }: {
   defaultChecked?: boolean;
   onChange?: (b: boolean) => void;
   label?: React.ReactNode;
   name?: string;
   labelClassname?: string;
+  className?: string;
 }) => {
   const [enabled, setEnabled] = useState(defaultChecked);
   return (
     <HeadlessSwitch.Group>
-      <div className="mb-6 flex items-center gap-4">
+      <div className={mixClasses("mb-6 flex items-center gap-4", className)}>
         <HeadlessSwitch
           checked={enabled}
           onChange={(s) => {
@@ -37,9 +40,10 @@ const Switch = ({
         </HeadlessSwitch>
         <HeadlessSwitch.Label
           htmlFor={name}
-          className={`block text-md font-medium text-gray-900 cursor-pointer select-none ${
-            labelClassname ? ` ${labelClassname}` : ""
-          }`}
+          className={mixClasses(
+            `block text-md font-medium text-gray-900 cursor-pointer select-none`,
+            labelClassname
+          )}
         >
           {label}
         </HeadlessSwitch.Label>
