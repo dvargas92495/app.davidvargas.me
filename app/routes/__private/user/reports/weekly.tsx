@@ -1,7 +1,7 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import remixAppLoader from "~/package/backend/remixAppLoader.server";
 import remixAppAction from "~/package/backend/remixAppAction.server";
-import Table from "dist/app/package/components/Table";
+import Table from "~/package/components/Table";
 import listWeeklyReports from "~/data/listWeeklyReports.server";
 import generateWeeklyReport from "~/data/generateWeeklyReport.server";
 import deleteReportRecord from "~/data/deleteReportRecord.server";
@@ -23,7 +23,9 @@ const ReportsWeeklyPage = () => {
         <Button>+ New</Button>
       </Form>
       <Table
-        onRowClick={(row) => submit({ uuid: row.uuid }, { method: "delete" })}
+        onRowClick={(row) =>
+          submit({ uuid: row.uuid as string }, { method: "delete" })
+        }
       />
     </>
   );
