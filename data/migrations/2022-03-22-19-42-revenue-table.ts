@@ -1,11 +1,8 @@
-import getMysqlConnection from "~/package/backend/mysql.server";
-import type { MigrationProps } from "fuegojs/dist/migrate";
+import type { MigrationProps } from "fuegojs/types";
 
-export const migrate = ({ connection }: MigrationProps): Promise<void> => {
-  return getMysqlConnection(connection)
-    .then((connection) =>
-      connection.execute(
-        `CREATE TABLE IF NOT EXISTS revenue (
+export const migrate = ({ connection }: MigrationProps): Promise<unknown> => {
+  return connection.execute(
+    `CREATE TABLE IF NOT EXISTS revenue (
         uuid      VARCHAR(36)  NOT NULL,
         source    VARCHAR(191) NOT NULL,
         source_id VARCHAR(191) NOT NULL,
@@ -17,7 +14,5 @@ export const migrate = ({ connection }: MigrationProps): Promise<void> => {
         PRIMARY KEY (uuid),
         CONSTRAINT UC_source UNIQUE (source,source_id)
     )`
-      )
-    )
-    .then(() => Promise.resolve());
+  );
 };

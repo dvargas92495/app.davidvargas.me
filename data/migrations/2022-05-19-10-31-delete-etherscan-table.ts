@@ -1,11 +1,9 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
-import type { MigrationProps } from "fuegojs/dist/migrate";
+import type { MigrationProps } from "fuegojs/types";
 
 export const migrate = ({ connection }: MigrationProps) => {
   return getMysqlConnection(connection).then((connection) =>
-    connection.execute(
-      `DROP TABLE etherscan`
-    )
+    connection.execute(`DROP TABLE etherscan`)
   );
 };
 

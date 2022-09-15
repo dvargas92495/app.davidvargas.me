@@ -1,4 +1,4 @@
-import base from "fuegojs/dist/base";
+import base from "fuegojs/utils/base";
 import schema from "./schema";
 
 const projectName = "app.davidvargas.me";

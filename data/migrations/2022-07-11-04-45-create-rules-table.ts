@@ -1,5 +1,5 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
-import type { MigrationProps } from "fuegojs/dist/migrate";
+import type { MigrationProps } from "fuegojs/types";
 import { taxCodeByLabel } from "~/enums/taxCodes";
 import { v4 } from "uuid";
 import { users } from "@clerk/clerk-sdk-node";

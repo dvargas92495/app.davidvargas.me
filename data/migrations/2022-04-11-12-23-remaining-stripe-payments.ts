@@ -1,5 +1,5 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
-import type { MigrationProps } from "fuegojs/dist/migrate";
+import type { MigrationProps } from "fuegojs/types";
 import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
 
 const IDS = [

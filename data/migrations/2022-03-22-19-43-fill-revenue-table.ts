@@ -1,7 +1,6 @@
-import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
+import insertRevenueFromStripe from "../../app/data/insertRevenueFromStripe.server";
 import Stripe from "stripe";
-import type { MigrationProps } from "fuegojs/dist/migrate";
-import getMysqlConnection from "~/package/backend/mysql.server";
+import type { MigrationProps } from "fuegojs/types";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   maxNetworkRetries: 3,
@@ -28,8 +27,7 @@ const collect = (starting_after?: string): Promise<number> => {
 export const migrate = ({ connection }: MigrationProps) =>
   collect()
     .then((d) => console.log("there are", d, "ids to migrate"))
-    .then(() => getMysqlConnection(connection))
-    .then((connection) =>
+    .then(() =>
       paymentIntents
         .map(
           (id) => () =>
@@ -42,4 +40,4 @@ export const migrate = ({ connection }: MigrationProps) =>
     .then(() => console.log("done"));
 
 export const revert = ({ connection }: MigrationProps) =>
-  getMysqlConnection(connection).then((c) => c.execute(`DELETE FROM revenue`));
+  connection.execute(`DELETE FROM revenue`);

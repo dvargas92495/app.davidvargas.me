@@ -1,5 +1,5 @@
 import getMysqlConnection from "~/package/backend/mysql.server";
-import type { MigrationProps } from "fuegojs/dist/migrate";
+import type { MigrationProps } from "fuegojs/types";
 import type mysql from "mysql2";
 
 export const migrate = ({ connection }: MigrationProps) => {
@@ -28,7 +28,11 @@ export const migrate = ({ connection }: MigrationProps) => {
           FROM revenue ON DUPLICATE KEY UPDATE amount = VALUES(amount)`
             )
             .then((r) =>
-              console.log("migrated", (r as mysql.OkPacket).affectedRows, "revenue records")
+              console.log(
+                "migrated",
+                (r as mysql.OkPacket).affectedRows,
+                "revenue records"
+              )
             ),
           connection
             .execute(
@@ -37,7 +41,11 @@ export const migrate = ({ connection }: MigrationProps) => {
           FROM expenses ON DUPLICATE KEY UPDATE amount = VALUES(amount)`
             )
             .then((r) =>
-              console.log("migrated", (r as mysql.OkPacket).affectedRows, "expense records")
+              console.log(
+                "migrated",
+                (r as mysql.OkPacket).affectedRows,
+                "expense records"
+              )
             ),
           connection
             .execute(
@@ -46,7 +54,11 @@ export const migrate = ({ connection }: MigrationProps) => {
           FROM personal_transfers ON DUPLICATE KEY UPDATE amount = VALUES(amount)`
             )
             .then((r) =>
-              console.log("migrated", (r as mysql.OkPacket).affectedRows, "transfer records")
+              console.log(
+                "migrated",
+                (r as mysql.OkPacket).affectedRows,
+                "transfer records"
+              )
             ),
         ])
       )

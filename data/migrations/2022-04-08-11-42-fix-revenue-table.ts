@@ -1,4 +1,4 @@
-import type { MigrationProps } from "fuegojs/dist/migrate";
+import type { MigrationProps } from "fuegojs/types";
 import getMysqlConnection from "~/package/backend/mysql.server";
 import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
 import Stripe from "stripe";
