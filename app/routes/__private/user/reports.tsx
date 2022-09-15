@@ -12,7 +12,7 @@ const UserReportsPage = () => {
     <div className="flex flex-col">
       <div className="flex items-center gap-4">
         {Tabs.map((t) => (
-          <TabLink to={t === "Home" ? "" : t.toLowerCase()} base={4}>
+          <TabLink to={t === "Home" ? "" : t.toLowerCase()} base={4} key={t}>
             {t}
           </TabLink>
         ))}

@@ -29,6 +29,33 @@ const ruleCondition = z.object({
   operation: z.number().max(Math.pow(2, 4)),
 });
 
-const schema = { rule, event, ruleCondition };
+const report = z.object({
+  uuid: z.string().uuid().describe("primary"),
+  userId: z.string().max(191),
+  start: z.date(),
+  end: z.date(),
+});
+
+const reportEvent = z.object({
+  uuid: z.string().uuid().describe("primary"),
+  eventUuid: z.string().uuid().describe("foreign"),
+  reportUuid: z.string().uuid().describe("foreign"),
+});
+
+const reportSource = z.object({
+  uuid: z.string().uuid().describe("primary"),
+  source: z.string().max(191).describe("unique"),
+  snapshot: z.number(),
+  reportUuid: z.string().uuid().describe("foreign unique"),
+});
+
+const schema = {
+  rule,
+  event,
+  report,
+  reportEvent,
+  reportSource,
+  ruleCondition,
+};
 
 export default schema;

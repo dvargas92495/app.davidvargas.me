@@ -122,7 +122,6 @@ const getSourceTransaction = async ({
             value: string;
             operation: number;
           }[];
-          console.log(rows.length);
           const rules = rows.reduce(
             (p, c) => {
               if (p[c.rule_uuid]) {
