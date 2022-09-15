@@ -1,4 +1,4 @@
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 import axios from "axios";
 import dateFnsFormat from "date-fns/format";
 import type mysql from "mysql2/promise";

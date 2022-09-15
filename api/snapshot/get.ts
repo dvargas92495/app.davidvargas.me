@@ -1,6 +1,6 @@
 import axios from "axios";
 import createAPIGatewayProxyHandler from "~/package/backend/createAPIGatewayProxyHandler.server";
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 
 const getLastWeeksValue = async (source: string, requestId: string) => {
   const cxn = await getMysqlConnection(requestId);

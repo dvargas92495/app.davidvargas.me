@@ -1,4 +1,4 @@
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 
 const deleteMigrationRecord = (uuid: string) => {
   return getMysqlConnection()

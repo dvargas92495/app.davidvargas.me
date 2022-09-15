@@ -1,7 +1,7 @@
 import axios from "axios";
 import { v4 } from "uuid";
 import { z } from "zod";
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 import listSources from "./listSources.server";
 
 const generateWeeklyReport = ({

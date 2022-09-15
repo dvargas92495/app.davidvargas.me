@@ -1,4 +1,4 @@
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 import { v4 } from "uuid";
 import { z } from "zod";
 

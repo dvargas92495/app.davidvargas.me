@@ -1,4 +1,4 @@
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 import { NotFoundError } from "~/package/backend/errors.server";
 import {
   RULE_CONDITION_OPERATIONS,

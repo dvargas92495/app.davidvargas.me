@@ -1,4 +1,4 @@
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 import insertRevenueFromStripe from "~/data/insertRevenueFromStripe.server";
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from "aws-lambda";
 import axios, { AxiosError, AxiosRequestHeaders } from "axios";

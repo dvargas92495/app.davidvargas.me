@@ -1,5 +1,5 @@
 import axios from "axios";
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 import dateFnsFormat from "date-fns/format";
 import { z } from "zod";
 import { MethodNotAllowedResponse } from "~/package/backend/responses.server";

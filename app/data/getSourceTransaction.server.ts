@@ -7,7 +7,7 @@ import {
   TRANSFORM_AMOUNT_OPERATION,
   RULE_CONDITION_OPERATIONS,
 } from "~/enums/rules";
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 
 const dataSchema = z.object({
   source: z.string(),

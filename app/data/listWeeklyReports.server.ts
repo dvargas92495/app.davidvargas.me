@@ -1,4 +1,4 @@
-import getMysqlConnection from "~/package/backend/mysql.server";
+import getMysqlConnection from "fuegojs/utils/mysql";
 
 const format = (n: number) => n.toString().padStart(2, "0");
 
@@ -53,7 +53,10 @@ const listWeeklyReports = async ({
       })),
     columns: Object.keys(reports).length
       ? [{ Header: "date", accessor: "date" }].concat(
-          Object.values(reports)[0].sources.map((s) => ({ Header: s[0], accessor: s[0] }))
+          Object.values(reports)[0].sources.map((s) => ({
+            Header: s[0],
+            accessor: s[0],
+          }))
         )
       : [],
   };
