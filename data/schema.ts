@@ -1,7 +1,19 @@
 import { z } from "zod";
 
+const uuid = z.string().uuid().describe("primary");
+const userId = z.string().max(191);
+
+const source = z.object({
+  uuid,
+  userId,
+  label: z.string().max(128),
+  snapshotUrl: z.string().max(512),
+  feedUrl: z.string().max(512),
+  credentials: z.string(),
+});
+
 const event = z.object({
-  uuid: z.string().uuid().describe("primary"),
+  uuid,
   source: z.string().max(191).describe("unique"),
   sourceId: z.string().max(191).describe("unique"),
   date: z.date(),
@@ -11,8 +23,8 @@ const event = z.object({
 });
 
 const rule = z.object({
-  uuid: z.string().uuid().describe("primary"),
-  userId: z.string().max(191),
+  uuid,
+  userId,
   label: z.string(),
   transformAmountOperation: z.number().max(Math.pow(2, 4)),
   transformAmountOperand: z.number().max(255),
@@ -21,7 +33,7 @@ const rule = z.object({
 });
 
 const ruleCondition = z.object({
-  uuid: z.string().uuid().describe("primary"),
+  uuid,
   ruleUuid: z.string().uuid().describe("foreign unique"),
   position: z.number().max(Math.pow(2, 4)).describe("unique"),
   conditionKey: z.string(),
@@ -30,26 +42,27 @@ const ruleCondition = z.object({
 });
 
 const report = z.object({
-  uuid: z.string().uuid().describe("primary"),
-  userId: z.string().max(191),
+  uuid,
+  userId,
   start: z.date(),
   end: z.date(),
 });
 
 const reportEvent = z.object({
-  uuid: z.string().uuid().describe("primary"),
+  uuid,
   eventUuid: z.string().uuid().describe("foreign"),
   reportUuid: z.string().uuid().describe("foreign"),
 });
 
 const reportSource = z.object({
-  uuid: z.string().uuid().describe("primary"),
+  uuid,
   source: z.string().max(191).describe("unique"),
   snapshot: z.number(),
   reportUuid: z.string().uuid().describe("foreign unique"),
 });
 
 const schema = {
+  source,
   rule,
   event,
   report,

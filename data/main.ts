@@ -13,5 +13,6 @@ base({
     "npm_token",
     "infura_project_id",
     "convertkit_api_key",
+    "encryption_key"
   ],
 });
