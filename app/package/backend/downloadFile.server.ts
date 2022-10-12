@@ -12,11 +12,7 @@ const getDefault = () => {
 const downloadFile = ({
   Key = "",
 }: Partial<Pick<GetObjectCommandInput, "Key">>) => {
-  if (process.env.NODE_ENV === "development") {
-    const path = `public/${Key}`;
-    if (!fs.existsSync(path)) return Promise.resolve(getDefault());
-    return Promise.resolve(fs.createReadStream(path));
-  } else {
+  if (process.env.NODE_ENV === "production") {
     const s3 = new S3({ region: "us-east-1" });
     const Bucket = domain;
     return s3.listObjectsV2({ Bucket, Prefix: Key }).then((r) => {
@@ -28,6 +24,10 @@ const downloadFile = ({
         })
         .then((r) => r.Body as Readable);
     });
+  } else {
+    const path = `public/${Key}`;
+    if (!fs.existsSync(path)) return Promise.resolve(getDefault());
+    return Promise.resolve(fs.createReadStream(path));
   }
 };
 

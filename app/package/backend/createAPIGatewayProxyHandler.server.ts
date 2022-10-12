@@ -75,7 +75,9 @@ const createAPIGatewayProxyHandler =
         if (statusCode >= 400 && statusCode < 500) {
           return userResponse;
         }
-        return typeof e.name === "string" && e.name
+        return typeof e.name === "string" &&
+          e.name &&
+          process.env.NODE_ENV === "production"
           ? emailError(e.name, e).then((id) => ({
               statusCode,
               body: `Unknown error - Message Id ${id}`,
