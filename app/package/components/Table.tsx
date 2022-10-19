@@ -19,7 +19,11 @@ const Table = ({
   getTdClassName = () => `p-3 border-2 border-gray-400`,
 }: {
   activeRow?: string;
-  onRowClick?: (row: Record<string, unknown>, index: number) => void;
+  onRowClick?: (
+    row: Record<string, unknown>,
+    index: number,
+    e: React.MouseEvent<HTMLTableRowElement, MouseEvent>
+  ) => void;
   className?: string;
   tableClassName?: string;
   thClassName?: string;
@@ -78,7 +82,7 @@ const Table = ({
                   index,
                   activeRow === (row.uuid || row.id || index)
                 )}
-                onClick={() => onRowClick?.(data[index], index)}
+                onClick={(e) => onRowClick?.(data[index], index, e)}
               >
                 {columns.map((cell, jndex) => {
                   return (
