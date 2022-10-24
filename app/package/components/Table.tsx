@@ -1,4 +1,5 @@
 import { useLoaderData, useSearchParams } from "@remix-run/react";
+import React from "react";
 import mixClasses from "../utils/mixClasses";
 
 const Table = ({
@@ -17,6 +18,7 @@ const Table = ({
         : "bg-gray-200"
     } hover:bg-gray-300 whitespace-pre-wrap`,
   getTdClassName = () => `p-3 border-2 border-gray-400`,
+  renderCell = {},
 }: {
   activeRow?: string;
   onRowClick?: (
@@ -30,6 +32,7 @@ const Table = ({
   theadClassName?: string;
   getTrClassName?: (index: number, isActive: boolean) => string;
   getTdClassName?: (index: number) => string;
+  renderCell?: Record<string, (value: unknown) => React.ReactNode>;
 }) => {
   const {
     data = [],
@@ -85,9 +88,11 @@ const Table = ({
                 onClick={(e) => onRowClick?.(data[index], index, e)}
               >
                 {columns.map((cell, jndex) => {
+                  const renderer = renderCell[cell.accessor];
+                  const value = row[cell.accessor];
                   return (
                     <td key={cell.accessor} className={getTdClassName(jndex)}>
-                      {row[cell.accessor]}
+                      {renderer ? renderer(value) : value}
                     </td>
                   );
                 })}
