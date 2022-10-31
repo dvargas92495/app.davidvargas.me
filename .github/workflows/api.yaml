@@ -28,6 +28,6 @@ jobs:
       - name: install
         run: npm install
       - name: build
-        run: npm run compile
+        run: npx fuego compile
       - name: deploy
-        run: npm run publish --name app
+        run: npx fuego publish --name app
