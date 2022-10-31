@@ -34,7 +34,7 @@ const rule = z.object({
 
 const ruleCondition = z.object({
   uuid,
-  ruleUuid: z.string().uuid().describe("foreign unique"),
+  ruleUuid: z.string().uuid().describe("unique"),
   position: z.number().max(Math.pow(2, 4)).describe("unique"),
   conditionKey: z.string(),
   value: z.string(),
@@ -50,15 +50,15 @@ const report = z.object({
 
 const reportEvent = z.object({
   uuid,
-  eventUuid: z.string().uuid().describe("foreign"),
-  reportUuid: z.string().uuid().describe("foreign"),
+  eventUuid: z.string().uuid(),
+  reportUuid: z.string().uuid(),
 });
 
 const reportSource = z.object({
   uuid,
   source: z.string().max(191).describe("unique"),
   snapshot: z.number(),
-  reportUuid: z.string().uuid().describe("foreign unique"),
+  reportUuid: z.string().uuid().describe("unique"),
 });
 
 const schema = {
