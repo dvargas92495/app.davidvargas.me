@@ -20,15 +20,10 @@ const searchSources = ({
             .map((k) => `${k} = ?`)
             .join(" AND ")}
           ORDER BY label LIMIT ?, ?`,
-          keys
-            .map((k) => searchParams[k])
-            .concat(
-              [
-                Math.max((Number(index) || 1) - 1, 0) *
-                  Math.max(Number(size), 0),
-                size,
-              ].map((n) => n.toString())
-            )
+          (keys.map((k) => searchParams[k]) as (string | number)[]).concat([
+            Math.max((Number(index) || 1) - 1, 0) * Math.max(Number(size), 0),
+            size,
+          ])
         ),
         con.execute(`SELECT COUNT(uuid) as count FROM sources`),
       ]).then((a) => {
