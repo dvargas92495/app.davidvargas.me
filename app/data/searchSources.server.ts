@@ -22,7 +22,7 @@ const searchSources = ({
           ORDER BY label LIMIT ?, ?`,
           (keys.map((k) => searchParams[k]) as (string | number)[]).concat([
             Math.max((Number(index) || 1) - 1, 0) * Math.max(Number(size), 0),
-            size,
+            Number(size),
           ])
         ),
         con.execute(`SELECT COUNT(uuid) as count FROM sources`),
