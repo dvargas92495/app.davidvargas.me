@@ -15,7 +15,7 @@ const searchSources = ({
       return Promise.all([
         con.execute(
           `SELECT label, uuid, snapshot_url, feed_url
-          FROM rules 
+          FROM sources 
           ${!keys.length ? "" : "WHERE "}${keys
             .map((k) => `${k} = ?`)
             .join(" AND ")}
