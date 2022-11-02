@@ -28,10 +28,8 @@ const insertRevenueFromStripe = async ({
     description: string;
   }[];
 }> => {
-  const execute = connection
-    ? connection.execute
-    : await getMysqlConnection().then((m) => m.execute);
-  return execute(
+  const cxn = await getMysqlConnection(connection);
+  return cxn.execute(
     `SELECT * FROM events WHERE source = "stripe" AND source_id = ?`,
     [id]
   ).then(([a]) => {
@@ -147,7 +145,7 @@ const insertRevenueFromStripe = async ({
               amount: line.amount,
               description: mappedProducts[line.product] || line.product,
             }));
-            return execute(
+            return cxn.execute(
               `INSERT INTO events (uuid, source, source_id, date, amount, description, code) VALUES ${values
                 .map(() => `(?, ?, ?, ?, ?, ?, ?)`)
                 .join(",")} ON DUPLICATE KEY UPDATE amount=amount`,
