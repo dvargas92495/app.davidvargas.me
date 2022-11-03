@@ -5,13 +5,16 @@ type Logic<T, U> = (e: T) => string | U | Promise<U | string>;
 
 const createAPIGatewayProxyHandler =
   <T extends Record<string, unknown>, U extends Record<string, unknown>>(
-    args: Logic<T, U> | { logic: Logic<T, U>; allowedOrigins?: string[] }
+    args:
+      | Logic<T, U>
+      | { logic: Logic<T, U>; allowedOrigins?: (string | RegExp)[] }
   ): APIGatewayProxyHandler =>
   (event, context) => {
-    const allowedOrigins =
-      typeof args === "function" ? [] : args.allowedOrigins || [];
+    const allowedOrigins = (
+      typeof args === "function" ? [] : args.allowedOrigins || []
+    ).map((s) => (typeof s === "string" ? new RegExp(s) : s));
     const requestOrigin = event.headers.origin || event.headers.Origin || "";
-    const cors = allowedOrigins.includes(requestOrigin)
+    const cors = allowedOrigins.some((r) => r.test(requestOrigin))
       ? requestOrigin
       : process.env.ORIGIN || "*";
     const getHeaders = (responseHeaders: unknown) => ({
