@@ -9,7 +9,17 @@ const uploadFile = ({
   Body = "",
   Metadata,
 }: Partial<Pick<PutObjectCommandInput, "Body" | "Key" | "Metadata">>) => {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === "production") {
+    const s3 = new S3({ region: "us-east-1" });
+    return s3
+      .putObject({
+        Bucket: domain,
+        Key,
+        Body,
+        Metadata,
+      })
+      .then(() => true);
+  } else {
     const path = `public/${Key}`;
     const dir = nodepath.dirname(path);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -21,16 +31,6 @@ const uploadFile = ({
       Body.stream().pipe(fs.createWriteStream(path));
     // else if (Body instanceof ReadableStream) Body.pipeTo(fs.createWriteStream(path));
     return Promise.resolve(true);
-  } else {
-    const s3 = new S3({ region: "us-east-1" });
-    return s3
-      .putObject({
-        Bucket: domain,
-        Key,
-        Body,
-        Metadata,
-      })
-      .then(() => true);
   }
 };
 
