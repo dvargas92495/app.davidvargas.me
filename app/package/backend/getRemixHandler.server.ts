@@ -14,6 +14,7 @@ const getRemixHandler = ({
       /^\/build\/.*/,
       /^\/data\/.*/,
       /^\/images\/.*/,
+      /^\/videos\/.*/,
       /^\/svgs\/.*/,
       ...originPaths,
     ],

@@ -3,7 +3,7 @@
   "description": "Package doubling as an npm package and a webapp to view said components on app.davidvargas.me",
   "version": "0.13.35",
   "license": "MIT",
-  "repository": "dvargas92495/app",
+  "repository": "vargas-arts/app.davidvargas.me",
   "sideEffects": false,
   "main": "dist/index.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "@types/uuid": "8.3.4",
     "axios": "0.24.0",
     "date-fns": "2.28.0",
-    "fuegojs": "^0.38.1",
+    "fuegojs": "^0.38.2",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
     "remix-lambda-at-edge": "^0.4.3",
