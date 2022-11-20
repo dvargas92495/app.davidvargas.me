@@ -1,9 +1,9 @@
-import AWS from "aws-sdk";
+import {SES} from "@aws-sdk/client-ses";
 import type React from "react";
 import ReactDOMServer from "react-dom/server";
 import { domain } from "./constants.server";
 
-const ses = new AWS.SES();
+const ses = new SES({});
 export const supportEmail = process.env.SUPPORT_EMAIL || `support@${domain}`;
 
 const sendEmail = ({
@@ -42,7 +42,6 @@ const sendEmail = ({
       Source: from,
       ReplyToAddresses: typeof replyTo === "string" ? [replyTo] : replyTo,
     })
-    .promise()
-    .then((r) => r.MessageId);
+    .then((r) => r.MessageId || "");
 
 export default sendEmail;
