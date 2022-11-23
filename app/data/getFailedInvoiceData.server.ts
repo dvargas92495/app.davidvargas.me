@@ -11,7 +11,9 @@ const getFailedInvoiceData = (invoice: Stripe.Invoice, stripe: Stripe) => {
           .retrieve(invoice.subscription as string)
           .then((sub) => sub.metadata.project)
       : invoice.lines.data[0]?.description || "No Project found",
-    stripe.charges.retrieve(invoice.charge as string),
+    invoice.charge
+      ? stripe.charges.retrieve(invoice.charge as string)
+      : { failure_message: `No charge found for invoice: ${invoice.id}` },
   ]).then(([c, project, charge]) => ({
     customerEmail: c.deleted
       ? "dvargas92495@gmail.com"
