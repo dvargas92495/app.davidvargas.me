@@ -3,9 +3,7 @@ import ExternalLink from "./ExternalLink";
 import Title from "./Title";
 
 const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
-  <div
-    className="w-full max-w-4xl"
-  >
+  <div className="w-full max-w-4xl">
     <Title>Privacy Policy for Vargas Arts, LLC</Title>
     <p>
       {name}, accessible from https://{domain}, is an application residing in
@@ -20,10 +18,7 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
     <p>
       If you have additional questions or require more information about our
       Privacy Policy, do not hesitate to{" "}
-      <ExternalLink href={"/contact"}>
-        contact us
-      </ExternalLink>
-      .
+      <ExternalLink href={"/contact"}>contact us</ExternalLink>.
     </p>
     <p>
       This Privacy Policy applies only to our online activities and is valid for
@@ -33,16 +28,13 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
       websites. Our Privacy Policy was created with the help of the Free Privacy
       Policy Generator.
     </p>
-    <h6>Consent</h6>
+    <h6 className="font-bold text-2xl">Consent</h6>
     <p>
       By using our websites, you hereby consent to our Privacy Policy and agree
       to its terms. For our Terms and Conditions, please visit the{" "}
-      <ExternalLink href={"/terms-of-use"}>
-        Terms Of Use
-      </ExternalLink>
-      .
+      <ExternalLink href={"/terms-of-use"}>Terms Of Use</ExternalLink>.
     </p>
-    <h6>Information we collect</h6>
+    <h6 className="font-bold text-2xl">Information we collect</h6>
     <p>
       The personal information that you are asked to provide, and the reasons
       why you are asked to provide it, will be made clear to you at the point we
@@ -58,9 +50,9 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
       When you register for an Account, we may ask for your contact information,
       including items such as name, email address, and telephone number.
     </p>
-    <h6>How we use your information</h6>
+    <h6 className="font-bold text-2xl">How we use your information</h6>
     <p>We use the information we collect in various ways, including to:</p>
-    <ul>
+    <ul className="list-disc pl-8">
       <li>Provide, operate, and maintain our websites</li>
       <li>Improve, personalize, and expand our websites</li>
       <li>Understand and analyze how you use our websites</li>
@@ -74,7 +66,7 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
       <li>Send you emails</li>
       <li>Find and prevent fraud</li>
     </ul>
-    <h6>Log Files</h6>
+    <h6 className="font-bold text-2xl">Log Files</h6>
     <p>
       Vargas Arts follows a standard procedure of using log files. These files
       log visitors when they visit websites. All hosting companies do this and a
@@ -86,7 +78,7 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
       analyzing trends, administering the site, tracking users' movement on the
       website, and gathering demographic information.
     </p>
-    <h6>Cookies and Web Beacons</h6>
+    <h6 className="font-bold text-2xl">Cookies and Web Beacons</h6>
     <p>
       Like any other website, Vargas Arts uses 'cookies'. These cookies are used
       to store information including visitors' preferences, and the pages on the
@@ -98,7 +90,7 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
       For more general information on cookies, please read "What Are Cookies"
       from Cookie Consent.
     </p>
-    <h6>Third Party Privacy Policies</h6>
+    <h6 className="font-bold text-2xl">Third Party Privacy Policies</h6>
     <p>
       Vargas Arts' Privacy Policy does not apply to other websites. Thus, we are
       advising you to consult the respective Privacy Policies of these
@@ -110,7 +102,7 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
       To know more detailed information about cookie management with specific
       web browsers, it can be found at the browsers' respective websites.
     </p>
-    <h6>CCPA Privacy Rights</h6>
+    <h6 className="font-bold text-2xl">CCPA Privacy Rights</h6>
     <p>
       Under the CCPA, among other rights, California consumers have the right
       to:
@@ -136,7 +128,7 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
       If you make a request, we have one month to respond to you. If you would
       like to exercise any of these rights, please contact us.
     </p>
-    <h6>GDPR Data Protection Rights</h6>
+    <h6 className="font-bold text-2xl">GDPR Data Protection Rights</h6>
     <p>
       We would like to make sure you are fully aware of all of your data
       protection rights. Every user is entitled to the following:
@@ -174,7 +166,7 @@ const PrivacyPolicy = ({ name, domain }: { name: string; domain: string }) => (
       If you make a request, we have one month to respond to you. If you would
       like to exercise any of these rights, please contact us.
     </p>
-    <h6>Children's Information</h6>
+    <h6 className="font-bold text-2xl">Children's Information</h6>
     <p>
       Another part of our priority is adding protection for children while using
       the internet. We encourage parents and guardians to observe, participate
