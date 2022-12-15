@@ -46,17 +46,17 @@ const insertRevenueFromStripe = async ({
         return { values: records };
       }
       return stripe.paymentIntents
-        .retrieve(id, { expand: ["invoice"] })
+        .retrieve(id, { expand: ["invoice", "latest_charge"] })
         .then((p) => {
           if (p.metadata.Test === "true") {
             console.log(`Not Recording test transaction`, id);
             return { values: [] };
           }
-          if (!p.charges.data.length) {
+          if (!p.latest_charge) {
             console.log(`Not Recording chargeless transaction`, id);
             return { values: [] };
           }
-          const [charge] = p.charges.data;
+          const charge = p.latest_charge as Stripe.Charge;
           if (charge.refunded) {
             console.log(`Not Recording refunded transaction`, id);
             return { values: [] };
