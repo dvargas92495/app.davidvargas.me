@@ -2,16 +2,21 @@ import getMysqlConnection from "fuegojs/utils/mysql";
 
 const searchEvents = ({
   searchParams,
+  context: { requestId },
 }: {
   searchParams: Record<string, string>;
+  context: { requestId: string };
 }) =>
-  getMysqlConnection()
+  getMysqlConnection(requestId)
     .then((con) => {
       const keys = Object.keys(searchParams).filter(
         (p) => searchParams[p] && !["size", "index"].includes(p)
       );
       const size = searchParams["size"] || "10";
       const index = searchParams["index"] || "0";
+      const args = keys
+        .map((k) => searchParams[k] as string | number)
+        .concat([Number(index) * Number(size), size]);
       return Promise.all([
         con.execute(
           `SELECT date, amount, description, uuid, code, source
@@ -20,11 +25,9 @@ const searchEvents = ({
             .map((k) => `${k} = ?`)
             .join(" AND ")}
           ORDER BY date DESC LIMIT ?, ?`,
-          keys
-            .map((k) => searchParams[k])
-            .concat(
-              [Number(index) * Number(size), size].map((n) => n.toString())
-            )
+          process.env.NODE_ENV === "development"
+            ? args.map((n) => n.toString())
+            : args
         ),
         con.execute(`SELECT COUNT(uuid) as count FROM events`),
       ]).then((a) => {
