@@ -27,7 +27,7 @@ import { IamPolicy } from "@cdktf/provider-aws/lib/iam-policy";
 import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
 import { IamUser } from "@cdktf/provider-aws/lib/iam-user";
-import { IamUserPolicy } from "@cdktf/provider-aws/lib/iam-user-policy";
+import { IamUserPolicyAttachment } from "@cdktf/provider-aws/lib/iam-user-policy-attachment";
 import { IamAccessKey } from "@cdktf/provider-aws/lib/iam-access-key";
 import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
 import { DataAwsIamPolicyDocument } from "@cdktf/provider-aws/lib/data-aws-iam-policy-document";
@@ -96,7 +96,7 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
 
   const callerIdentity = new DataAwsCallerIdentity(scope, "tf_caller", {});
   // lambda resource requires either filename or s3... wow
-  new ArchiveProvider(scope, "archive", {});  
+  new ArchiveProvider(scope, "archive", {});
   const dummyFile = new DataArchiveFile(scope, "dummy", {
     type: "zip",
     outputPath: "./dummy.zip",
@@ -403,9 +403,21 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
   const updateLambdaKey = new IamAccessKey(scope, "update_lambda_key", {
     user: updateLambdaUser.name,
   });
-  new IamUserPolicy(scope, "update_lambda_user_policy", {
-    user: updateLambdaUser.name,
+  const policy = new IamPolicy(scope, "update_lambda_policy", {
+    name: `${safeProjectName}-lambda-update`,
     policy: lambdaDeployPolicyDocument.json,
+  });
+  new IamUserPolicyAttachment(scope, "update_lambda_user_policy", {
+    user: updateLambdaUser.name,
+    policyArn: policy.arn,
+  });
+  const role = new IamRole(scope, "update_lambda_role", {
+    name: `${safeProjectName}-lambda-update`,
+    assumeRolePolicy: assumeLambdaPolicy.json,
+  });
+  new IamRolePolicyAttachment(scope, "update_lambda_role_policy", {
+    role: role.name,
+    policyArn: policy.arn,
   });
   const apiCertificate = new AcmCertificate(scope, "api_certificate", {
     domainName: "api.davidvargas.me",
@@ -514,11 +526,6 @@ const setupInfrastructure = async (): Promise<void> => {
         cachePolicyId: cachePolicy.id,
       });
 
-      const allPaths = readDir("api").map((f) =>
-        f.replace(/\.ts$/, "").replace(/^api\//, "")
-      );
-
-      const paths = allPaths.filter((f) => !/^ws/.test(f));
       const backend = getAwsBackend(this, {
         zoneId: staticSite.route53ZoneIdOutput,
       });
