@@ -408,7 +408,7 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
     policy: lambdaDeployPolicyDocument.json,
   });
   const apiCertificate = new AcmCertificate(scope, "api_certificate", {
-    domainName: "api.samepage.network",
+    domainName: "api.davidvargas.me",
     validationMethod: "DNS",
     lifecycle: {
       createBeforeDestroy: true,
@@ -432,7 +432,7 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
     }
   );
   const apiDomain = new ApiGatewayDomainName(scope, "api_domain_name", {
-    domainName: "api.samepage.network",
+    domainName: "api.davidvargas.me",
     certificateArn: apiCertValidation.certificateArn,
   });
   new Route53Record(scope, "api_record", {
