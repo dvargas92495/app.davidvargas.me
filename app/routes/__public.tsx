@@ -6,4 +6,4 @@ export const loader: LoaderFunction = ({ request }) => {
   return getUserId(request).then((id) => !!id);
 };
 
-export default () => <PublicPage pages={["revenue", "components"]} />;
+export default () => <PublicPage pages={[]} />;

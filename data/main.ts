@@ -12,6 +12,7 @@ import { GithubProvider } from "@cdktf/provider-github/lib/provider";
 import { ActionsSecret } from "@cdktf/provider-github/lib/actions-secret";
 import { AwsStaticSite } from "@dvargas92495/aws-static-site";
 import { readDir } from "fuegojs/internal/common";
+import { ArchiveProvider } from "@cdktf/provider-archive/lib/provider";
 import { DataArchiveFile } from "@cdktf/provider-archive/lib/data-archive-file";
 import { ApiGatewayRestApi } from "@cdktf/provider-aws/lib/api-gateway-rest-api";
 import { ApiGatewayResource } from "@cdktf/provider-aws/lib/api-gateway-resource";
@@ -95,6 +96,7 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
 
   const callerIdentity = new DataAwsCallerIdentity(scope, "tf_caller", {});
   // lambda resource requires either filename or s3... wow
+  new ArchiveProvider(scope, "archive", {});  
   const dummyFile = new DataArchiveFile(scope, "dummy", {
     type: "zip",
     outputPath: "./dummy.zip",
