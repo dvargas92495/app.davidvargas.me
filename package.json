@@ -58,9 +58,6 @@
       "externals": [
         "electron"
       ]
-    },
-    "postinstall": [
-      "scripts/postinstall.js"
-    ]
+    }
   }
 }
