@@ -390,7 +390,7 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
           resources: [
             `arn:aws:lambda:us-east-1:${
               callerIdentity.accountId
-            }:function:${projectName.replace(/\./g, "-")}_*`,
+            }:function:${safeProjectName}_*`,
           ],
         },
       ],
