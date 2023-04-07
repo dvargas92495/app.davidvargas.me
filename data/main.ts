@@ -73,12 +73,10 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
         );
     }
   );
-  const ignorePaths = ["ws", "car", "clerk", "extensions", "mocks"];
   const apiPaths = readDir("api").map((f) =>
     f.replace(/\.ts$/, "").replace(/^api\//, "")
   );
   const allLambdas = apiPaths
-    .filter((f) => !ignorePaths.some((i) => f.startsWith(i)))
     .concat(extensionPaths);
 
   const pathParts = Object.fromEntries(

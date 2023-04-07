@@ -12,7 +12,6 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.LAMBDA_AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.LAMBDA_AWS_ACCESS_SECRET }}
   AWS_REGION: us-east-1
-  CLERK_API_KEY: ${{ secrets.CLERK_API_KEY }}
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
   IS_PRODUCTION: 1
   ORIGIN: https://app.davidvargas.me

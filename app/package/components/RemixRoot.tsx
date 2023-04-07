@@ -11,7 +11,6 @@ import {
   useLoaderData,
   useTransition,
 } from "@remix-run/react";
-import { ClerkApp, ClerkCatchBoundary } from "@clerk/remix";
 import Loading from "./Loading";
 import type remixRootLoader from "../backend/remixRootLoader.server";
 // primary: "sky-400",
@@ -44,7 +43,7 @@ export const getRootLinks =
     ];
   };
 
-export const RootCatchBoundary = ClerkCatchBoundary(() => {
+export const RootCatchBoundary = () => {
   const caught = useCatch();
   return (
     <html>
@@ -61,7 +60,7 @@ export const RootCatchBoundary = ClerkCatchBoundary(() => {
       </body>
     </html>
   );
-});
+};
 
 const PageTransition = () => {
   const transition = useTransition();
@@ -100,6 +99,6 @@ const App = () => {
   );
 };
 
-const RemixRoot = () => ClerkApp(App, {})();
+const RemixRoot = () => App();
 
 export default RemixRoot;
