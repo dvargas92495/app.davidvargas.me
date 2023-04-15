@@ -76,8 +76,7 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
   const apiPaths = readDir("api").map((f) =>
     f.replace(/\.ts$/, "").replace(/^api\//, "")
   );
-  const allLambdas = apiPaths
-    .concat(extensionPaths);
+  const allLambdas = apiPaths.concat(extensionPaths);
 
   const pathParts = Object.fromEntries(
     allLambdas.map((p) => [p, p.split("/")])
@@ -224,7 +223,7 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
           filename: dummyFile.outputPath,
           runtime: "nodejs18.x",
           publish: false,
-          timeout: 10,
+          timeout: 30,
           memorySize: 5120,
         }
       ),
@@ -386,9 +385,7 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
         {
           actions: ["lambda:UpdateFunctionCode", "lambda:GetFunction"],
           resources: [
-            `arn:aws:lambda:us-east-1:${
-              callerIdentity.accountId
-            }:function:${safeProjectName}_*`,
+            `arn:aws:lambda:us-east-1:${callerIdentity.accountId}:function:${safeProjectName}_*`,
           ],
         },
       ],
