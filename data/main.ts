@@ -59,7 +59,7 @@ const getAwsBackend = (scope: Construct, opts: { zoneId: string }) => {
     "head",
   ]);
   const backendFunctionsByRepo = {
-    padawan: ["oauth/post", "webhook/post"],
+    padawan: ["oauth/post", "webhook/post", "develop"],
   };
   const extensionPaths = Object.entries(backendFunctionsByRepo).flatMap(
     ([app, lambdas]) => {
