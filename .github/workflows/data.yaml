@@ -28,4 +28,4 @@ jobs:
       - name: plan
         run: npx fuego plan
       - name: apply
-        run: npx fuego apply
+        run: npx fuego apply --bare

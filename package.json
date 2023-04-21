@@ -49,9 +49,9 @@
   },
   "dependencies": {
     "@cdktf/provider-archive": "^4.0.0",
+    "csv-writer": "^1.6.0",
     "puppeteer": "^19.8.2",
     "puppeteer-core": "^19.8.1",
-    "csv-writer": "^1.6.0",
     "web3": "1.6.0"
   },
   "fuego": {
@@ -60,5 +60,8 @@
         "electron"
       ]
     }
+  },
+  "devDependencies": {
+    "patch-package": "^6.5.1"
   }
 }
