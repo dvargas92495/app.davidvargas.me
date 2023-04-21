@@ -8,6 +8,7 @@ _fuego
 .cache
 /app/tailwind.css
 meta.json
+scripts/debug.js
 
 .gen
 cdktf.out
