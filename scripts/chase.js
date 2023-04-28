@@ -15,7 +15,9 @@ const gather = async () => {
     }
     return oldFetch(...args);
   };
-  const details = document.querySelectorAll("[id*='transactionDetailIcon']");
+  const details = Array.from(
+    document.querySelectorAll("[id*='transactionDetailIcon']")
+  );
   await details
     .map((d, i) => async () => {
       d.click();
@@ -29,6 +31,7 @@ const gather = async () => {
             clearInterval(interval);
             clearTimeout(timeout);
             r(close);
+            console.log("closed", i + 1);
           }
         }, 100);
       });
