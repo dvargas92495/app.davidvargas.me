@@ -1,18 +1,9 @@
 import axios from "axios";
 import createAPIGatewayProxyHandler from "~/package/backend/createAPIGatewayProxyHandler.server";
-import getMysqlConnection from "fuegojs/utils/mysql";
 
+// @ts-ignore
 const getLastWeeksValue = async (source: string, requestId: string) => {
-  const cxn = await getMysqlConnection(requestId);
-  const [results] = await cxn.execute(
-    `SELECT s.snapshot FROM reports r
-  INNER JOIN report_sources s ON s.report_uuid = r.uuid
-  WHERE s.source = ?
-  ORDER BY r.end DESC
-  LIMIT 1`,
-    [source]
-  );
-  return (results as { snapshot: number }[])[0]?.snapshot || 0;
+    // Query google sheets for last week's value
 };
 
 const logic = ({

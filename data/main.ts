@@ -41,10 +41,7 @@ const projectName = "app.davidvargas.me";
 const safeProjectName = "app";
 const variables = [
   "database_url",
-  "notion_api_key",
   "npm_token",
-  "infura_project_id",
-  "convertkit_api_key",
   "encryption_key",
 ];
 
